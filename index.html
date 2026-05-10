@@ -306,44 +306,11 @@ footer a { color:var(--green); }
 <!-- MAIN -->
 <main class="main">
 
-  <!-- CONFIGURACIÓN GOOGLE SHEETS -->
-  <div class="setup-box">
-    <div class="setup-title">Configuración — Google Sheets (Resultados de cuestionarios)</div>
-    <p class="setup-desc">Para que los resultados de los cuestionarios se guarden automáticamente en la planilla, seguí estos pasos una sola vez:</p>
-    <div class="step-row"><div class="step-n">1.</div><div class="step-text">Abrí tu planilla de Google Sheets y andá a <strong>Extensiones → Apps Script</strong>.</div></div>
-    <div class="step-row"><div class="step-n">2.</div><div class="step-text">Borrá el contenido por defecto y pegá el código del archivo <code>apps_script.gs</code> incluido en este repositorio.</div></div>
-    <div class="step-row"><div class="step-n">3.</div><div class="step-text">Hacé clic en <strong>Implementar → Nueva implementación</strong>. Tipo: <em>Aplicación web</em>. Acceso: <em>Cualquier persona</em>. Copiá la URL generada.</div></div>
-    <div class="step-row"><div class="step-n">4.</div><div class="step-text">En cada archivo de cuestionario, reemplazá <code>TU_SCRIPT_ID_AQUI</code> en la variable <code>SCRIPT_URL</code> con la URL que copiaste.</div></div>
-    <div class="step-row"><div class="step-n">5.</div><div class="step-text">¡Listo! Cada vez que un alumno envíe un cuestionario, los datos aparecerán automáticamente en tu planilla.</div></div>
-  </div>
-
-  <!-- MÓDULOS -->
+   <!-- MÓDULOS -->
   <div class="sec-label">Módulos del curso</div>
   <div class="cards-grid">
 
-    <!-- CAP 13 -->
-    <div class="module-card">
-      <div class="card-header">
-        <div class="card-num">13</div>
-        <div class="card-meta">
-          <div class="card-tag"><span class="badge-available"></span> Disponible</div>
-          <div class="card-title">El Profesional de TI</div>
-        </div>
-      </div>
-      <div class="card-desc">Habilidades de comunicación, conducta profesional, consideraciones éticas, legales y protección de datos (PII, PCI DSS 4.0, PHI).</div>
-      <div class="card-topics">
-        <span class="topic-tag">Comunicación</span>
-        <span class="topic-tag">Ética</span>
-        <span class="topic-tag">PII</span>
-        <span class="topic-tag">PCI DSS</span>
-        <span class="topic-tag">HIPAA</span>
-      </div>
-      <div class="card-actions">
-        <a href="capitulo13_profesional_ti.html" class="btn-primary">📖 Ver capítulo</a>
-        <span class="btn-secondary" style="opacity:.4;pointer-events:none;">📝 Cuestionario</span>
-      </div>
-    </div>
-
+ 
     <!-- CAP 1 -->
     <div class="module-card">
       <div class="card-header">
@@ -374,7 +341,7 @@ footer a { color:var(--green); }
       <div class="card-header">
         <div class="card-num">02</div>
         <div class="card-meta">
-          <div class="card-tag"><span class="badge-available"></span> Próximamente</div>
+          <div class="card-tag"><span class="badge-soon"></span> Próximamente</div>
           <div class="card-title">Armado y Desarmado de PC</div>
         </div>
       </div>
