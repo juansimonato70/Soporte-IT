@@ -497,159 +497,145 @@ body { background:var(--bg); color:var(--text); font-family:'Barlow',sans-serif;
 </div><!-- /main -->
 
 <script>
-// ─── CONFIGURACIÓN ────────────────────────────────────────────────
-// Reemplazá esta URL con la URL de tu Google Apps Script deployment
-// (una sola URL para todos los cuestionarios)
-const SCRIPT_URL = 'TU_APPS_SCRIPT_URL_AQUI';
-
-// IDs de las planillas por capítulo — NO modificar
-const SHEET_ID = '1RDuRX6vBnEqgEJ-Rv6QLgWzR_774zZhKS4ovaJ8egi4';
+// ── CONFIG ─────────────────────────────────────────────
+// REEMPLAZAR con la URL de tu Google Apps Script Web App
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxkLDVMVy4z1w6znv4CbjW_gyIKDFOthbBR8qs1GtvX-XSZDPRPalww8cF5yRn7LGTD/exec';
 
 // Respuestas correctas
 const ANSWERS = {
-  q1: 'c',
-  q2: 'b',
-  q3: 'c',
-  q4: 'c',
-  q5: 'c',
-  q6: 'b',
-  q7: 'c',
-  q8: 'b',
-  q9: 'c',
-  q10: 'c',
-  q11: 'c',
-  q12: 'd',
-  q13: 'c',
-  q14: 'b',
-  q15: 'b',
+  q1:  'c',  // Teclado
+  q2:  'b',  // Disco duro externo USB
+  q3:  'c',  // 3000V
+  q4:  'c',  // Pulsera antiestática
+  q5:  'c',  // +12V
+  q6:  'b',  // Negro
+  q7:  'c',  // ATX
+  q8:  'b',  // En el socket de la placa base
+  q9:  'c',  // RAM
+  q10: 'c',  // DDR5
+  q11: 'c',  // PCIe x16
+  q12: 'd',  // NVMe PCIe 5.0
+  q13: 'c',  // VGA
+  q14: 'b',  // Adaptador conecta; convertidor transforma
+  q15: 'b',  // ATX de 12V
 };
-const TOTAL = 15;
 
-// ─── AVISO DE CONFIGURACIÓN ────────────────────────────────────────
-window.addEventListener('DOMContentLoaded', () => {
-  if (SCRIPT_URL.includes('TU_APPS_SCRIPT')) {
-    const bar = document.createElement('div');
-    bar.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#e53e3e;color:#fff;text-align:center;padding:10px 16px;font-size:.85rem;font-family:Barlow,sans-serif;z-index:9999;';
-    bar.innerHTML = '⚠️ <strong>Configuración pendiente:</strong> Reemplazá <code>TU_APPS_SCRIPT_URL_AQUI</code> en el archivo HTML con la URL de tu Apps Script para guardar resultados.';
-    document.body.appendChild(bar);
-  }
-});
+const TOTAL = Object.keys(ANSWERS).length;
 
-// ─── PROGRESO ──────────────────────────────────────────────────────
-document.querySelectorAll('input[type=radio]').forEach(r => {
-  r.addEventListener('change', () => {
+// ── PROGRESS ────────────────────────────────────────────
+document.querySelectorAll('input[type=radio]').forEach(radio => {
+  radio.addEventListener('change', () => {
     updateProgress();
-    const q = document.getElementById(r.name);
+    const q = document.getElementById(radio.name);
     q.classList.add('answered');
+    // Highlight selected option
     q.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
-    r.closest('.option').classList.add('selected');
+    radio.closest('.option').classList.add('selected');
   });
 });
 
 function updateProgress() {
-  let n = 0;
-  for (let q in ANSWERS) if (document.querySelector(`input[name="${q}"]:checked`)) n++;
-  document.getElementById('progressFill').style.width = (n / TOTAL * 100) + '%';
-  document.getElementById('progressNum').textContent = n + ' / ' + TOTAL;
+  let answered = 0;
+  for(let q in ANSWERS) {
+    if(document.querySelector(`input[name="${q}"]:checked`)) answered++;
+  }
+  document.getElementById('progressFill').style.width = (answered/TOTAL*100)+'%';
+  document.getElementById('progressNum').textContent = answered+' / '+TOTAL;
 }
 
-// ─── ENVIAR ────────────────────────────────────────────────────────
+// ── SUBMIT ──────────────────────────────────────────────
 function submitQuiz() {
-  const nombre   = document.getElementById('nombre').value.trim();
+  const nombre = document.getElementById('nombre').value.trim();
   const comision = document.getElementById('comision').value.trim();
 
-  if (!nombre) {
-    const inp = document.getElementById('nombre');
-    inp.focus(); inp.style.borderColor = '#e53e3e';
-    setTimeout(() => inp.style.borderColor = '', 2500);
+  if(!nombre) {
+    document.getElementById('nombre').focus();
+    document.getElementById('nombre').style.borderColor = '#e53e3e';
+    setTimeout(() => document.getElementById('nombre').style.borderColor = '', 2000);
     return;
   }
 
-  // Verificar que todas estén respondidas
-  const unanswered = Object.keys(ANSWERS).filter(
-    q => !document.querySelector(`input[name="${q}"]:checked`)
-  );
-  if (unanswered.length) {
-    document.getElementById(unanswered[0]).scrollIntoView({ behavior:'smooth', block:'center' });
-    unanswered.forEach(q => {
-      document.getElementById(q).style.borderColor = '#e53e3e';
-    });
-    setTimeout(() => unanswered.forEach(q => document.getElementById(q).style.borderColor = ''), 3000);
+  // Check all answered
+  let unanswered = [];
+  for(let q in ANSWERS) {
+    if(!document.querySelector(`input[name="${q}"]:checked`)) unanswered.push(q);
+  }
+  if(unanswered.length > 0) {
+    const num = unanswered[0].replace('q','');
+    document.getElementById(unanswered[0]).scrollIntoView({behavior:'smooth', block:'center'});
+    document.getElementById(unanswered[0]).style.borderColor = '#e53e3e';
+    setTimeout(() => { unanswered.forEach(q => document.getElementById(q).style.borderColor = ''); }, 3000);
     return;
   }
 
+  // Disable submit
   document.getElementById('btnSubmit').disabled = true;
 
-  // Puntaje y feedback visual
+  // Score
   let correct = 0;
-  const respuestas = [];
-  for (const q in ANSWERS) {
-    const sel = document.querySelector(`input[name="${q}"]:checked`).value;
-    const ok  = sel === ANSWERS[q];
-    if (ok) correct++;
-    respuestas.push(ok ? 'Correcta' : 'Incorrecta');
+  let respuestas = [];
+  for(let q in ANSWERS) {
+    const selected = document.querySelector(`input[name="${q}"]:checked`).value;
+    const isCorrect = selected === ANSWERS[q];
+    if(isCorrect) correct++;
+    respuestas.push(isCorrect ? 'Correcta' : 'Incorrecta');
+
+    // Visual feedback
     const qEl = document.getElementById(q);
     qEl.querySelectorAll('.option').forEach(opt => {
-      const v = opt.querySelector('input').value;
-      if (v === ANSWERS[q])       opt.classList.add('correct-answer');
-      else if (v === sel && !ok)  opt.classList.add('wrong-answer');
+      const val = opt.querySelector('input').value;
+      if(val === ANSWERS[q]) opt.classList.add('correct-answer');
+      else if(val === selected && !isCorrect) opt.classList.add('wrong-answer');
     });
     qEl.classList.remove('answered');
-    qEl.classList.add(ok ? 'correct' : 'incorrect');
+    qEl.classList.add(isCorrect ? 'correct' : 'incorrect');
   }
 
-  const pct = Math.round(correct / TOTAL * 100);
-  document.getElementById('scorePct').textContent  = pct + '%';
-  document.getElementById('correctQ').textContent  = correct;
-  document.getElementById('wrongQ').textContent    = TOTAL - correct;
+  const pct = Math.round(correct/TOTAL*100);
 
-  const title = pct >= 90 ? '🏆 ¡Excelente!'
-              : pct >= 70 ? '✅ ¡Muy bien!'
-              : pct >= 50 ? '📚 En progreso'
-              :             '💡 Seguí estudiando';
-  const sub   = pct >= 90 ? 'Dominás el contenido de este capítulo.'
-              : pct >= 70 ? 'Buen desempeño. Revisá las preguntas incorrectas.'
-              : pct >= 50 ? 'Repasá el capítulo y volvé a intentarlo.'
-              :             'Te recomendamos releer el capítulo completo.';
+  // Show results
+  document.getElementById('scorePct').textContent = pct+'%';
+  document.getElementById('correctQ').textContent = correct;
+  document.getElementById('wrongQ').textContent = TOTAL - correct;
+
+  let title, sub;
+  if(pct >= 90)      { title = '🏆 ¡Excelente!'; sub = 'Dominás el contenido del Capítulo 1.'; }
+  else if(pct >= 70) { title = '✅ ¡Muy bien!'; sub = 'Buen desempeño. Revisá las preguntas incorrectas.'; }
+  else if(pct >= 50) { title = '📚 En progreso'; sub = 'Repasá el capítulo y volvé a intentarlo.'; }
+  else               { title = '💡 Seguí estudiando'; sub = 'Te recomendamos releer el Capítulo 1 completo.'; }
 
   document.getElementById('resultsTitle').textContent = title;
-  document.getElementById('resultsSub').textContent   = sub;
+  document.getElementById('resultsSub').textContent = sub;
   document.getElementById('results').classList.add('show');
-  document.getElementById('results').scrollIntoView({ behavior:'smooth', block:'start' });
+  document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
 
-  // ─── Enviar a Google Sheets ────────────────────────────────────
+  // Send to Google Sheets
   const now = new Date();
   const payload = {
-    sheetId:   SHEET_ID,
-    nombre,    comision,
-    capitulo:  'Capítulo 1 - Introducción al Hardware',
-    fecha:     now.toLocaleDateString('es-AR'),
-    hora:      now.toLocaleTimeString('es-AR'),
-    puntaje:   correct,
-    total:     TOTAL,
+    nombre, comision,
+    capitulo: 'Capítulo 1 - Introducción al Hardware',
+    fecha: now.toLocaleDateString('es-AR'),
+    hora: now.toLocaleTimeString('es-AR'),
+    puntaje: correct,
+    total: TOTAL,
     porcentaje: pct,
     respuestas
   };
 
-  if (SCRIPT_URL.includes('TU_APPS_SCRIPT')) {
-    document.getElementById('sendStatus').textContent = '⚠️ Configurá el SCRIPT_URL para guardar resultados.';
-    document.getElementById('sendStatus').className   = 'send-status err';
-    return;
-  }
-
-  // FormData es más confiable con no-cors (evita el preflight de application/json)
-  const fd = new FormData();
-  fd.append('data', JSON.stringify(payload));
-
-  fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: fd })
-    .then(() => {
-      document.getElementById('sendStatus').textContent = '✅ Resultados guardados correctamente.';
-      document.getElementById('sendStatus').className   = 'send-status ok';
-    })
-    .catch(() => {
-      document.getElementById('sendStatus').textContent = '⚠️ Error al guardar. Verificá la conexión y el SCRIPT_URL.';
-      document.getElementById('sendStatus').className   = 'send-status err';
-    });
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  })
+  .then(() => {
+    document.getElementById('sendStatus').textContent = '✅ Resultados guardados correctamente.';
+    document.getElementById('sendStatus').className = 'send-status ok';
+  })
+  .catch(() => {
+    document.getElementById('sendStatus').textContent = '⚠️ No se pudieron guardar los resultados. Verificá la conexión.';
+    document.getElementById('sendStatus').className = 'send-status err';
+  });
 }
 </script>
 </body>
