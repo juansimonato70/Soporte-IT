@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cuestionario — Capítulo 6 | Potrero Digital</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--green:#7ac143;--green-dark:#5c9430;--bg:#111;--bg2:#1a1a1a;--bg3:#222;--bg4:#2a2a2a;--text:#e8e8e8;--muted:#888;--border:rgba(122,193,67,.22);--white:#fff;--red:#e53e3e;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font-size:15px;line-height:1.7;}
+a{text-decoration:none;}
+.topnav{background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 28px;position:sticky;top:0;z-index:100;height:48px;}
+.nav-brand{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;color:var(--white);padding-right:20px;border-right:1px solid var(--border);margin-right:8px;}
+.nav-brand span{color:var(--green);}
+.topnav a{color:var(--muted);font-size:.8rem;font-weight:500;padding:0 14px;height:48px;display:flex;align-items:center;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s;}
+.topnav a:hover{color:var(--text);}
+.topnav a.active{color:var(--green);border-bottom-color:var(--green);font-weight:600;}
+.hero{background:linear-gradient(135deg,#0d1f06,#1a2a0d);border-bottom:2px solid var(--green);padding:52px 60px 44px;position:relative;overflow:hidden;}
+.hero-tag{display:inline-block;background:var(--green);color:#000;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.72rem;letter-spacing:2.5px;text-transform:uppercase;padding:4px 12px;border-radius:3px;margin-bottom:14px;}
+.hero-title{font-family:'Barlow Condensed',sans-serif;font-size:3rem;font-weight:800;line-height:1;color:var(--white);text-transform:uppercase;}
+.hero-title em{color:var(--green);font-style:normal;}
+.hero-sub{margin-top:10px;font-size:.9rem;color:rgba(255,255,255,.5);max-width:520px;}
+.hero-meta{margin-top:20px;display:flex;gap:20px;flex-wrap:wrap;}
+.hero-badge{display:flex;align-items:center;gap:6px;font-size:.82rem;color:var(--muted);}
+.hero-badge strong{color:var(--text);}
+.main{max-width:820px;margin:0 auto;padding:52px 40px 80px;}
+.sf{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:24px 28px;margin-bottom:32px;}
+.sf-title{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;}
+.sf-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.sf-g{display:flex;flex-direction:column;gap:6px;}
+.sf-label{font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;}
+.sf-input{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:10px 14px;font-family:'Barlow',sans-serif;font-size:.9rem;color:var(--text);outline:none;transition:border-color .2s;width:100%;}
+.sf-input:focus{border-color:var(--green);}
+.sf-input.error{border-color:var(--red);}
+.prog-label{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted);margin-bottom:8px;}
+.prog-wrap{background:var(--bg3);border-radius:100px;height:6px;margin-bottom:32px;overflow:hidden;}
+.prog-bar{height:100%;background:var(--green);border-radius:100px;transition:width .5s ease;}
+.qb{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:28px 30px;margin-bottom:16px;transition:border-color .2s;}
+.qb.answered{border-color:rgba(122,193,67,.4);}
+.qb.wrong{border-color:rgba(229,62,62,.4);}
+.q-num{font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;color:var(--green);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+.q-text{font-size:1rem;font-weight:500;color:var(--white);line-height:1.5;margin-bottom:18px;}
+.opts{display:flex;flex-direction:column;gap:8px;}
+.opt{display:flex;align-items:flex-start;gap:12px;background:var(--bg3);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:12px 16px;cursor:pointer;transition:all .18s;font-size:.9rem;color:var(--text);}
+.opt:hover:not(.locked){background:var(--bg4);border-color:rgba(122,193,67,.3);}
+.opt.selected{background:rgba(122,193,67,.1);border-color:var(--green);color:var(--white);}
+.opt.correct{background:rgba(122,193,67,.15);border-color:var(--green);color:#a8d87a;}
+.opt.incorrect{background:rgba(229,62,62,.08);border-color:var(--red);color:#f08080;}
+.opt.locked{cursor:default;}
+.ol{width:24px;height:24px;border-radius:50%;background:var(--bg4);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:800;color:var(--muted);flex-shrink:0;transition:all .18s;}
+.opt.selected .ol,.opt.correct .ol{background:var(--green);color:#000;border-color:var(--green);}
+.opt.incorrect .ol{background:var(--red);color:#fff;border-color:var(--red);}
+.exp{margin-top:14px;padding:12px 16px;background:rgba(122,193,67,.06);border-left:3px solid var(--green);border-radius:0 6px 6px 0;font-size:.86rem;color:var(--muted);display:none;line-height:1.6;}
+.exp.show{display:block;}
+.exp strong{color:var(--green);}
+.submit-area{text-align:center;margin-top:40px;}
+.btn-submit{background:var(--green);color:#000;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;letter-spacing:1.5px;text-transform:uppercase;padding:14px 40px;border-radius:8px;border:none;cursor:pointer;transition:all .2s;}
+.btn-submit:hover{background:var(--green-dark);transform:translateY(-2px);}
+.btn-submit:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+.sending{display:none;margin-top:16px;font-size:.88rem;color:var(--muted);text-align:center;}
+.sending.show{display:block;}
+.result{display:none;background:linear-gradient(135deg,#0d1f06,#1a2a0d);border:1px solid var(--green);border-radius:14px;padding:40px;text-align:center;margin-top:40px;}
+.result.show{display:block;}
+.r-score{font-family:'Barlow Condensed',sans-serif;font-size:5rem;font-weight:900;color:var(--green);line-height:1;}
+.r-label{font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:800;color:var(--white);text-transform:uppercase;margin-top:6px;}
+.r-student{margin-top:12px;font-size:.88rem;color:var(--muted);}
+.r-msg{color:var(--muted);margin:10px auto 0;max-width:380px;font-size:.9rem;}
+.r-ok{display:none;margin-top:14px;background:rgba(122,193,67,.08);border:1px solid rgba(122,193,67,.25);border-radius:8px;padding:10px 16px;font-size:.83rem;color:#a8d87a;}
+.r-ok.show{display:block;}
+.r-err{display:none;margin-top:14px;background:rgba(229,62,62,.08);border:1px solid rgba(229,62,62,.3);border-radius:8px;padding:10px 16px;font-size:.83rem;color:#f08080;}
+.r-err.show{display:block;}
+.r-actions{margin-top:24px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.btn-retry{background:transparent;color:var(--green);border:1px solid var(--green);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.9rem;letter-spacing:1px;text-transform:uppercase;padding:10px 24px;border-radius:6px;cursor:pointer;transition:all .2s;}
+.btn-retry:hover{background:var(--green);color:#000;}
+.btn-home{background:var(--bg3);color:var(--text);border:1px solid var(--border);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.9rem;letter-spacing:1px;text-transform:uppercase;padding:10px 24px;border-radius:6px;display:inline-flex;align-items:center;}
+@media(max-width:600px){.hero{padding:32px 24px;}.hero-title{font-size:2rem;}.main{padding:28px 16px 60px;}.qb{padding:20px 18px;}.sf-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <div class="nav-brand">Potrero <span>Digital</span></div>
+  <a href="index.html">← Inicio</a>
+  <a href="#" class="active">Cuestionario 6</a>
+</nav>
+<div class="hero">
+  <div class="hero-tag">Cuestionario</div>
+  <h1 class="hero-title">Capítulo 6 —<br><em>Nube y Virtualización</em></h1>
+  <p class="hero-sub">Cloud computing, IaaS/PaaS/SaaS, hipervisores tipo 1 y 2, contenedores Docker/Kubernetes y tendencias 2026.</p>
+  <div class="hero-meta">
+    <div class="hero-badge">📋 <strong>20 preguntas</strong></div>
+    <div class="hero-badge">✅ <strong>Aprobación: 70%</strong></div>
+    <div class="hero-badge">📊 <strong>Registro automático</strong></div>
+  </div>
+</div>
+<div class="main">
+<div class="sf">
+  <div class="sf-title">👤 Datos del alumno</div>
+  <div class="sf-grid">
+    <div class="sf-g"><label class="sf-label">Nombre completo</label><input class="sf-input" type="text" id="inp-nombre" placeholder="Ej: Juan Pérez" autocomplete="off"></div>
+    <div class="sf-g"><label class="sf-label">Comisión</label><input class="sf-input" type="text" id="inp-comision" placeholder="Ej: 6A" autocomplete="off"></div>
+  </div>
+</div>
+<div class="prog-label"><span id="prog-txt">0 de 20 respondidas</span><span id="prog-pct">0%</span></div>
+<div class="prog-wrap"><div class="prog-bar" id="prog-bar" style="width:0%"></div></div>
+
+<div class="qb" id="q1"><div class="q-num">Pregunta 01</div>
+<div class="q-text">¿Cuál es la definición más precisa de computación en la nube?</div>
+<div class="opts">
+  <div class="opt" data-q="1" data-val="a"><div class="ol">A</div>Un servicio de internet que almacena fotos y videos en línea</div>
+  <div class="opt" data-q="1" data-val="b"><div class="ol">B</div>Un modelo que permite acceso ubicuo y bajo demanda a recursos informáticos compartidos (servidores, almacenamiento, aplicaciones) a través de internet, con mínimo esfuerzo de gestión</div>
+  <div class="opt" data-q="1" data-val="c"><div class="ol">C</div>El proceso de hacer copias de seguridad de archivos en un disco externo</div>
+  <div class="opt" data-q="1" data-val="d"><div class="ol">D</div>Una red privada de computadoras dentro de una empresa</div>
+</div>
+<div class="exp" id="exp1"><strong>Correcto:</strong> Según la definición del NIST, cloud computing es un modelo de acceso ubicuo, conveniente y bajo demanda a recursos informáticos configurables compartidos que se pueden aprovisionar y liberar rápidamente. Las claves son: acceso por red, bajo demanda, pago por uso y mínima gestión del usuario.</div></div>
+
+<div class="qb" id="q2"><div class="q-num">Pregunta 02</div>
+<div class="q-text">¿Qué significa el modelo IaaS (Infraestructura como Servicio)?</div>
+<div class="opts">
+  <div class="opt" data-q="2" data-val="a"><div class="ol">A</div>El proveedor entrega software listo para usar accesible desde el navegador</div>
+  <div class="opt" data-q="2" data-val="b"><div class="ol">B</div>El proveedor entrega la plataforma de desarrollo con bases de datos y herramientas</div>
+  <div class="opt" data-q="2" data-val="c"><div class="ol">C</div>El cliente contrata infraestructura de hardware (servidores virtuales, almacenamiento, redes) y gestiona el SO y las aplicaciones; el proveedor gestiona el hardware físico</div>
+  <div class="opt" data-q="2" data-val="d"><div class="ol">D</div>El cliente solo paga por el almacenamiento utilizado, sin acceso a procesamiento</div>
+</div>
+<div class="exp" id="exp2"><strong>Correcto:</strong> En IaaS el cliente alquila la infraestructura (VMs, almacenamiento, red) pero gestiona el sistema operativo y las aplicaciones. Es como alquilar un terreno: vos construís la casa. Ejemplos: AWS EC2, Azure VMs, Google Compute Engine.</div></div>
+
+<div class="qb" id="q3"><div class="q-num">Pregunta 03</div>
+<div class="q-text">¿Qué diferencia al modelo SaaS del PaaS?</div>
+<div class="opts">
+  <div class="opt" data-q="3" data-val="a"><div class="ol">A</div>SaaS es para empresas grandes; PaaS es para usuarios individuales</div>
+  <div class="opt" data-q="3" data-val="b"><div class="ol">B</div>En SaaS el proveedor gestiona todo y el usuario solo usa la aplicación desde el navegador; en PaaS el cliente desarrolla y despliega sus propias aplicaciones sobre la plataforma del proveedor</div>
+  <div class="opt" data-q="3" data-val="c"><div class="ol">C</div>SaaS requiere instalación local; PaaS no</div>
+  <div class="opt" data-q="3" data-val="d"><div class="ol">D</div>No hay diferencia práctica entre ambos modelos</div>
+</div>
+<div class="exp" id="exp3"><strong>Correcto:</strong> En SaaS el usuario solo consume la aplicación (Gmail, Office 365, Zoom) — no instala, no actualiza, no gestiona nada. En PaaS el desarrollador usa la plataforma para construir sus propias aplicaciones (Google App Engine, Azure App Service) sin gestionar el hardware o el SO subyacente.</div></div>
+
+<div class="qb" id="q4"><div class="q-num">Pregunta 04</div>
+<div class="q-text">¿Cuáles de los siguientes son ejemplos de SaaS de uso cotidiano?</div>
+<div class="opts">
+  <div class="opt" data-q="4" data-val="a"><div class="ol">A</div>VMware ESXi y Oracle VirtualBox</div>
+  <div class="opt" data-q="4" data-val="b"><div class="ol">B</div>AWS EC2 y Google Compute Engine</div>
+  <div class="opt" data-q="4" data-val="c"><div class="ol">C</div>Microsoft 365, Google Workspace, Gmail y Zoom</div>
+  <div class="opt" data-q="4" data-val="d"><div class="ol">D</div>Windows Server y Ubuntu Server</div>
+</div>
+<div class="exp" id="exp4"><strong>Correcto:</strong> Microsoft 365 (Word, Excel, Teams online), Google Workspace (Gmail, Drive, Docs) y Zoom son ejemplos clásicos de SaaS: el usuario accede desde el navegador o app sin instalar ni gestionar nada. El proveedor administra toda la infraestructura, plataforma y aplicación.</div></div>
+
+<div class="qb" id="q5"><div class="q-num">Pregunta 05</div>
+<div class="q-text">¿Cuál es la principal ventaja del modelo de pago en la nube (pay-as-you-go) respecto al modelo de hardware propio?</div>
+<div class="opts">
+  <div class="opt" data-q="5" data-val="a"><div class="ol">A</div>El hardware propio es siempre más seguro que la nube</div>
+  <div class="opt" data-q="5" data-val="b"><div class="ol">B</div>Con pay-as-you-go solo se paga por los recursos efectivamente usados, sin invertir en hardware que puede estar subutilizado, y se puede escalar o reducir en minutos</div>
+  <div class="opt" data-q="5" data-val="c"><div class="ol">C</div>El pago en la nube siempre es más barato que tener servidores propios</div>
+  <div class="opt" data-q="5" data-val="d"><div class="ol">D</div>Con pay-as-you-go nunca hay que preocuparse por el uso de recursos</div>
+</div>
+<div class="exp" id="exp5"><strong>Correcto:</strong> El modelo pay-as-you-go elimina la inversión inicial en hardware y permite pagar solo por lo consumido. Un servidor físico comprado puede estar usando el 10% de su capacidad, pero el costo fijo es el mismo. En la nube, si usás el 10%, pagás el 10%. La escalabilidad inmediata (más o menos recursos en minutos) es otra ventaja clave.</div></div>
+
+<div class="qb" id="q6"><div class="q-num">Pregunta 06</div>
+<div class="q-text">¿Qué es una Máquina Virtual (VM)?</div>
+<div class="opts">
+  <div class="opt" data-q="6" data-val="a"><div class="ol">A</div>Un servidor físico de alta potencia dedicado a un solo cliente</div>
+  <div class="opt" data-q="6" data-val="b"><div class="ol">B</div>Una computadora virtual que corre sobre hardware físico compartido, creyendo que tiene hardware exclusivo, administrada por un hipervisor</div>
+  <div class="opt" data-q="6" data-val="c"><div class="ol">C</div>Un simulador de hardware para probar programas antes de compilarlos</div>
+  <div class="opt" data-q="6" data-val="d"><div class="ol">D</div>Una copia de seguridad del sistema operativo almacenada en la red</div>
+</div>
+<div class="exp" id="exp6"><strong>Correcto:</strong> Una VM es una computadora virtual creada por software. Tiene su propio SO (invitado), aplicaciones y archivos, pero comparte el hardware físico del host. Cada VM está aislada de las demás: un problema en una VM no afecta a las otras. El hipervisor gestiona la asignación de recursos.</div></div>
+
+<div class="qb" id="q7"><div class="q-num">Pregunta 07</div>
+<div class="q-text">¿Cuál es el principal problema del modelo de servidores dedicados tradicionales que la virtualización resuelve?</div>
+<div class="opts">
+  <div class="opt" data-q="7" data-val="a"><div class="ol">A</div>Que los servidores dedicados son demasiado pequeños para instalar múltiples sistemas operativos</div>
+  <div class="opt" data-q="7" data-val="b"><div class="ol">B</div>El desperdicio de recursos: cada servidor usa solo una fracción de su capacidad, pero genera costos fijos de hardware, espacio, energía y mantenimiento</div>
+  <div class="opt" data-q="7" data-val="c"><div class="ol">C</div>Que los servidores dedicados solo pueden ejecutar software de un fabricante específico</div>
+  <div class="opt" data-q="7" data-val="d"><div class="ol">D</div>Que los servidores dedicados no pueden conectarse a internet</div>
+</div>
+<div class="exp" id="exp7"><strong>Correcto:</strong> Un servidor de email puede usar solo el 10% de su CPU y RAM. Con hardware dedicado, ese 90% desperdiciado tiene el mismo costo fijo. La virtualización permite consolidar múltiples servicios en un solo servidor físico, usando los recursos de forma eficiente y reduciendo drásticamente la proliferación de servidores.</div></div>
+
+<div class="qb" id="q8"><div class="q-num">Pregunta 08</div>
+<div class="q-text">¿Qué es un hipervisor y cuál es su función principal?</div>
+<div class="opts">
+  <div class="opt" data-q="8" data-val="a"><div class="ol">A</div>Un procesador de alta velocidad diseñado específicamente para virtualización</div>
+  <div class="opt" data-q="8" data-val="b"><div class="ol">B</div>Software que crea, ejecuta y gestiona máquinas virtuales, administrando la asignación de recursos físicos (CPU, RAM, disco) entre las VMs</div>
+  <div class="opt" data-q="8" data-val="c"><div class="ol">C</div>Un sistema de almacenamiento en red para guardar imágenes de VMs</div>
+  <div class="opt" data-q="8" data-val="d"><div class="ol">D</div>Un protocolo de red para comunicar máquinas virtuales entre sí</div>
+</div>
+<div class="exp" id="exp8"><strong>Correcto:</strong> El hipervisor (VMM - Virtual Machine Monitor) es el software que hace posible la virtualización. Crea y gestiona las VMs, asigna recursos físicos (CPU, RAM, almacenamiento, red) a cada VM, y las aísla entre sí para que no interfieran. Sin hipervisor no hay virtualización.</div></div>
+
+<div class="qb" id="q9"><div class="q-num">Pregunta 09</div>
+<div class="q-text">¿Cuál es la diferencia fundamental entre un hipervisor de Tipo 1 y uno de Tipo 2?</div>
+<div class="opts">
+  <div class="opt" data-q="9" data-val="a"><div class="ol">A</div>El Tipo 1 crea más VMs que el Tipo 2; el Tipo 2 es más seguro</div>
+  <div class="opt" data-q="9" data-val="b"><div class="ol">B</div>El Tipo 1 corre directamente sobre el hardware sin SO host (bare-metal); el Tipo 2 corre como aplicación sobre un SO host existente</div>
+  <div class="opt" data-q="9" data-val="c"><div class="ol">C</div>El Tipo 1 es gratuito; el Tipo 2 siempre tiene costo</div>
+  <div class="opt" data-q="9" data-val="d"><div class="ol">D</div>El Tipo 1 es para Windows; el Tipo 2 es para Linux</div>
+</div>
+<div class="exp" id="exp9"><strong>Correcto:</strong> Tipo 1 (bare-metal): el hipervisor ES el SO del servidor, corre directamente sobre el hardware. Máximo rendimiento, usado en datacenters. Tipo 2 (hosted): el hipervisor es una aplicación que corre sobre un SO host (Windows, Linux). Más fácil de instalar, usado en PCs y notebooks de usuarios y desarrolladores.</div></div>
+
+<div class="qb" id="q10"><div class="q-num">Pregunta 10</div>
+<div class="q-text">¿Cuál de los siguientes es un hipervisor de Tipo 1 (bare-metal)?</div>
+<div class="opts">
+  <div class="opt" data-q="10" data-val="a"><div class="ol">A</div>Oracle VirtualBox</div>
+  <div class="opt" data-q="10" data-val="b"><div class="ol">B</div>VMware Workstation</div>
+  <div class="opt" data-q="10" data-val="c"><div class="ol">C</div>VMware vSphere/ESXi</div>
+  <div class="opt" data-q="10" data-val="d"><div class="ol">D</div>Parallels Desktop</div>
+</div>
+<div class="exp" id="exp10"><strong>Correcto:</strong> VMware vSphere/ESXi es un hipervisor de Tipo 1: corre directamente sobre el hardware del servidor sin necesitar un SO host. Es el estándar empresarial en datacenters. VirtualBox, VMware Workstation y Parallels son hipervisores de Tipo 2 que corren como aplicaciones sobre Windows, Linux o macOS.</div></div>
+
+<div class="qb" id="q11"><div class="q-num">Pregunta 11</div>
+<div class="q-text">¿Cómo puede un técnico en formación practicar con virtualización en su propia notebook con Windows 11 Pro sin instalar software adicional?</div>
+<div class="opts">
+  <div class="opt" data-q="11" data-val="a"><div class="ol">A</div>Descargando VMware Workstation de forma gratuita desde la web oficial</div>
+  <div class="opt" data-q="11" data-val="b"><div class="ol">B</div>Activando Hyper-V desde "Características de Windows", que está incluido en Windows 11 Pro sin costo adicional</div>
+  <div class="opt" data-q="11" data-val="c"><div class="ol">C</div>Usando el modo de compatibilidad de Windows 11 para ejecutar sistemas operativos antiguos</div>
+  <div class="opt" data-q="11" data-val="d"><div class="ol">D</div>Instalando una segunda copia de Windows 11 en una partición separada del disco</div>
+</div>
+<div class="exp" id="exp11"><strong>Correcto:</strong> Windows 11 Pro incluye Hyper-V, un hipervisor de Microsoft activable desde "Características de Windows" (Panel de Control). Sin costo adicional, permite crear y gestionar VMs con Linux, Windows Server u otros sistemas operativos. Es ideal para practicar en el laboratorio sin hardware adicional.</div></div>
+
+<div class="qb" id="q12"><div class="q-num">Pregunta 12</div>
+<div class="q-text">¿Para qué sirve un "snapshot" de una máquina virtual?</div>
+<div class="opts">
+  <div class="opt" data-q="12" data-val="a"><div class="ol">A</div>Para capturar una imagen de pantalla de lo que muestra la VM</div>
+  <div class="opt" data-q="12" data-val="b"><div class="ol">B</div>Para guardar el estado completo de la VM en un momento dado, pudiendo restaurarla exactamente a ese punto si algo sale mal</div>
+  <div class="opt" data-q="12" data-val="c"><div class="ol">C</div>Para clonar la VM y crear una copia idéntica en otro servidor</div>
+  <div class="opt" data-q="12" data-val="d"><div class="ol">D</div>Para pausar la VM y liberar recursos temporalmente para el host</div>
+</div>
+<div class="exp" id="exp12"><strong>Correcto:</strong> Un snapshot guarda el estado completo de la VM (memoria, disco, configuración) en un instante. Permite restaurar la VM exactamente a ese estado anterior. Es muy útil antes de instalar software riesgoso, aplicar actualizaciones o realizar cambios de configuración: si algo falla, se restaura el snapshot en segundos.</div></div>
+
+<div class="qb" id="q13"><div class="q-num">Pregunta 13</div>
+<div class="q-text">¿Cuál es la principal diferencia entre un contenedor Docker y una máquina virtual?</div>
+<div class="opts">
+  <div class="opt" data-q="13" data-val="a"><div class="ol">A</div>Los contenedores son más seguros que las VMs porque tienen más capas de aislamiento</div>
+  <div class="opt" data-q="13" data-val="b"><div class="ol">B</div>Los contenedores virtualizan a nivel de aplicación compartiendo el kernel del SO host, son más ligeros (MB vs GB) e inician en milisegundos; las VMs virtualizan hardware completo incluyendo SO</div>
+  <div class="opt" data-q="13" data-val="c"><div class="ol">C</div>Los contenedores solo funcionan en Linux; las VMs funcionan en cualquier SO</div>
+  <div class="opt" data-q="13" data-val="d"><div class="ol">D</div>Los contenedores son una versión simplificada de las VMs, con menos funcionalidades</div>
+</div>
+<div class="exp" id="exp13"><strong>Correcto:</strong> Las VMs incluyen un SO completo (GB de tamaño, minutos para iniciar). Los contenedores Docker solo incluyen la aplicación y sus dependencias, compartiendo el kernel del SO host (MB de tamaño, milisegundos para iniciar). Los contenedores son más eficientes para microservicios y despliegue continuo; las VMs ofrecen mayor aislamiento.</div></div>
+
+<div class="qb" id="q14"><div class="q-num">Pregunta 14</div>
+<div class="q-text">¿Qué es Kubernetes y en qué contexto se usa?</div>
+<div class="opts">
+  <div class="opt" data-q="14" data-val="a"><div class="ol">A</div>Un tipo de base de datos NoSQL desarrollado por Google para cloud</div>
+  <div class="opt" data-q="14" data-val="b"><div class="ol">B</div>Un sistema open source de orquestación de contenedores que automatiza el despliegue, escalado y gestión de cientos o miles de contenedores en producción</div>
+  <div class="opt" data-q="14" data-val="c"><div class="ol">C</div>Un hipervisor de Tipo 1 desarrollado por Google para datacenters</div>
+  <div class="opt" data-q="14" data-val="d"><div class="ol">D</div>Un protocolo de red para comunicar contenedores entre distintos proveedores cloud</div>
+</div>
+<div class="exp" id="exp14"><strong>Correcto:</strong> Kubernetes (K8s) es el estándar open source de Google para orquestación de contenedores. Cuando hay cientos o miles de contenedores en producción, K8s los gestiona automáticamente: escala según demanda, reinicia los que fallan, distribuye tráfico y gestiona actualizaciones sin downtime. Es la tecnología base de los tres grandes cloud providers.</div></div>
+
+<div class="qb" id="q15"><div class="q-num">Pregunta 15</div>
+<div class="q-text">¿Qué es el modelo de nube híbrida y por qué es tan adoptado en 2026?</div>
+<div class="opts">
+  <div class="opt" data-q="15" data-val="a"><div class="ol">A</div>Una nube que combina servicios de AWS y Azure simultáneamente</div>
+  <div class="opt" data-q="15" data-val="b"><div class="ol">B</div>Una combinación de nube pública y privada: las cargas sensibles van a la privada con mayor control, y las que necesitan escala van a la pública, obteniendo lo mejor de ambos modelos</div>
+  <div class="opt" data-q="15" data-val="c"><div class="ol">C</div>Una nube que funciona tanto desde el navegador como desde aplicaciones instaladas localmente</div>
+  <div class="opt" data-q="15" data-val="d"><div class="ol">D</div>Un modelo donde los datos se distribuyen automáticamente entre múltiples regiones geográficas</div>
+</div>
+<div class="exp" id="exp15"><strong>Correcto:</strong> La nube híbrida combina infraestructura privada (datacenter propio, mayor control y seguridad) con nube pública (mayor escala y elasticidad). Las cargas de trabajo críticas o con datos sensibles van a la privada; las que necesitan escalar rápidamente van a la pública. Es el modelo más adoptado por grandes empresas en 2025–2026.</div></div>
+
+<div class="qb" id="q16"><div class="q-num">Pregunta 16</div>
+<div class="q-text">¿Qué es el serverless computing y cuál es su principal ventaja?</div>
+<div class="opts">
+  <div class="opt" data-q="16" data-val="a"><div class="ol">A</div>Computación que no usa servidores físicos, basada completamente en computadoras personales</div>
+  <div class="opt" data-q="16" data-val="b"><div class="ol">B</div>Modelo en que el desarrollador solo escribe código (funciones), el proveedor gestiona toda la infraestructura y cobra solo por cada ejecución, sin necesidad de aprovisionar servidores</div>
+  <div class="opt" data-q="16" data-val="c"><div class="ol">C</div>Computación distribuida entre miles de dispositivos IoT sin servidor central</div>
+  <div class="opt" data-q="16" data-val="d"><div class="ol">D</div>Un modelo de nube privada que elimina la necesidad de conexión a internet</div>
+</div>
+<div class="exp" id="exp16"><strong>Correcto:</strong> En serverless (AWS Lambda, Azure Functions, Google Cloud Functions) el desarrollador solo escribe la función de código. El proveedor la ejecuta solo cuando se necesita, escala automáticamente y cobra por milisegundo de ejecución. No hay servidores que aprovisionar, parchear ni mantener. Ideal para tareas event-driven y microservicios.</div></div>
+
+<div class="qb" id="q17"><div class="q-num">Pregunta 17</div>
+<div class="q-text">¿Cuál es el proveedor cloud con mayor cuota de mercado en 2026 y con qué servicio pionero se asocia?</div>
+<div class="opts">
+  <div class="opt" data-q="17" data-val="a"><div class="ol">A</div>Microsoft Azure, con el servicio Teams como punta de lanza</div>
+  <div class="opt" data-q="17" data-val="b"><div class="ol">B</div>Amazon Web Services (AWS), el primer proveedor cloud masivo (2006) con ~32% de cuota de mercado</div>
+  <div class="opt" data-q="17" data-val="c"><div class="ol">C</div>Google Cloud Platform, gracias a su dominio en búsqueda web</div>
+  <div class="opt" data-q="17" data-val="d"><div class="ol">D</div>IBM Cloud, por su experiencia histórica en servidores empresariales</div>
+</div>
+<div class="exp" id="exp17"><strong>Correcto:</strong> AWS (Amazon Web Services) es el líder del mercado cloud con aproximadamente 32% de cuota en 2026. Fue el primer proveedor en ofrecer cloud pública a gran escala en 2006 (primero EC2 y S3). Microsoft Azure es segundo (~23%) y Google Cloud Platform tercero (~12%).</div></div>
+
+<div class="qb" id="q18"><div class="q-num">Pregunta 18</div>
+<div class="q-text">¿Qué es Windows 365 Cloud PC y qué modelo de cloud representa?</div>
+<div class="opts">
+  <div class="opt" data-q="18" data-val="a"><div class="ol">A</div>Una versión ligera de Windows 11 para dispositivos con poca RAM, es un modelo IaaS</div>
+  <div class="opt" data-q="18" data-val="b"><div class="ol">B</div>Un PC Windows completo en la nube al que se accede desde cualquier dispositivo con navegador, es el ejemplo más claro de SaaS de sistema operativo</div>
+  <div class="opt" data-q="18" data-val="c"><div class="ol">C</div>Un servicio de backup de Windows 11 en la nube de Microsoft, es un modelo PaaS</div>
+  <div class="opt" data-q="18" data-val="d"><div class="ol">D</div>Una plataforma para desarrolladores que quieren crear apps para Windows, es un modelo PaaS</div>
+</div>
+<div class="exp" id="exp18"><strong>Correcto:</strong> Windows 365 Cloud PC es un Windows 11 completo que corre en la nube de Azure y se accede desde cualquier dispositivo (PC, tablet, smartphone) con un navegador. El usuario tiene sus aplicaciones, archivos y configuraciones sin depender del hardware local. Es SaaS de SO: Microsoft gestiona todo, el usuario solo usa.</div></div>
+
+<div class="qb" id="q19"><div class="q-num">Pregunta 19</div>
+<div class="q-text">¿Qué problema resuelve el Edge Computing y en qué aplicaciones es crítico?</div>
+<div class="opts">
+  <div class="opt" data-q="19" data-val="a"><div class="ol">A</div>El costo excesivo de los proveedores cloud, procesando datos localmente para pagar menos</div>
+  <div class="opt" data-q="19" data-val="b"><div class="ol">B</div>La latencia: al procesar datos cerca del origen (dispositivos IoT, fábricas, vehículos) en lugar de enviarlos a una nube central, reduce el tiempo de respuesta a milisegundos</div>
+  <div class="opt" data-q="19" data-val="c"><div class="ol">C</div>La seguridad de los datos al cifrarlos en el dispositivo antes de enviarlos a la nube</div>
+  <div class="opt" data-q="19" data-val="d"><div class="ol">D</div>La falta de cobertura de internet en zonas remotas, creando mini-nubes locales</div>
+</div>
+<div class="exp" id="exp19"><strong>Correcto:</strong> Edge Computing reduce la latencia procesando datos en el borde de la red (cerca de donde se generan). Esto es crítico en aplicaciones donde milisegundos importan: vehículos autónomos (deben reaccionar antes de consultar la nube), cirugía robótica remota, control industrial en tiempo real e IoT de alta frecuencia.</div></div>
+
+<div class="qb" id="q20"><div class="q-num">Pregunta 20</div>
+<div class="q-text">¿Qué ventaja tiene la virtualización sobre los servidores dedicados en cuanto a recuperación ante desastres?</div>
+<div class="opts">
+  <div class="opt" data-q="20" data-val="a"><div class="ol">A</div>Las VMs no pueden sufrir fallos porque el hipervisor las protege automáticamente</div>
+  <div class="opt" data-q="20" data-val="b"><div class="ol">B</div>La imagen de una VM se puede guardar como archivo, copiar a otro servidor y restaurar rápidamente; con hardware dedicado hay que reparar o reemplazar físicamente el servidor antes de restaurar</div>
+  <div class="opt" data-q="20" data-val="c"><div class="ol">C</div>Las VMs no requieren hardware físico, por lo que no pueden sufrir fallas de hardware</div>
+  <div class="opt" data-q="20" data-val="d"><div class="ol">D</div>Los proveedores cloud garantizan por contrato que nunca habrá pérdida de datos</div>
+</div>
+<div class="exp" id="exp20"><strong>Correcto:</strong> Una VM es un archivo (o conjunto de archivos) que se puede copiar, mover y restaurar en cualquier servidor compatible. Si el servidor físico falla, la VM se levanta en otro host en minutos. Con hardware dedicado, una falla requiere reparar o reemplazar el equipo físico (horas o días) antes de poder restaurar el servicio.</div></div>
+
+<div class="submit-area">
+  <button class="btn-submit" id="btn-submit" disabled>Verificar y registrar respuestas</button>
+  <div class="sending" id="sending">⏳ Enviando resultados a Google Sheets…</div>
+</div>
+<div class="result" id="result">
+  <div class="r-score" id="r-score">0%</div>
+  <div class="r-label" id="r-label">—</div>
+  <div class="r-student" id="r-student"></div>
+  <div class="r-msg" id="r-msg"></div>
+  <div class="r-ok" id="r-ok">📊 Resultado registrado en Google Sheets correctamente.</div>
+  <div class="r-err" id="r-err">⚠️ No se pudo registrar en Google Sheets. Verificá la URL del script.</div>
+  <div class="r-actions">
+    <button class="btn-retry" onclick="location.reload()">Intentar nuevamente</button>
+    <a href="index.html" class="btn-home">← Volver al Inicio</a>
+  </div>
+</div>
+</div>
+<script>
+// ════════════════════════════════════════════════════
+// ⚙️  REEMPLAZÁ CON LA URL DE TU APPS SCRIPT
+// ════════════════════════════════════════════════════
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyFrp2PI4pJw9kobBFit18bTmkMkIRR4ThabNvTG6I16gJ8W7hX0U9iMfvDwL33vw41/exec';
+// ════════════════════════════════════════════════════
+const ANSWERS={1:'b',2:'c',3:'b',4:'c',5:'b',6:'b',7:'b',8:'b',9:'b',10:'c',11:'b',12:'b',13:'b',14:'b',15:'b',16:'b',17:'b',18:'b',19:'b',20:'b'};
+const sel={};let submitted=false;
+function updProg(){const n=Object.keys(sel).length,p=Math.round(n/20*100);document.getElementById('prog-bar').style.width=p+'%';document.getElementById('prog-txt').textContent=n+' de 20 respondidas';document.getElementById('prog-pct').textContent=p+'%';document.getElementById('btn-submit').disabled=(n<20||!document.getElementById('inp-nombre').value.trim());}
+document.getElementById('inp-nombre').addEventListener('input',updProg);
+document.querySelectorAll('.opt').forEach(o=>{o.addEventListener('click',()=>{if(submitted)return;const q=o.dataset.q;document.querySelectorAll(`.opt[data-q="${q}"]`).forEach(x=>x.classList.remove('selected'));o.classList.add('selected');sel[q]=o.dataset.val;document.getElementById('q'+q).classList.add('answered');updProg();});});
+document.getElementById('btn-submit').addEventListener('click',()=>{
+  if(submitted)return;
+  const nombre=document.getElementById('inp-nombre').value.trim(),comision=document.getElementById('inp-comision').value.trim();
+  if(!nombre){document.getElementById('inp-nombre').classList.add('error');document.getElementById('inp-nombre').focus();return;}
+  submitted=true;document.getElementById('btn-submit').disabled=true;
+  let correct=0;
+  for(let i=1;i<=20;i++){const ua=sel[String(i)],ca=ANSWERS[i];document.querySelectorAll(`.opt[data-q="${i}"]`).forEach(o=>{o.classList.add('locked');if(o.dataset.val===ca)o.classList.add('correct');else if(o.dataset.val===ua&&ua!==ca)o.classList.add('incorrect');});document.getElementById('exp'+i).classList.add('show');if(ua===ca)correct++;else{document.getElementById('q'+i).classList.remove('answered');document.getElementById('q'+i).classList.add('wrong');}}
+  const pct=Math.round(correct/20*100),label=pct>=90?'🏆 Excelente':pct>=70?'✅ Aprobado':'❌ A repasar',msg=pct>=90?`Obtuviste ${correct}/20. ¡Excelente dominio del capítulo!`:pct>=70?`Obtuviste ${correct}/20. Aprobado. Revisá las incorrectas.`:`Obtuviste ${correct}/20. Repasá el Capítulo 6 antes de continuar.`;
+  document.getElementById('r-score').textContent=pct+'%';document.getElementById('r-label').textContent=label;document.getElementById('r-student').textContent=nombre+(comision?' — Comisión: '+comision:'');document.getElementById('r-msg').textContent=msg;document.getElementById('result').classList.add('show');document.getElementById('result').scrollIntoView({behavior:'smooth',block:'center'});
+  if(SCRIPT_URL&&!SCRIPT_URL.includes('TU_APPS_SCRIPT')){document.getElementById('sending').classList.add('show');const now=new Date();fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({capitulo:'Capítulo 6',nombre,comision:comision||'—',fecha:now.toLocaleDateString('es-AR'),hora:now.toLocaleTimeString('es-AR'),puntaje:correct,total:20,porcentaje:pct})}).then(()=>{document.getElementById('sending').classList.remove('show');document.getElementById('r-ok').classList.add('show');}).catch(()=>{document.getElementById('sending').classList.remove('show');document.getElementById('r-err').classList.add('show');});}
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cuestionario — Capítulo 5 | Potrero Digital</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--green:#7ac143;--green-dark:#5c9430;--bg:#111;--bg2:#1a1a1a;--bg3:#222;--bg4:#2a2a2a;--text:#e8e8e8;--muted:#888;--border:rgba(122,193,67,.22);--white:#fff;--red:#e53e3e;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font-size:15px;line-height:1.7;}
+a{text-decoration:none;}
+.topnav{background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 28px;position:sticky;top:0;z-index:100;height:48px;}
+.nav-brand{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;color:var(--white);padding-right:20px;border-right:1px solid var(--border);margin-right:8px;}
+.nav-brand span{color:var(--green);}
+.topnav a{color:var(--muted);font-size:.8rem;font-weight:500;padding:0 14px;height:48px;display:flex;align-items:center;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s;}
+.topnav a:hover{color:var(--text);}
+.topnav a.active{color:var(--green);border-bottom-color:var(--green);font-weight:600;}
+.hero{background:linear-gradient(135deg,#0d1f06,#1a2a0d);border-bottom:2px solid var(--green);padding:52px 60px 44px;position:relative;overflow:hidden;}
+.hero-tag{display:inline-block;background:var(--green);color:#000;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.72rem;letter-spacing:2.5px;text-transform:uppercase;padding:4px 12px;border-radius:3px;margin-bottom:14px;}
+.hero-title{font-family:'Barlow Condensed',sans-serif;font-size:3rem;font-weight:800;line-height:1;color:var(--white);text-transform:uppercase;}
+.hero-title em{color:var(--green);font-style:normal;}
+.hero-sub{margin-top:10px;font-size:.9rem;color:rgba(255,255,255,.5);max-width:520px;}
+.hero-meta{margin-top:20px;display:flex;gap:20px;flex-wrap:wrap;}
+.hero-badge{display:flex;align-items:center;gap:6px;font-size:.82rem;color:var(--muted);}
+.hero-badge strong{color:var(--text);}
+.main{max-width:820px;margin:0 auto;padding:52px 40px 80px;}
+.sf{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:24px 28px;margin-bottom:32px;}
+.sf-title{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;}
+.sf-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.sf-g{display:flex;flex-direction:column;gap:6px;}
+.sf-label{font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;}
+.sf-input{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:10px 14px;font-family:'Barlow',sans-serif;font-size:.9rem;color:var(--text);outline:none;transition:border-color .2s;width:100%;}
+.sf-input:focus{border-color:var(--green);}
+.sf-input.error{border-color:var(--red);}
+.prog-label{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted);margin-bottom:8px;}
+.prog-wrap{background:var(--bg3);border-radius:100px;height:6px;margin-bottom:32px;overflow:hidden;}
+.prog-bar{height:100%;background:var(--green);border-radius:100px;transition:width .5s ease;}
+.qb{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:28px 30px;margin-bottom:16px;transition:border-color .2s;}
+.qb.answered{border-color:rgba(122,193,67,.4);}
+.qb.wrong{border-color:rgba(229,62,62,.4);}
+.q-num{font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;color:var(--green);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+.q-text{font-size:1rem;font-weight:500;color:var(--white);line-height:1.5;margin-bottom:18px;}
+.opts{display:flex;flex-direction:column;gap:8px;}
+.opt{display:flex;align-items:flex-start;gap:12px;background:var(--bg3);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:12px 16px;cursor:pointer;transition:all .18s;font-size:.9rem;color:var(--text);}
+.opt:hover:not(.locked){background:var(--bg4);border-color:rgba(122,193,67,.3);}
+.opt.selected{background:rgba(122,193,67,.1);border-color:var(--green);color:var(--white);}
+.opt.correct{background:rgba(122,193,67,.15);border-color:var(--green);color:#a8d87a;}
+.opt.incorrect{background:rgba(229,62,62,.08);border-color:var(--red);color:#f08080;}
+.opt.locked{cursor:default;}
+.ol{width:24px;height:24px;border-radius:50%;background:var(--bg4);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:800;color:var(--muted);flex-shrink:0;transition:all .18s;}
+.opt.selected .ol,.opt.correct .ol{background:var(--green);color:#000;border-color:var(--green);}
+.opt.incorrect .ol{background:var(--red);color:#fff;border-color:var(--red);}
+.exp{margin-top:14px;padding:12px 16px;background:rgba(122,193,67,.06);border-left:3px solid var(--green);border-radius:0 6px 6px 0;font-size:.86rem;color:var(--muted);display:none;line-height:1.6;}
+.exp.show{display:block;}
+.exp strong{color:var(--green);}
+.submit-area{text-align:center;margin-top:40px;}
+.btn-submit{background:var(--green);color:#000;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;letter-spacing:1.5px;text-transform:uppercase;padding:14px 40px;border-radius:8px;border:none;cursor:pointer;transition:all .2s;}
+.btn-submit:hover{background:var(--green-dark);transform:translateY(-2px);}
+.btn-submit:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+.sending{display:none;margin-top:16px;font-size:.88rem;color:var(--muted);text-align:center;}
+.sending.show{display:block;}
+.result{display:none;background:linear-gradient(135deg,#0d1f06,#1a2a0d);border:1px solid var(--green);border-radius:14px;padding:40px;text-align:center;margin-top:40px;}
+.result.show{display:block;}
+.r-score{font-family:'Barlow Condensed',sans-serif;font-size:5rem;font-weight:900;color:var(--green);line-height:1;}
+.r-label{font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:800;color:var(--white);text-transform:uppercase;margin-top:6px;}
+.r-student{margin-top:12px;font-size:.88rem;color:var(--muted);}
+.r-msg{color:var(--muted);margin:10px auto 0;max-width:380px;font-size:.9rem;}
+.r-ok{display:none;margin-top:14px;background:rgba(122,193,67,.08);border:1px solid rgba(122,193,67,.25);border-radius:8px;padding:10px 16px;font-size:.83rem;color:#a8d87a;}
+.r-ok.show{display:block;}
+.r-err{display:none;margin-top:14px;background:rgba(229,62,62,.08);border:1px solid rgba(229,62,62,.3);border-radius:8px;padding:10px 16px;font-size:.83rem;color:#f08080;}
+.r-err.show{display:block;}
+.r-actions{margin-top:24px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.btn-retry{background:transparent;color:var(--green);border:1px solid var(--green);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.9rem;letter-spacing:1px;text-transform:uppercase;padding:10px 24px;border-radius:6px;cursor:pointer;transition:all .2s;}
+.btn-retry:hover{background:var(--green);color:#000;}
+.btn-home{background:var(--bg3);color:var(--text);border:1px solid var(--border);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.9rem;letter-spacing:1px;text-transform:uppercase;padding:10px 24px;border-radius:6px;display:inline-flex;align-items:center;}
+@media(max-width:600px){.hero{padding:32px 24px;}.hero-title{font-size:2rem;}.main{padding:28px 16px 60px;}.qb{padding:20px 18px;}.sf-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="nav-brand">Potrero <span>Digital</span></div>
+  <a href="index.html">← Inicio</a>
+  <a href="#" class="active">Cuestionario 5</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">Cuestionario</div>
+  <h1 class="hero-title">Capítulo 5 —<br><em>Mantenimiento Preventivo</em></h1>
+  <p class="hero-sub">Limpieza, entorno, software, resolución de problemas en 6 pasos y herramientas de diagnóstico en Windows 11.</p>
+  <div class="hero-meta">
+    <div class="hero-badge">📋 <strong>20 preguntas</strong></div>
+    <div class="hero-badge">✅ <strong>Aprobación: 70%</strong></div>
+    <div class="hero-badge">📊 <strong>Registro automático</strong></div>
+  </div>
+</div>
+
+<div class="main">
+<div class="sf">
+  <div class="sf-title">👤 Datos del alumno</div>
+  <div class="sf-grid">
+    <div class="sf-g"><label class="sf-label">Nombre completo</label><input class="sf-input" type="text" id="inp-nombre" placeholder="Ej: Juan Pérez" autocomplete="off"></div>
+    <div class="sf-g"><label class="sf-label">Comisión</label><input class="sf-input" type="text" id="inp-comision" placeholder="Ej: 5A" autocomplete="off"></div>
+  </div>
+</div>
+
+<div class="prog-label"><span id="prog-txt">0 de 20 respondidas</span><span id="prog-pct">0%</span></div>
+<div class="prog-wrap"><div class="prog-bar" id="prog-bar" style="width:0%"></div></div>
+
+<div class="qb" id="q1"><div class="q-num">Pregunta 01</div>
+<div class="q-text">¿Cuál es la diferencia principal entre mantenimiento preventivo y correctivo?</div>
+<div class="opts">
+  <div class="opt" data-q="1" data-val="a"><div class="ol">A</div>El preventivo lo hace el usuario; el correctivo lo hace el técnico</div>
+  <div class="opt" data-q="1" data-val="b"><div class="ol">B</div>El preventivo se realiza antes de que ocurra una falla, con el objetivo de evitarla; el correctivo se realiza después de que el equipo ya falló</div>
+  <div class="opt" data-q="1" data-val="c"><div class="ol">C</div>El preventivo solo involucra limpieza; el correctivo incluye reemplazar piezas</div>
+  <div class="opt" data-q="1" data-val="d"><div class="ol">D</div>Son sinónimos, ambos términos describen el mismo proceso</div>
+</div>
+<div class="exp" id="exp1"><strong>Correcto:</strong> El mantenimiento preventivo actúa antes del fallo: limpieza, actualizaciones, revisión de componentes. El correctivo actúa después del fallo: diagnóstico y reparación. El preventivo es siempre más económico porque evita daños mayores y pérdida de datos.</div></div>
+
+<div class="qb" id="q2"><div class="q-num">Pregunta 02</div>
+<div class="q-text">¿Por qué las notebooks tienen más probabilidad que las PCs de escritorio de sufrir daños por contaminación?</div>
+<div class="opts">
+  <div class="opt" data-q="2" data-val="a"><div class="ol">A</div>Porque tienen peores materiales de fabricación que las PCs de escritorio</div>
+  <div class="opt" data-q="2" data-val="b"><div class="ol">B</div>Porque al ser portátiles se usan en distintos entornos y son más susceptibles a suciedad, derrames, caídas, temperatura y humedad extremas</div>
+  <div class="opt" data-q="2" data-val="c"><div class="ol">C</div>Porque no tienen ventiladores para disipar el calor</div>
+  <div class="opt" data-q="2" data-val="d"><div class="ol">D</div>Porque sus componentes son más baratos y se dañan más fácilmente</div>
+</div>
+<div class="exp" id="exp2"><strong>Correcto:</strong> La portabilidad de las notebooks las expone a entornos muy variados: cafeterías, transporte, al aire libre, fábricas. Esto aumenta la probabilidad de derrame de líquidos, caídas, polvo excesivo y variaciones de temperatura. Además, en las notebooks muchos componentes están justo debajo del teclado, muy vulnerables a derrames.</div></div>
+
+<div class="qb" id="q3"><div class="q-num">Pregunta 03</div>
+<div class="q-text">¿Qué efecto tiene el polvo acumulado dentro de una PC sobre sus componentes?</div>
+<div class="opts">
+  <div class="opt" data-q="3" data-val="a"><div class="ol">A</div>Solo afecta la apariencia estética del equipo, sin consecuencias para el hardware</div>
+  <div class="opt" data-q="3" data-val="b"><div class="ol">B</div>Impide el flujo de aire, eleva la temperatura de operación, acelera la degradación de componentes y puede crear puentes conductores que causan cortocircuitos</div>
+  <div class="opt" data-q="3" data-val="c"><div class="ol">C</div>Solo afecta al ventilador del gabinete, sin impacto en CPU ni GPU</div>
+  <div class="opt" data-q="3" data-val="d"><div class="ol">D</div>Reduce el consumo eléctrico del equipo al actuar como aislante</div>
+</div>
+<div class="exp" id="exp3"><strong>Correcto:</strong> El polvo es el principal enemigo físico de los componentes electrónicos. Obstruye ventiladores y disipadores (elevando temperatura hasta 20°C), puede crear puentes conductores entre pistas de la placa base (cortocircuito) y hace que los ventiladores trabajen más y se desgasten antes.</div></div>
+
+<div class="qb" id="q4"><div class="q-num">Pregunta 04</div>
+<div class="q-text">¿Qué productos están PROHIBIDOS para limpiar los componentes de una PC o pantalla?</div>
+<div class="opts">
+  <div class="opt" data-q="4" data-val="a"><div class="ol">A</div>Aire comprimido e hisopos de algodón</div>
+  <div class="opt" data-q="4" data-val="b"><div class="ol">B</div>Limpiadores abrasivos, productos con amoníaco y paños con pelusa</div>
+  <div class="opt" data-q="4" data-val="c"><div class="ol">C</div>Paños de microfibra y agua destilada</div>
+  <div class="opt" data-q="4" data-val="d"><div class="ol">D</div>Soluciones de limpieza leves y materiales no abrasivos</div>
+</div>
+<div class="exp" id="exp4"><strong>Correcto:</strong> Los limpiadores abrasivos rayan superficies plásticas y pantallas. Los productos con amoníaco dañan los recubrimientos anti-reflejo de las pantallas LCD/OLED. Los paños con pelusa dejan residuos y pueden rayar. Lo correcto: aire comprimido para interior, microfibra seca o con agua destilada para pantallas.</div></div>
+
+<div class="qb" id="q5"><div class="q-num">Pregunta 05</div>
+<div class="q-text">¿Cuál es el rango de temperatura ambiente óptimo para la operación de una PC?</div>
+<div class="opts">
+  <div class="opt" data-q="5" data-val="a"><div class="ol">A</div>0°C a 50°C</div>
+  <div class="opt" data-q="5" data-val="b"><div class="ol">B</div>15°C a 32°C</div>
+  <div class="opt" data-q="5" data-val="c"><div class="ol">C</div>10°C a 45°C</div>
+  <div class="opt" data-q="5" data-val="d"><div class="ol">D</div>5°C a 40°C</div>
+</div>
+<div class="exp" id="exp5"><strong>Correcto:</strong> El rango recomendado para operación de equipos informáticos es 15°C a 32°C. Por debajo pueden formarse condensación al encender el equipo (daño por humedad). Por encima se acelera la degradación térmica de componentes. La humedad relativa ideal es entre 20% y 80%.</div></div>
+
+<div class="qb" id="q6"><div class="q-num">Pregunta 06</div>
+<div class="q-text">¿Por qué la humedad baja (ambiente muy seco) es peligrosa para los componentes de PC?</div>
+<div class="opts">
+  <div class="opt" data-q="6" data-val="a"><div class="ol">A</div>Porque oxida los contactos metálicos de los conectores</div>
+  <div class="opt" data-q="6" data-val="b"><div class="ol">B</div>Porque favorece la acumulación de electricidad estática (ESD), que puede dañar permanentemente componentes electrónicos con descargas imperceptibles para el humano</div>
+  <div class="opt" data-q="6" data-val="c"><div class="ol">C</div>Porque reseca los lubricantes de los ventiladores y discos mecánicos</div>
+  <div class="opt" data-q="6" data-val="d"><div class="ol">D</div>Porque aumenta la resistencia eléctrica de los cables internos</div>
+</div>
+<div class="exp" id="exp6"><strong>Correcto:</strong> Los ambientes secos (humedad menor al 20%) favorecen la carga electrostática en el cuerpo humano. Una descarga de apenas 100V (imperceptible) puede dañar un chip o módulo de RAM. Por eso siempre se usa pulsera antiestática al manipular componentes internos, especialmente en épocas secas.</div></div>
+
+<div class="qb" id="q7"><div class="q-num">Pregunta 07</div>
+<div class="q-text">¿Para qué sirve CrystalDiskInfo en el contexto del mantenimiento preventivo?</div>
+<div class="opts">
+  <div class="opt" data-q="7" data-val="a"><div class="ol">A</div>Para limpiar archivos temporales y liberar espacio en el disco</div>
+  <div class="opt" data-q="7" data-val="b"><div class="ol">B</div>Para monitorear la salud de discos HDD y SSD mediante atributos S.M.A.R.T., alertando sobre posibles fallas antes de que ocurran</div>
+  <div class="opt" data-q="7" data-val="c"><div class="ol">C</div>Para desfragmentar y optimizar el sistema de archivos del disco</div>
+  <div class="opt" data-q="7" data-val="d"><div class="ol">D</div>Para formatear y reparar sectores dañados en discos HDD</div>
+</div>
+<div class="exp" id="exp7"><strong>Correcto:</strong> CrystalDiskInfo lee los atributos S.M.A.R.T. (Self-Monitoring, Analysis and Reporting Technology) que los discos registran internamente. Muestra indicadores como sectores reasignados, errores de lectura, temperatura y horas de uso. Permite anticipar una falla antes de que el disco pierda datos.</div></div>
+
+<div class="qb" id="q8"><div class="q-num">Pregunta 08</div>
+<div class="q-text">¿Por qué los SSD y NVMe NO deben desfragmentarse en Windows 11?</div>
+<div class="opts">
+  <div class="opt" data-q="8" data-val="a"><div class="ol">A</div>Porque son demasiado rápidos y la desfragmentación no lograría mejorar su velocidad</div>
+  <div class="opt" data-q="8" data-val="b"><div class="ol">B</div>Porque la desfragmentación genera escrituras innecesarias que desgastan las celdas NAND; Windows usa en cambio la operación TRIM que optimiza sin desgaste</div>
+  <div class="opt" data-q="8" data-val="c"><div class="ol">C</div>Porque los SSD no pueden almacenar la herramienta de desfragmentación</div>
+  <div class="opt" data-q="8" data-val="d"><div class="ol">D</div>Porque Windows 11 no incluye herramienta de desfragmentación</div>
+</div>
+<div class="exp" id="exp8"><strong>Correcto:</strong> Las celdas NAND de los SSDs tienen un número limitado de ciclos de escritura. La desfragmentación mueve datos entre sectores generando escrituras innecesarias, acortando la vida del SSD. TRIM, en cambio, le indica al controlador qué bloques están libres para ser reutilizados, sin reescribir datos.</div></div>
+
+<div class="qb" id="q9"><div class="q-num">Pregunta 09</div>
+<div class="q-text">¿Cuál es la función del comando "SFC /scannow" en Windows 11?</div>
+<div class="opts">
+  <div class="opt" data-q="9" data-val="a"><div class="ol">A</div>Analiza el disco en busca de virus y malware</div>
+  <div class="opt" data-q="9" data-val="b"><div class="ol">B</div>Verifica y repara automáticamente los archivos del sistema de Windows que estén dañados o faltantes</div>
+  <div class="opt" data-q="9" data-val="c"><div class="ol">C</div>Verifica y repara errores en el sistema de archivos del disco (sectores)</div>
+  <div class="opt" data-q="9" data-val="d"><div class="ol">D</div>Actualiza todos los drivers del sistema operativo automáticamente</div>
+</div>
+<div class="exp" id="exp9"><strong>Correcto:</strong> SFC (System File Checker) compara los archivos del sistema de Windows con copias protegidas y reemplaza los que estén corruptos o faltantes. Si SFC no puede reparar algunos archivos, se usa DISM para reparar la imagen del sistema. CHKDSK es el comando para verificar el sistema de archivos del disco.</div></div>
+
+<div class="qb" id="q10"><div class="q-num">Pregunta 10</div>
+<div class="q-text">¿Qué información proporciona el Monitor de Confiabilidad de Windows 11?</div>
+<div class="opts">
+  <div class="opt" data-q="10" data-val="a"><div class="ol">A</div>El rendimiento de la red y la velocidad de transferencia de datos</div>
+  <div class="opt" data-q="10" data-val="b"><div class="ol">B</div>Un historial visual con línea de tiempo de errores del sistema, cuelgues de aplicaciones, instalaciones y eventos críticos, facilitando identificar cuándo comenzó un problema</div>
+  <div class="opt" data-q="10" data-val="c"><div class="ol">C</div>El nivel de confiabilidad del proveedor de internet actual</div>
+  <div class="opt" data-q="10" data-val="d"><div class="ol">D</div>Un análisis de la RAM y detecta módulos con errores</div>
+</div>
+<div class="exp" id="exp10"><strong>Correcto:</strong> El Monitor de Confiabilidad (Panel de control → Seguridad → Ver historial de confiabilidad) muestra una línea de tiempo con eventos: errores de aplicación, errores del sistema, instalaciones y advertencias. Es muy útil para identificar exactamente qué día comenzó un problema y qué cambió en el sistema en esa fecha.</div></div>
+
+<div class="qb" id="q11"><div class="q-num">Pregunta 11</div>
+<div class="q-text">¿Cuál es el PRIMER paso del proceso de resolución de problemas?</div>
+<div class="opts">
+  <div class="opt" data-q="11" data-val="a"><div class="ol">A</div>Desarmar el equipo e inspeccionar todos los componentes visualmente</div>
+  <div class="opt" data-q="11" data-val="b"><div class="ol">B</div>Identificar el problema: recolectar toda la información posible del usuario y del equipo antes de intervenir</div>
+  <div class="opt" data-q="11" data-val="c"><div class="ol">C</div>Formatear el equipo para descartar problemas de software</div>
+  <div class="opt" data-q="11" data-val="d"><div class="ol">D</div>Reemplazar los componentes más probablemente dañados</div>
+</div>
+<div class="exp" id="exp11"><strong>Correcto:</strong> El Paso 1 es identificar el problema recolectando información: datos del cliente, configuración del equipo, descripción del problema, mensajes de error exactos y desde cuándo ocurre. Intervenir sin información es ineficiente y puede generar problemas nuevos. Un buen diagnóstico empieza siempre con escuchar al usuario.</div></div>
+
+<div class="qb" id="q12"><div class="q-num">Pregunta 12</div>
+<div class="q-text">En el Paso 2 (teoría de causas probables), ¿en qué orden se deben probar las posibles causas?</div>
+<div class="opts">
+  <div class="opt" data-q="12" data-val="a"><div class="ol">A</div>De la más cara a la más económica, para garantizar la solución definitiva</div>
+  <div class="opt" data-q="12" data-val="b"><div class="ol">B</div>De la más compleja a la más simple, porque los problemas difíciles son los más comunes</div>
+  <div class="opt" data-q="12" data-val="c"><div class="ol">C</div>De la más simple y obvia a la más compleja, siguiendo el principio de la Navaja de Occam</div>
+  <div class="opt" data-q="12" data-val="d"><div class="ol">D</div>Aleatoriamente, ya que no existe un orden que mejore la eficiencia</div>
+</div>
+<div class="exp" id="exp12"><strong>Correcto:</strong> Siempre de lo más simple a lo más complejo. Antes de abrir el equipo, verificar: ¿está enchufado? ¿el tomacorriente tiene tensión? ¿el cable está bien conectado? La mayoría de los problemas tienen causas simples. Buscar causas complejas antes de descartar las básicas es ineficiente y frustrante.</div></div>
+
+<div class="qb" id="q13"><div class="q-num">Pregunta 13</div>
+<div class="q-text">¿Qué debe hacer el técnico si agota todas las teorías del Paso 3 sin encontrar la causa del problema?</div>
+<div class="opts">
+  <div class="opt" data-q="13" data-val="a"><div class="ol">A</div>Declarar el equipo irrecuperable y recomendar comprar uno nuevo</div>
+  <div class="opt" data-q="13" data-val="b"><div class="ol">B</div>Formatear el sistema operativo como solución de último recurso</div>
+  <div class="opt" data-q="13" data-val="c"><div class="ol">C</div>Volver al Paso 1 para obtener nueva información, o buscar recursos adicionales como foros especializados y documentación del fabricante</div>
+  <div class="opt" data-q="13" data-val="d"><div class="ol">D</div>Reemplazar todos los componentes del equipo uno por uno hasta encontrar el defectuoso</div>
+</div>
+<div class="exp" id="exp13"><strong>Correcto:</strong> Si se agotan las teorías, significa que falta información. El técnico debe volver al Paso 1 (obtener más datos) o consultar recursos: motores de búsqueda, foros técnicos, manuales del fabricante, grupos de usuarios. Reemplazar componentes al azar sin diagnóstico es costoso e ineficiente.</div></div>
+
+<div class="qb" id="q14"><div class="q-num">Pregunta 14</div>
+<div class="q-text">¿Por qué el Paso 5 (verificar la funcionalidad total del sistema) es importante incluso después de resolver el problema específico?</div>
+<div class="opts">
+  <div class="opt" data-q="14" data-val="a"><div class="ol">A</div>Para cumplir con el protocolo formal y completar el ticket de soporte</div>
+  <div class="opt" data-q="14" data-val="b"><div class="ol">B</div>Porque un problema puede estar enmascarando otro, y hay que verificar que todo el sistema funcione correctamente, no solo el componente reparado</div>
+  <div class="opt" data-q="14" data-val="c"><div class="ol">C</div>Para que el cliente vea que el técnico hizo un trabajo completo</div>
+  <div class="opt" data-q="14" data-val="d"><div class="ol">D</div>Para reiniciar el equipo y verificar que el sistema operativo cargue</div>
+</div>
+<div class="exp" id="exp14"><strong>Correcto:</strong> Un problema puede coexistir con otro o haberlo causado. Si se reemplazó una fuente de alimentación dañada, también hay que verificar que no haya dañado otros componentes. La verificación completa garantiza que el equipo entregado al cliente funcione correctamente en todos sus aspectos.</div></div>
+
+<div class="qb" id="q15"><div class="q-num">Pregunta 15</div>
+<div class="q-text">¿Por qué el Paso 6 (registrar hallazgos) es considerado igual de importante que los pasos anteriores?</div>
+<div class="opts">
+  <div class="opt" data-q="15" data-val="a"><div class="ol">A</div>Porque es obligatorio por ley para todos los técnicos certificados</div>
+  <div class="opt" data-q="15" data-val="b"><div class="ol">B</div>Porque la documentación es la base del aprendizaje profesional: permite consultar soluciones anteriores, mantener historial del cliente y mejorar continuamente el proceso de diagnóstico</div>
+  <div class="opt" data-q="15" data-val="c"><div class="ol">C</div>Porque los fabricantes exigen un registro de reparaciones para mantener la garantía</div>
+  <div class="opt" data-q="15" data-val="d"><div class="ol">D</div>Solo es importante para facturación, no tiene valor técnico</div>
+</div>
+<div class="exp" id="exp15"><strong>Correcto:</strong> El registro de reparaciones permite: consultar soluciones a problemas similares, llevar historial del cliente (qué se reparó antes), analizar patrones de falla recurrentes, mejorar tiempos de diagnóstico y capacitar a otros técnicos. Un técnico que no documenta pierde conocimiento valioso con cada intervención.</div></div>
+
+<div class="qb" id="q16"><div class="q-num">Pregunta 16</div>
+<div class="q-text">¿Cuáles son los síntomas más comunes de un módulo de RAM defectuoso?</div>
+<div class="opts">
+  <div class="opt" data-q="16" data-val="a"><div class="ol">A</div>Pantalla muy oscura y teclado que no responde</div>
+  <div class="opt" data-q="16" data-val="b"><div class="ol">B</div>Pantalla azul (BSOD), reinicios aleatorios, errores al abrir programas y POST fallido con beeps</div>
+  <div class="opt" data-q="16" data-val="c"><div class="ol">C</div>Ruido mecánico al iniciar y lentitud extrema en carga de archivos</div>
+  <div class="opt" data-q="16" data-val="d"><div class="ol">D</div>Calentamiento excesivo del gabinete y apagado automático por temperatura</div>
+</div>
+<div class="exp" id="exp16"><strong>Correcto:</strong> Los síntomas de RAM defectuosa incluyen BSOD (pantalla azul), reinicios aleatorios sin causa aparente, errores al ejecutar programas y en casos graves, el POST falla con códigos de beep. Para diagnosticarlo, se usa la herramienta de Diagnóstico de Memoria de Windows (mdsched.exe) o MemTest86.</div></div>
+
+<div class="qb" id="q17"><div class="q-num">Pregunta 17</div>
+<div class="q-text">¿Qué herramienta de Windows 11 permite verificar el estado de salud de la batería de una notebook con detalle histórico?</div>
+<div class="opts">
+  <div class="opt" data-q="17" data-val="a"><div class="ol">A</div>Task Manager (Ctrl+Shift+Esc) → pestaña Rendimiento</div>
+  <div class="opt" data-q="17" data-val="b"><div class="ol">B</div>El comando "powercfg /batteryreport" que genera un informe HTML con capacidad actual, historial de carga y estimación de autonomía</div>
+  <div class="opt" data-q="17" data-val="c"><div class="ol">C</div>Panel de control → Opciones de energía → Estado de batería</div>
+  <div class="opt" data-q="17" data-val="d"><div class="ol">D</div>CrystalDiskInfo con el módulo de análisis de batería</div>
+</div>
+<div class="exp" id="exp17"><strong>Correcto:</strong> El comando <code>powercfg /batteryreport</code> (ejecutado en CMD o PowerShell como administrador) genera un archivo HTML en el directorio actual con: capacidad de diseño vs. capacidad actual, historial de cargas y descargas, estimaciones de autonomía y ciclos de uso. Es la herramienta oficial de Windows para diagnóstico de batería.</div></div>
+
+<div class="qb" id="q18"><div class="q-num">Pregunta 18</div>
+<div class="q-text">¿Qué diferencia hay entre usar "CHKDSK" y "SFC /scannow" en Windows 11?</div>
+<div class="opts">
+  <div class="opt" data-q="18" data-val="a"><div class="ol">A</div>Son el mismo comando con nombres diferentes para mayor compatibilidad</div>
+  <div class="opt" data-q="18" data-val="b"><div class="ol">B</div>CHKDSK verifica y repara errores en el sistema de archivos del disco (sectores); SFC /scannow verifica y repara los archivos del sistema operativo Windows dañados o faltantes</div>
+  <div class="opt" data-q="18" data-val="c"><div class="ol">C</div>CHKDSK solo funciona en HDDs; SFC solo funciona en SSDs</div>
+  <div class="opt" data-q="18" data-val="d"><div class="ol">D</div>CHKDSK requiere reiniciar; SFC funciona sin reiniciar y es más rápido</div>
+</div>
+<div class="exp" id="exp18"><strong>Correcto:</strong> CHKDSK (Check Disk) trabaja a nivel del disco: verifica errores en el sistema de archivos NTFS y sectores defectuosos. SFC (System File Checker) trabaja a nivel del sistema operativo: compara archivos de Windows con copias protegidas y reemplaza los dañados. Son complementarios y se usan en contextos distintos.</div></div>
+
+<div class="qb" id="q19"><div class="q-num">Pregunta 19</div>
+<div class="q-text">Un usuario reporta que su PC de escritorio se apaga sola luego de unos minutos de uso. ¿Cuál es la causa más probable y la primera acción a tomar?</div>
+<div class="opts">
+  <div class="opt" data-q="19" data-val="a"><div class="ol">A</div>Virus o malware; ejecutar Windows Defender inmediatamente</div>
+  <div class="opt" data-q="19" data-val="b"><div class="ol">B</div>Temperatura excesiva por polvo acumulado en el disipador de CPU o pasta térmica seca; limpiar el interior y revisar la temperatura con HWiNFO</div>
+  <div class="opt" data-q="19" data-val="c"><div class="ol">C</div>Falla del sistema de archivos; ejecutar CHKDSK en modo reparación</div>
+  <div class="opt" data-q="19" data-val="d"><div class="ol">D</div>RAM defectuosa; ejecutar Diagnóstico de Memoria de Windows</div>
+</div>
+<div class="exp" id="exp19"><strong>Correcto:</strong> El apagado automático luego de minutos de uso es el síntoma clásico de protección térmica: la CPU o GPU superan la temperatura máxima y el sistema se apaga para protegerse. La causa más común es polvo acumulado en el disipador o pasta térmica deteriorada. Acción inicial: abrir el equipo, limpiar y monitorear temperatura con HWiNFO.</div></div>
+
+<div class="qb" id="q20"><div class="q-num">Pregunta 20</div>
+<div class="q-text">¿Cada cuánto tiempo se recomienda renovar la pasta térmica del procesador de una notebook como mantenimiento preventivo?</div>
+<div class="opts">
+  <div class="opt" data-q="20" data-val="a"><div class="ol">A</div>Cada mes, como parte de la limpieza mensual habitual</div>
+  <div class="opt" data-q="20" data-val="b"><div class="ol">B</div>Nunca, la pasta térmica es de por vida y no se deteriora</div>
+  <div class="opt" data-q="20" data-val="c"><div class="ol">C</div>Cada año o dos años aproximadamente, o cuando se detecten temperaturas de CPU más altas de lo normal</div>
+  <div class="opt" data-q="20" data-val="d"><div class="ol">D</div>Cada vez que se instala una actualización de Windows</div>
+</div>
+<div class="exp" id="exp20"><strong>Correcto:</strong> La pasta térmica se seca y pierde eficacia con el tiempo, especialmente en equipos que operan a temperaturas altas. Se recomienda renovarla cada 1-2 años en notebooks de uso intensivo, o cuando se detecte que la temperatura de la CPU es notablemente más alta que antes sin causa aparente. En PC de escritorio puede durar 3-5 años.</div></div>
+
+<div class="submit-area">
+  <button class="btn-submit" id="btn-submit" disabled>Verificar y registrar respuestas</button>
+  <div class="sending" id="sending">⏳ Enviando resultados a Google Sheets…</div>
+</div>
+
+<div class="result" id="result">
+  <div class="r-score" id="r-score">0%</div>
+  <div class="r-label" id="r-label">—</div>
+  <div class="r-student" id="r-student"></div>
+  <div class="r-msg" id="r-msg"></div>
+  <div class="r-ok" id="r-ok">📊 Resultado registrado en Google Sheets correctamente.</div>
+  <div class="r-err" id="r-err">⚠️ No se pudo registrar en Google Sheets. Verificá la URL del script.</div>
+  <div class="r-actions">
+    <button class="btn-retry" onclick="location.reload()">Intentar nuevamente</button>
+    <a href="index.html" class="btn-home">← Volver al Inicio</a>
+  </div>
+</div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════
+// ⚙️  REEMPLAZÁ CON LA URL DE TU APPS SCRIPT
+// ════════════════════════════════════════════════════
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw-CVWhYrzN_JFyV8lZkLTFjhdXRq4kH5yiOLSzoeuVXsRHwp4CRI7HNlfIpWDfy_B4/exec';
+// ════════════════════════════════════════════════════
+
+const ANSWERS = {
+  1:'b',2:'b',3:'b',4:'b',5:'b',
+  6:'b',7:'b',8:'b',9:'b',10:'b',
+  11:'b',12:'c',13:'c',14:'b',15:'b',
+  16:'b',17:'b',18:'b',19:'b',20:'c'
+};
+
+const sel = {};
+let submitted = false;
+
+function updProg() {
+  const n = Object.keys(sel).length, p = Math.round(n/20*100);
+  document.getElementById('prog-bar').style.width = p+'%';
+  document.getElementById('prog-txt').textContent = n+' de 20 respondidas';
+  document.getElementById('prog-pct').textContent = p+'%';
+  document.getElementById('btn-submit').disabled = (n<20 || !document.getElementById('inp-nombre').value.trim());
+}
+document.getElementById('inp-nombre').addEventListener('input', updProg);
+
+document.querySelectorAll('.opt').forEach(o => {
+  o.addEventListener('click', () => {
+    if (submitted) return;
+    const q = o.dataset.q;
+    document.querySelectorAll(`.opt[data-q="${q}"]`).forEach(x => x.classList.remove('selected'));
+    o.classList.add('selected');
+    sel[q] = o.dataset.val;
+    document.getElementById('q'+q).classList.add('answered');
+    updProg();
+  });
+});
+
+document.getElementById('btn-submit').addEventListener('click', () => {
+  if (submitted) return;
+  const nombre = document.getElementById('inp-nombre').value.trim();
+  const comision = document.getElementById('inp-comision').value.trim();
+  if (!nombre) { document.getElementById('inp-nombre').classList.add('error'); document.getElementById('inp-nombre').focus(); return; }
+  submitted = true;
+  document.getElementById('btn-submit').disabled = true;
+  let correct = 0;
+  for (let i=1;i<=20;i++) {
+    const ua=sel[String(i)], ca=ANSWERS[i];
+    document.querySelectorAll(`.opt[data-q="${i}"]`).forEach(o => {
+      o.classList.add('locked');
+      if (o.dataset.val===ca) o.classList.add('correct');
+      else if (o.dataset.val===ua && ua!==ca) o.classList.add('incorrect');
+    });
+    document.getElementById('exp'+i).classList.add('show');
+    if (ua===ca) correct++;
+    else { document.getElementById('q'+i).classList.remove('answered'); document.getElementById('q'+i).classList.add('wrong'); }
+  }
+  const pct = Math.round(correct/20*100);
+  const label = pct>=90?'🏆 Excelente':pct>=70?'✅ Aprobado':'❌ A repasar';
+  const msg = pct>=90?`Obtuviste ${correct}/20. ¡Dominio completo!`:pct>=70?`Obtuviste ${correct}/20. Aprobado. Revisá las incorrectas.`:`Obtuviste ${correct}/20. Repasá el Capítulo 5 antes de continuar.`;
+  document.getElementById('r-score').textContent = pct+'%';
+  document.getElementById('r-label').textContent = label;
+  document.getElementById('r-student').textContent = nombre+(comision?' — Comisión: '+comision:'');
+  document.getElementById('r-msg').textContent = msg;
+  document.getElementById('result').classList.add('show');
+  document.getElementById('result').scrollIntoView({behavior:'smooth',block:'center'});
+  if (SCRIPT_URL && !SCRIPT_URL.includes('TU_APPS_SCRIPT')) {
+    document.getElementById('sending').classList.add('show');
+    const now = new Date();
+    fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({capitulo:'Capítulo 5',nombre,comision:comision||'—',
+        fecha:now.toLocaleDateString('es-AR'),hora:now.toLocaleTimeString('es-AR'),
+        puntaje:correct,total:20,porcentaje:pct})
+    })
+    .then(()=>{document.getElementById('sending').classList.remove('show');document.getElementById('r-ok').classList.add('show');})
+    .catch(()=>{document.getElementById('sending').classList.remove('show');document.getElementById('r-err').classList.add('show');});
+  }
+});
+</script>
+</body>
+</html>

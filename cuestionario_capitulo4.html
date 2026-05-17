@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cuestionario — Capítulo 4 | Potrero Digital</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--green:#7ac143;--green-dark:#5c9430;--bg:#111;--bg2:#1a1a1a;--bg3:#222;--bg4:#2a2a2a;--text:#e8e8e8;--muted:#888;--border:rgba(122,193,67,.22);--white:#fff;--red:#e53e3e;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font-size:15px;line-height:1.7;}
+a{text-decoration:none;}
+.topnav{background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 28px;position:sticky;top:0;z-index:100;height:48px;}
+.nav-brand{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;color:var(--white);padding-right:20px;border-right:1px solid var(--border);margin-right:8px;}
+.nav-brand span{color:var(--green);}
+.topnav a{color:var(--muted);font-size:.8rem;font-weight:500;padding:0 14px;height:48px;display:flex;align-items:center;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s;}
+.topnav a:hover{color:var(--text);}
+.topnav a.active{color:var(--green);border-bottom-color:var(--green);font-weight:600;}
+.hero{background:linear-gradient(135deg,#0d1f06,#1a2a0d);border-bottom:2px solid var(--green);padding:52px 60px 44px;position:relative;overflow:hidden;}
+.hero-tag{display:inline-block;background:var(--green);color:#000;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.72rem;letter-spacing:2.5px;text-transform:uppercase;padding:4px 12px;border-radius:3px;margin-bottom:14px;}
+.hero-title{font-family:'Barlow Condensed',sans-serif;font-size:3rem;font-weight:800;line-height:1;color:var(--white);text-transform:uppercase;}
+.hero-title em{color:var(--green);font-style:normal;}
+.hero-sub{margin-top:10px;font-size:.9rem;color:rgba(255,255,255,.5);max-width:520px;}
+.hero-meta{margin-top:20px;display:flex;gap:20px;flex-wrap:wrap;}
+.hero-badge{display:flex;align-items:center;gap:6px;font-size:.82rem;color:var(--muted);}
+.hero-badge strong{color:var(--text);}
+.main{max-width:820px;margin:0 auto;padding:52px 40px 80px;}
+.sf{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:24px 28px;margin-bottom:32px;}
+.sf-title{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;}
+.sf-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.sf-g{display:flex;flex-direction:column;gap:6px;}
+.sf-label{font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;}
+.sf-input{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:10px 14px;font-family:'Barlow',sans-serif;font-size:.9rem;color:var(--text);outline:none;transition:border-color .2s;width:100%;}
+.sf-input:focus{border-color:var(--green);}
+.sf-input.error{border-color:var(--red);}
+.prog-label{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted);margin-bottom:8px;}
+.prog-wrap{background:var(--bg3);border-radius:100px;height:6px;margin-bottom:32px;overflow:hidden;}
+.prog-bar{height:100%;background:var(--green);border-radius:100px;transition:width .5s ease;}
+.qb{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:28px 30px;margin-bottom:16px;transition:border-color .2s;}
+.qb.answered{border-color:rgba(122,193,67,.4);}
+.qb.wrong{border-color:rgba(229,62,62,.4);}
+.q-num{font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;color:var(--green);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+.q-text{font-size:1rem;font-weight:500;color:var(--white);line-height:1.5;margin-bottom:18px;}
+.opts{display:flex;flex-direction:column;gap:8px;}
+.opt{display:flex;align-items:flex-start;gap:12px;background:var(--bg3);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:12px 16px;cursor:pointer;transition:all .18s;font-size:.9rem;color:var(--text);}
+.opt:hover:not(.locked){background:var(--bg4);border-color:rgba(122,193,67,.3);}
+.opt.selected{background:rgba(122,193,67,.1);border-color:var(--green);color:var(--white);}
+.opt.correct{background:rgba(122,193,67,.15);border-color:var(--green);color:#a8d87a;}
+.opt.incorrect{background:rgba(229,62,62,.08);border-color:var(--red);color:#f08080;}
+.opt.locked{cursor:default;}
+.ol{width:24px;height:24px;border-radius:50%;background:var(--bg4);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:800;color:var(--muted);flex-shrink:0;transition:all .18s;}
+.opt.selected .ol{background:var(--green);color:#000;border-color:var(--green);}
+.opt.correct .ol{background:var(--green);color:#000;border-color:var(--green);}
+.opt.incorrect .ol{background:var(--red);color:#fff;border-color:var(--red);}
+.exp{margin-top:14px;padding:12px 16px;background:rgba(122,193,67,.06);border-left:3px solid var(--green);border-radius:0 6px 6px 0;font-size:.86rem;color:var(--muted);display:none;line-height:1.6;}
+.exp.show{display:block;}
+.exp strong{color:var(--green);}
+.submit-area{text-align:center;margin-top:40px;}
+.btn-submit{background:var(--green);color:#000;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;letter-spacing:1.5px;text-transform:uppercase;padding:14px 40px;border-radius:8px;border:none;cursor:pointer;transition:all .2s;}
+.btn-submit:hover{background:var(--green-dark);transform:translateY(-2px);}
+.btn-submit:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+.sending{display:none;margin-top:16px;font-size:.88rem;color:var(--muted);text-align:center;}
+.sending.show{display:block;}
+.result{display:none;background:linear-gradient(135deg,#0d1f06,#1a2a0d);border:1px solid var(--green);border-radius:14px;padding:40px;text-align:center;margin-top:40px;}
+.result.show{display:block;}
+.r-score{font-family:'Barlow Condensed',sans-serif;font-size:5rem;font-weight:900;color:var(--green);line-height:1;}
+.r-label{font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:800;color:var(--white);text-transform:uppercase;margin-top:6px;}
+.r-student{margin-top:12px;font-size:.88rem;color:var(--muted);}
+.r-msg{color:var(--muted);margin:10px auto 0;max-width:380px;font-size:.9rem;}
+.r-ok{display:none;margin-top:14px;background:rgba(122,193,67,.08);border:1px solid rgba(122,193,67,.25);border-radius:8px;padding:10px 16px;font-size:.83rem;color:#a8d87a;}
+.r-ok.show{display:block;}
+.r-err{display:none;margin-top:14px;background:rgba(229,62,62,.08);border:1px solid rgba(229,62,62,.3);border-radius:8px;padding:10px 16px;font-size:.83rem;color:#f08080;}
+.r-err.show{display:block;}
+.r-actions{margin-top:24px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.btn-retry{background:transparent;color:var(--green);border:1px solid var(--green);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.9rem;letter-spacing:1px;text-transform:uppercase;padding:10px 24px;border-radius:6px;cursor:pointer;transition:all .2s;}
+.btn-retry:hover{background:var(--green);color:#000;}
+.btn-home{background:var(--bg3);color:var(--text);border:1px solid var(--border);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.9rem;letter-spacing:1px;text-transform:uppercase;padding:10px 24px;border-radius:6px;display:inline-flex;align-items:center;}
+@media(max-width:600px){.hero{padding:32px 24px;}.hero-title{font-size:2rem;}.main{padding:28px 16px 60px;}.qb{padding:20px 18px;}.sf-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="nav-brand">Potrero <span>Digital</span></div>
+  <a href="index.html">← Inicio</a>
+  <a href="#" class="active">Cuestionario 4</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">Cuestionario</div>
+  <h1 class="hero-title">Capítulo 4 — <em>Notebook y sus<br>Componentes</em></h1>
+  <p class="hero-sub">SODIMM, pantallas, almacenamiento, conectividad, batería, ACPI y tecnología actual 2026.</p>
+  <div class="hero-meta">
+    <div class="hero-badge">📋 <strong>20 preguntas</strong></div>
+    <div class="hero-badge">✅ <strong>Aprobación: 70%</strong></div>
+    <div class="hero-badge">📊 <strong>Registro automático</strong></div>
+  </div>
+</div>
+
+<div class="main">
+
+<div class="sf">
+  <div class="sf-title">👤 Datos del alumno</div>
+  <div class="sf-grid">
+    <div class="sf-g">
+      <label class="sf-label">Nombre completo</label>
+      <input class="sf-input" type="text" id="inp-nombre" placeholder="Ej: Juan Pérez" autocomplete="off">
+    </div>
+    <div class="sf-g">
+      <label class="sf-label">Comisión</label>
+      <input class="sf-input" type="text" id="inp-comision" placeholder="Ej: 4A" autocomplete="off">
+    </div>
+  </div>
+</div>
+
+<div class="prog-label"><span id="prog-txt">0 de 20 respondidas</span><span id="prog-pct">0%</span></div>
+<div class="prog-wrap"><div class="prog-bar" id="prog-bar" style="width:0%"></div></div>
+
+<!-- Q1 -->
+<div class="qb" id="q1"><div class="q-num">Pregunta 01</div>
+<div class="q-text">¿Por qué las placas base de las notebooks tienen "factor de forma especial y propietario"?</div>
+<div class="opts">
+  <div class="opt" data-q="1" data-val="a"><div class="ol">A</div>Porque son más caras y exclusivas que las de escritorio</div>
+  <div class="opt" data-q="1" data-val="b"><div class="ol">B</div>Porque deben adaptarse al espacio reducido del chasis de cada modelo, variando en forma y tamaño según el fabricante, y generalmente no son intercambiables</div>
+  <div class="opt" data-q="1" data-val="c"><div class="ol">C</div>Porque utilizan un socket de CPU diferente al de escritorio en todos los casos</div>
+  <div class="opt" data-q="1" data-val="d"><div class="ol">D</div>Porque incluyen la batería integrada en la placa base</div>
+</div>
+<div class="exp" id="exp1"><strong>Correcto:</strong> La naturaleza compacta de las notebooks obliga a diseños muy específicos. Cada fabricante diseña su placa base a medida del chasis, lo que hace que sean únicas para cada modelo. Esto dificulta la reparación cuando el daño es en la placa base.</div></div>
+
+<!-- Q2 -->
+<div class="qb" id="q2"><div class="q-num">Pregunta 02</div>
+<div class="q-text">¿Qué diferencia física existe entre un módulo DIMM (escritorio) y un SODIMM (notebook)?</div>
+<div class="opts">
+  <div class="opt" data-q="2" data-val="a"><div class="ol">A</div>El SODIMM opera a mayor voltaje que el DIMM</div>
+  <div class="opt" data-q="2" data-val="b"><div class="ol">B</div>El SODIMM es notablemente más corto y compacto que el DIMM, diseñado para caber en el espacio reducido de una notebook</div>
+  <div class="opt" data-q="2" data-val="c"><div class="ol">C</div>El DIMM tiene más pines de conexión que el SODIMM</div>
+  <div class="opt" data-q="2" data-val="d"><div class="ol">D</div>No hay diferencia física, solo difieren en la velocidad de operación</div>
+</div>
+<div class="exp" id="exp2"><strong>Correcto:</strong> El SODIMM mide aproximadamente 67mm de largo vs 133mm del DIMM estándar. Su diseño compacto es lo que permite instalarlo en el espacio reducido de una notebook. Funcionalmente ambos cumplen la misma función: memoria RAM de trabajo.</div></div>
+
+<!-- Q3 -->
+<div class="qb" id="q3"><div class="q-num">Pregunta 03</div>
+<div class="q-text">¿Qué tipo de memoria RAM se usa en ultrabooks y notebooks con chips ARM en 2026 y por qué no se puede reemplazar?</div>
+<div class="opts">
+  <div class="opt" data-q="3" data-val="a"><div class="ol">A</div>DDR5 SODIMM, porque no hay ranuras disponibles en esos modelos</div>
+  <div class="opt" data-q="3" data-val="b"><div class="ol">B</div>LPDDR5X soldada directamente en la placa base (on-board), lo que reduce el voltaje a 0.9V y el tamaño, pero impide su reemplazo posterior</div>
+  <div class="opt" data-q="3" data-val="c"><div class="ol">C</div>DDR4 estándar, porque es la más económica y compatible</div>
+  <div class="opt" data-q="3" data-val="d"><div class="ol">D</div>GDDR6, la misma que usan las tarjetas de video</div>
+</div>
+<div class="exp" id="exp3"><strong>Correcto:</strong> LPDDR5X (Low Power DDR5X) opera a 0.9V y se suelda directamente en la placa base para minimizar el espacio y la latencia. Esta arquitectura es característica de Apple M-series, Qualcomm Snapdragon X y otros chips ARM. La desventaja es que la RAM no puede ampliarse después de la compra.</div></div>
+
+<!-- Q4 -->
+<div class="qb" id="q4"><div class="q-num">Pregunta 04</div>
+<div class="q-text">¿Cuál es el estándar de almacenamiento interno más rápido en notebooks actuales (2026)?</div>
+<div class="opts">
+  <div class="opt" data-q="4" data-val="a"><div class="ol">A</div>HDD 2.5" con interfaz SATA III</div>
+  <div class="opt" data-q="4" data-val="b"><div class="ol">B</div>SSD 2.5" con interfaz SATA III (~550 MB/s)</div>
+  <div class="opt" data-q="4" data-val="c"><div class="ol">C</div>SSD NVMe en slot M.2 con interfaz PCIe 4.0 o 5.0 (hasta 14.000 MB/s)</div>
+  <div class="opt" data-q="4" data-val="d"><div class="ol">D</div>Tarjeta SD Express conectada al lector integrado</div>
+</div>
+<div class="exp" id="exp4"><strong>Correcto:</strong> El SSD NVMe en slot M.2 (PCIe 4.0: ~7.000 MB/s, PCIe 5.0: ~14.000 MB/s) es el estándar de almacenamiento en notebooks actuales. Es hasta 25 veces más rápido que un HDD mecánico y está presente en prácticamente todas las notebooks de gama media y alta de 2024–2026.</div></div>
+
+<!-- Q5 -->
+<div class="qb" id="q5"><div class="q-num">Pregunta 05</div>
+<div class="q-text">Una notebook antigua tiene una unidad óptica (DVD) que el usuario ya no usa. ¿Qué se puede hacer para aprovechar ese espacio?</div>
+<div class="opts">
+  <div class="opt" data-q="5" data-val="a"><div class="ol">A</div>No se puede hacer nada, el espacio de la óptica está inutilizable si se retira</div>
+  <div class="opt" data-q="5" data-val="b"><div class="ol">B</div>Instalar un adaptador caddy que permite colocar un segundo HDD o SSD 2.5" en ese espacio</div>
+  <div class="opt" data-q="5" data-val="c"><div class="ol">C</div>Instalar una segunda batería para mayor autonomía</div>
+  <div class="opt" data-q="5" data-val="d"><div class="ol">D</div>Solo se puede dejar el espacio vacío para mejorar la ventilación</div>
+</div>
+<div class="exp" id="exp5"><strong>Correcto:</strong> El adaptador caddy (también llamado HDD caddy) ocupa el espacio de la unidad óptica y permite instalar un disco HDD o SSD 2.5" adicional. Es una excelente forma de agregar almacenamiento a notebooks que no tienen slot M.2.</div></div>
+
+<!-- Q6 -->
+<div class="qb" id="q6"><div class="q-num">Pregunta 06</div>
+<div class="q-text">¿Qué diferencia principal existe entre una pantalla IPS y una TN en notebooks?</div>
+<div class="opts">
+  <div class="opt" data-q="6" data-val="a"><div class="ol">A</div>La IPS consume más batería y tiene menor brillo que la TN</div>
+  <div class="opt" data-q="6" data-val="b"><div class="ol">B</div>La IPS tiene mejores ángulos de visión (178°) y colores más precisos; la TN tiene menor tiempo de respuesta (1ms) pero ángulos y colores inferiores</div>
+  <div class="opt" data-q="6" data-val="c"><div class="ol">C</div>La TN soporta contenido HDR y la IPS no</div>
+  <div class="opt" data-q="6" data-val="d"><div class="ol">D</div>No hay diferencia práctica entre ambas tecnologías en uso cotidiano</div>
+</div>
+<div class="exp" id="exp6"><strong>Correcto:</strong> TN (Twisted Nematic) tiene tiempos de respuesta muy bajos (gaming), pero ángulos de visión pobres y colores menos fieles. IPS (In-Plane Switching) ofrece 178° de ángulo de visión y colores más precisos, siendo la preferida para diseño, trabajo y uso general.</div></div>
+
+<!-- Q7 -->
+<div class="qb" id="q7"><div class="q-num">Pregunta 07</div>
+<div class="q-text">¿Por qué las pantallas OLED logran negros perfectos y contraste infinito?</div>
+<div class="opts">
+  <div class="opt" data-q="7" data-val="a"><div class="ol">A</div>Porque usan una capa de pintura negra adicional sobre el panel</div>
+  <div class="opt" data-q="7" data-val="b"><div class="ol">B</div>Porque cada píxel emite su propia luz y puede apagarse completamente para mostrar negro absoluto, sin depender de retroiluminación</div>
+  <div class="opt" data-q="7" data-val="c"><div class="ol">C</div>Porque tienen mayor cantidad de subpíxeles que las pantallas LCD</div>
+  <div class="opt" data-q="7" data-val="d"><div class="ol">D</div>Porque usan filtros de polarización más eficientes que los LCD</div>
+</div>
+<div class="exp" id="exp7"><strong>Correcto:</strong> En OLED cada píxel es su propia fuente de luz. Para mostrar negro, el píxel simplemente se apaga (consume 0W ese píxel). En cambio, las LCD necesitan retroiluminación siempre encendida, y los filtros de cristal líquido nunca bloquean la luz completamente, generando negros "grisáceos".</div></div>
+
+<!-- Q8 -->
+<div class="qb" id="q8"><div class="q-num">Pregunta 08</div>
+<div class="q-text">¿Qué precaución debe tomar un usuario de notebook con pantalla OLED para evitar el burn-in?</div>
+<div class="opts">
+  <div class="opt" data-q="8" data-val="a"><div class="ol">A</div>No usar la notebook más de 4 horas seguidas</div>
+  <div class="opt" data-q="8" data-val="b"><div class="ol">B</div>Usar el modo oscuro de Windows 11, evitar imágenes estáticas prolongadas y activar el protector de pantalla</div>
+  <div class="opt" data-q="8" data-val="c"><div class="ol">C</div>Calibrar los colores cada 3 meses con software especializado</div>
+  <div class="opt" data-q="8" data-val="d"><div class="ol">D</div>Mantener siempre el brillo al mínimo posible</div>
+</div>
+<div class="exp" id="exp8"><strong>Correcto:</strong> El burn-in ocurre cuando elementos estáticos (barra de tareas, iconos fijos) se muestran durante horas, "quemando" esos píxeles. El modo oscuro de Windows 11 reduce la actividad de los píxeles de la barra de tareas. También conviene activar rotación de píxeles y protector de pantalla.</div></div>
+
+<!-- Q9 -->
+<div class="qb" id="q9"><div class="q-num">Pregunta 09</div>
+<div class="q-text">¿Qué es una notebook "2-en-1" y qué ventaja ofrece?</div>
+<div class="opts">
+  <div class="opt" data-q="9" data-val="a"><div class="ol">A</div>Una notebook con dos procesadores para mayor rendimiento</div>
+  <div class="opt" data-q="9" data-val="b"><div class="ol">B</div>Una notebook cuya pantalla puede desmontarse o girarse 360° para usarla como tablet, combinando las funciones de ambos dispositivos</div>
+  <div class="opt" data-q="9" data-val="c"><div class="ol">C</div>Una notebook con dos baterías para mayor autonomía</div>
+  <div class="opt" data-q="9" data-val="d"><div class="ol">D</div>Una notebook con dos sistemas operativos instalados</div>
+</div>
+<div class="exp" id="exp9"><strong>Correcto:</strong> Las notebooks 2-en-1 tienen bisagra de 360° (convertibles) o pantalla desmontable (detachables). Permiten usarlas como laptop tradicional o como tablet, aprovechando la pantalla táctil. Son ideales para presentaciones, dibujo digital y trabajo en movimiento.</div></div>
+
+<!-- Q10 -->
+<div class="qb" id="q10"><div class="q-num">Pregunta 10</div>
+<div class="q-text">¿Cuáles son las señales que indican que la batería de una notebook debe reemplazarse?</div>
+<div class="opts">
+  <div class="opt" data-q="10" data-val="a"><div class="ol">A</div>El ventilador hace más ruido de lo normal</div>
+  <div class="opt" data-q="10" data-val="b"><div class="ol">B</div>La pantalla parpadea cuando el equipo funciona solo con batería</div>
+  <div class="opt" data-q="10" data-val="c"><div class="ol">C</div>La batería no conserva la carga, se recalienta, presenta pérdida, el gabinete se abomba, o Windows indica "Considere reemplazar la batería"</div>
+  <div class="opt" data-q="10" data-val="d"><div class="ol">D</div>La notebook tarda más en encenderse de lo normal</div>
+</div>
+<div class="exp" id="exp10"><strong>Correcto:</strong> Estas son las señales clásicas de batería defectuosa. Especialmente peligroso es el abombamiento del gabinete (batería LiPo hinchada), que indica riesgo de incendio. En ese caso hay que retirarla con cuidado y llevarla a reciclaje especializado. Nunca perforarla ni presionarla.</div></div>
+
+<!-- Q11 -->
+<div class="qb" id="q11"><div class="q-num">Pregunta 11</div>
+<div class="q-text">¿Qué significa el estado S3 del estándar ACPI?</div>
+<div class="opts">
+  <div class="opt" data-q="11" data-val="a"><div class="ol">A</div>La computadora está apagada completamente</div>
+  <div class="opt" data-q="11" data-val="b"><div class="ol">B</div>La CPU está apagada y la frecuencia de actualización definida para la RAM se lenta; el contenido de la RAM está almacenado en el disco (hibernación)</div>
+  <div class="opt" data-q="11" data-val="c"><div class="ol">C</div>La CPU y la RAM están operativas en modo de bajo consumo (suspensión en RAM o "sleep")</div>
+  <div class="opt" data-q="11" data-val="d"><div class="ol">D</div>El sistema está funcionando normalmente con todos los componentes activos</div>
+</div>
+<div class="exp" id="exp11"><strong>Correcto:</strong> S3 es el estado de "Suspensión en RAM" (Sleep): la CPU se apaga, pero la RAM mantiene su contenido activo con muy poca energía. Al presionar cualquier tecla, el sistema se recupera en segundos. S4 es hibernación (guarda en disco) y S5 es apagado completo.</div></div>
+
+<!-- Q12 -->
+<div class="qb" id="q12"><div class="q-num">Pregunta 12</div>
+<div class="q-text">¿Qué es Wake on LAN (WOL) y en qué contexto es útil?</div>
+<div class="opts">
+  <div class="opt" data-q="12" data-val="a"><div class="ol">A</div>Una tecnología para conectarse a redes Wi-Fi sin contraseña</div>
+  <div class="opt" data-q="12" data-val="b"><div class="ol">B</div>Una función que permite encender remotamente una computadora apagada enviando una señal especial por red (magic packet)</div>
+  <div class="opt" data-q="12" data-val="c"><div class="ol">C</div>Un protocolo que detecta automáticamente redes disponibles al encender</div>
+  <div class="opt" data-q="12" data-val="d"><div class="ol">D</div>Una función que activa el Wi-Fi automáticamente al despertar de la suspensión</div>
+</div>
+<div class="exp" id="exp12"><strong>Correcto:</strong> Wake on LAN permite encender un equipo de forma remota a través de la red, enviando un paquete especial (magic packet) a la dirección MAC del adaptador de red. Es muy útil en entornos empresariales para mantenimiento remoto sin necesidad de presencia física.</div></div>
+
+<!-- Q13 -->
+<div class="qb" id="q13"><div class="q-num">Pregunta 13</div>
+<div class="q-text">¿Qué ventaja tiene el estándar USB-C Power Delivery (PD) para los usuarios de notebooks en 2026?</div>
+<div class="opts">
+  <div class="opt" data-q="13" data-val="a"><div class="ol">A</div>Permite cargar la notebook 10 veces más rápido que el cargador convencional</div>
+  <div class="opt" data-q="13" data-val="b"><div class="ol">B</div>Permite usar un mismo cargador USB-C para cargar la notebook, el teléfono y otros dispositivos, con soporte de hasta 240W</div>
+  <div class="opt" data-q="13" data-val="c"><div class="ol">C</div>Solo funciona con notebooks de la misma marca que el cargador</div>
+  <div class="opt" data-q="13" data-val="d"><div class="ol">D</div>Requiere un adaptador especial para cada modelo de notebook</div>
+</div>
+<div class="exp" id="exp13"><strong>Correcto:</strong> USB-C Power Delivery (PD 3.1) soporta hasta 240W y es universal: el mismo cable y cargador puede usarse con notebooks, tablets, teléfonos y accesorios de distintas marcas. Esto simplifica enormemente el equipaje al viajar y reduce el número de cargadores necesarios.</div></div>
+
+<!-- Q14 -->
+<div class="qb" id="q14"><div class="q-num">Pregunta 14</div>
+<div class="q-text">¿Qué diferencia hay entre Wi-Fi 6E y Wi-Fi 7 en cuanto a bandas de frecuencia?</div>
+<div class="opts">
+  <div class="opt" data-q="14" data-val="a"><div class="ol">A</div>Wi-Fi 6E opera solo en 5 GHz; Wi-Fi 7 agrega la banda de 2.4 GHz</div>
+  <div class="opt" data-q="14" data-val="b"><div class="ol">B</div>Wi-Fi 6E agrega la banda de 6 GHz a las de 2.4 y 5 GHz; Wi-Fi 7 usa las mismas tres bandas pero con mayor velocidad (hasta 46 Gbps) y menor latencia</div>
+  <div class="opt" data-q="14" data-val="c"><div class="ol">C</div>Son idénticos en bandas, solo difieren en el nombre comercial</div>
+  <div class="opt" data-q="14" data-val="d"><div class="ol">D</div>Wi-Fi 7 opera exclusivamente en la banda de 60 GHz para máxima velocidad</div>
+</div>
+<div class="exp" id="exp14"><strong>Correcto:</strong> Wi-Fi 6E (802.11ax) añade la banda de 6 GHz, menos congestionada, a las bandas de 2.4 y 5 GHz. Wi-Fi 7 (802.11be) usa las mismas tres bandas pero introduce MLO (Multi-Link Operation), canales más anchos (320 MHz) y hasta 46 Gbps de velocidad teórica, con latencia mucho menor.</div></div>
+
+<!-- Q15 -->
+<div class="qb" id="q15"><div class="q-num">Pregunta 15</div>
+<div class="q-text">¿Qué función cumple la tecla Fn en el teclado de una notebook?</div>
+<div class="opts">
+  <div class="opt" data-q="15" data-val="a"><div class="ol">A</div>Reiniciar el sistema operativo rápidamente</div>
+  <div class="opt" data-q="15" data-val="b"><div class="ol">B</div>Activar funciones secundarias en teclas de doble propósito, como ajustar brillo, volumen, activar Wi-Fi o cambiar de pantalla</div>
+  <div class="opt" data-q="15" data-val="c"><div class="ol">C</div>Ingresar al BIOS/UEFI al iniciar el sistema</div>
+  <div class="opt" data-q="15" data-val="d"><div class="ol">D</div>Ejecutar macros de teclado programadas por el usuario</div>
+</div>
+<div class="exp" id="exp15"><strong>Correcto:</strong> La tecla Fn activa la función secundaria de las teclas de doble propósito (normalmente F1–F12 con íconos impresos). Las funciones varían según el fabricante pero comúnmente incluyen: brillo, volumen, Wi-Fi, Bluetooth, pantalla externa, retroiluminación y touchpad.</div></div>
+
+<!-- Q16 -->
+<div class="qb" id="q16"><div class="q-num">Pregunta 16</div>
+<div class="q-text">¿Qué es Thunderbolt 4 y qué capacidades ofrece por su único conector USB-C?</div>
+<div class="opts">
+  <div class="opt" data-q="16" data-val="a"><div class="ol">A</div>Un protocolo de carga rápida exclusivo de Apple</div>
+  <div class="opt" data-q="16" data-val="b"><div class="ol">B</div>Un protocolo de Intel que por un solo conector USB-C ofrece 40 Gbps de datos, soporte para 2 monitores 4K, carga de hasta 100W y conexión a hubs y eGPUs</div>
+  <div class="opt" data-q="16" data-val="c"><div class="ol">C</div>Una versión mejorada de HDMI para resoluciones 8K</div>
+  <div class="opt" data-q="16" data-val="d"><div class="ol">D</div>Un protocolo inalámbrico de corto alcance para transferencia de datos</div>
+</div>
+<div class="exp" id="exp16"><strong>Correcto:</strong> Thunderbolt 4 de Intel usa conector USB-C y en ese único puerto combina: 40 Gbps de transferencia de datos, dos salidas de video 4K, carga Power Delivery de hasta 100W, y conexión a docks y GPUs externas (eGPU). Thunderbolt 5 duplica a 120 Gbps.</div></div>
+
+<!-- Q17 -->
+<div class="qb" id="q17"><div class="q-num">Pregunta 17</div>
+<div class="q-text">¿Qué es una "Copilot+ PC" y qué requisito de hardware es indispensable?</div>
+<div class="opts">
+  <div class="opt" data-q="17" data-val="a"><div class="ol">A</div>Una PC con Windows 11 y conexión permanente a internet para usar funciones en la nube</div>
+  <div class="opt" data-q="17" data-val="b"><div class="ol">B</div>Una categoría de notebooks certificadas por Microsoft con NPU de ≥40 TOPS, 16 GB RAM y 256 GB NVMe, que habilita funciones de IA local en Windows 11</div>
+  <div class="opt" data-q="17" data-val="c"><div class="ol">C</div>Una notebook con teclado dedicado al asistente Copilot y cámara 4K integrada</div>
+  <div class="opt" data-q="17" data-val="d"><div class="ol">D</div>Cualquier PC con Windows 11 y cuenta de Microsoft activa</div>
+</div>
+<div class="exp" id="exp17"><strong>Correcto:</strong> Copilot+ PC es una certificación de Microsoft para notebooks con NPU ≥40 TOPS (procesamiento de IA local), 16 GB RAM y 256 GB NVMe. Habilita funciones exclusivas de Windows 11 como Recall (historial visual de actividad), Live Captions con traducción y mejora de imagen/video por IA local.</div></div>
+
+<!-- Q18 -->
+<div class="qb" id="q18"><div class="q-num">Pregunta 18</div>
+<div class="q-text">¿Por qué los procesadores móviles de notebooks se diseñan con menor TDP que los de escritorio?</div>
+<div class="opts">
+  <div class="opt" data-q="18" data-val="a"><div class="ol">A</div>Porque son menos potentes y realizan menos operaciones por segundo</div>
+  <div class="opt" data-q="18" data-val="b"><div class="ol">B</div>Para generar menos calor y consumir menos energía, permitiendo usar baterías más pequeñas y sistemas de refrigeración compactos dentro del chasis reducido</div>
+  <div class="opt" data-q="18" data-val="c"><div class="ol">C</div>Porque la batería de la notebook no puede suministrar suficiente voltaje a procesadores de alto TDP</div>
+  <div class="opt" data-q="18" data-val="d"><div class="ol">D</div>Para reducir el costo de fabricación de las notebooks</div>
+</div>
+<div class="exp" id="exp18"><strong>Correcto:</strong> TDP (Thermal Design Power) indica el calor máximo que el sistema de refrigeración debe disipar. Menor TDP = menos calor = disipador más pequeño = más espacio para batería = mayor autonomía. Un procesador móvil de 15W puede lograr rendimientos cercanos a uno de escritorio de 65-125W en cargas sostenidas gracias a arquitecturas más eficientes.</div></div>
+
+<!-- Q19 -->
+<div class="qb" id="q19"><div class="q-num">Pregunta 19</div>
+<div class="q-text">¿Cuál es la diferencia entre los adaptadores Wi-Fi Mini-PCIe y M.2 en notebooks?</div>
+<div class="opts">
+  <div class="opt" data-q="19" data-val="a"><div class="ol">A</div>El Mini-PCIe es más rápido que M.2 porque tiene más pines de conexión</div>
+  <div class="opt" data-q="19" data-val="b"><div class="ol">B</div>Mini-PCIe es un formato más antiguo (usado hasta ~2020); M.2 es el estándar actual, más compacto (2230) y compatible con Wi-Fi 6E y Wi-Fi 7</div>
+  <div class="opt" data-q="19" data-val="c"><div class="ol">C</div>M.2 solo puede usarse para almacenamiento, no para adaptadores Wi-Fi</div>
+  <div class="opt" data-q="19" data-val="d"><div class="ol">D</div>Ambos son idénticos, solo tienen conectores de formas diferentes</div>
+</div>
+<div class="exp" id="exp19"><strong>Correcto:</strong> Mini-PCIe fue el estándar de adaptadores Wi-Fi en notebooks del 2004 al 2020, soportando hasta Wi-Fi 5 (802.11ac). M.2 2230 (con interfaz CNVio2 en Intel) es el estándar actual, más compacto, y soporta Wi-Fi 6E y Wi-Fi 7 junto con Bluetooth 5.3/5.4 en el mismo módulo.</div></div>
+
+<!-- Q20 -->
+<div class="qb" id="q20"><div class="q-num">Pregunta 20</div>
+<div class="q-text">¿Qué función habilita Windows Hello en notebooks con cámara IR integrada?</div>
+<div class="opts">
+  <div class="opt" data-q="20" data-val="a"><div class="ol">A</div>Grabación de video en alta definición para videollamadas</div>
+  <div class="opt" data-q="20" data-val="b"><div class="ol">B</div>Desbloqueo del equipo mediante reconocimiento facial infrarrojo, sin necesidad de ingresar contraseña, disponible en Windows 11</div>
+  <div class="opt" data-q="20" data-val="c"><div class="ol">C</div>Detección automática de movimiento para activar el protector de pantalla</div>
+  <div class="opt" data-q="20" data-val="d"><div class="ol">D</div>Conexión automática a redes Wi-Fi conocidas al acercarse a ellas</div>
+</div>
+<div class="exp" id="exp20"><strong>Correcto:</strong> Windows Hello usa la cámara IR (infrarroja) para reconocimiento facial en 3D, que no puede engañarse con una foto. Windows 11 también permite desbloqueo por huella dactilar (sensor en el teclado o botón de encendido) y PIN. Ambos métodos son más seguros y rápidos que una contraseña.</div></div>
+
+<div class="submit-area">
+  <button class="btn-submit" id="btn-submit" disabled>Verificar y registrar respuestas</button>
+  <div class="sending" id="sending">⏳ Enviando resultados a Google Sheets…</div>
+</div>
+
+<div class="result" id="result">
+  <div class="r-score" id="r-score">0%</div>
+  <div class="r-label" id="r-label">—</div>
+  <div class="r-student" id="r-student"></div>
+  <div class="r-msg" id="r-msg"></div>
+  <div class="r-ok" id="r-ok">📊 Resultado registrado en Google Sheets correctamente.</div>
+  <div class="r-err" id="r-err">⚠️ No se pudo registrar en Google Sheets. Verificá la URL del script.</div>
+  <div class="r-actions">
+    <button class="btn-retry" onclick="location.reload()">Intentar nuevamente</button>
+    <a href="index.html" class="btn-home">← Volver al Inicio</a>
+  </div>
+</div>
+
+</div>
+
+<script>
+// ════════════════════════════════════════════════════
+// ⚙️  PASO 1: REEMPLAZÁ CON LA URL DE TU APPS SCRIPT
+// ════════════════════════════════════════════════════
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwE0FH2EOt5ingtJk0bXa2pGBjQbBHpoKAgJAniC8IcezegyQb5-gOvIqZ7w8WDvczl/exec';
+// ════════════════════════════════════════════════════
+
+const ANSWERS = {
+  1:'b',2:'b',3:'b',4:'c',5:'b',
+  6:'b',7:'b',8:'b',9:'b',10:'c',
+  11:'c',12:'b',13:'b',14:'b',15:'b',
+  16:'b',17:'b',18:'b',19:'b',20:'b'
+};
+
+const sel = {};
+let submitted = false;
+
+function updProg() {
+  const n = Object.keys(sel).length;
+  const p = Math.round(n/20*100);
+  document.getElementById('prog-bar').style.width = p+'%';
+  document.getElementById('prog-txt').textContent = n+' de 20 respondidas';
+  document.getElementById('prog-pct').textContent = p+'%';
+  document.getElementById('btn-submit').disabled = (n < 20 || !document.getElementById('inp-nombre').value.trim());
+}
+document.getElementById('inp-nombre').addEventListener('input', updProg);
+
+document.querySelectorAll('.opt').forEach(o => {
+  o.addEventListener('click', () => {
+    if (submitted) return;
+    const q = o.dataset.q;
+    document.querySelectorAll(`.opt[data-q="${q}"]`).forEach(x => x.classList.remove('selected'));
+    o.classList.add('selected');
+    sel[q] = o.dataset.val;
+    document.getElementById('q'+q).classList.add('answered');
+    updProg();
+  });
+});
+
+document.getElementById('btn-submit').addEventListener('click', () => {
+  if (submitted) return;
+  const nombre = document.getElementById('inp-nombre').value.trim();
+  const comision = document.getElementById('inp-comision').value.trim();
+  if (!nombre) { document.getElementById('inp-nombre').classList.add('error'); document.getElementById('inp-nombre').focus(); return; }
+  submitted = true;
+  document.getElementById('btn-submit').disabled = true;
+
+  let correct = 0;
+  for (let i = 1; i <= 20; i++) {
+    const ua = sel[String(i)], ca = ANSWERS[i];
+    document.querySelectorAll(`.opt[data-q="${i}"]`).forEach(o => {
+      o.classList.add('locked');
+      if (o.dataset.val === ca) o.classList.add('correct');
+      else if (o.dataset.val === ua && ua !== ca) o.classList.add('incorrect');
+    });
+    document.getElementById('exp'+i).classList.add('show');
+    if (ua === ca) correct++;
+    else { document.getElementById('q'+i).classList.remove('answered'); document.getElementById('q'+i).classList.add('wrong'); }
+  }
+
+  const pct = Math.round(correct/20*100);
+  let label, msg;
+  if (pct >= 90)      { label='🏆 Excelente'; msg=`Obtuviste ${correct}/20. ¡Excelente dominio del capítulo!`; }
+  else if (pct >= 70) { label='✅ Aprobado';  msg=`Obtuviste ${correct}/20. Aprobado. Revisá las incorrectas.`; }
+  else                { label='❌ A repasar'; msg=`Obtuviste ${correct}/20. Repasá el Capítulo 4 antes de continuar.`; }
+
+  document.getElementById('r-score').textContent = pct+'%';
+  document.getElementById('r-label').textContent = label;
+  document.getElementById('r-student').textContent = nombre+(comision?' — Comisión: '+comision:'');
+  document.getElementById('r-msg').textContent = msg;
+  document.getElementById('result').classList.add('show');
+  document.getElementById('result').scrollIntoView({behavior:'smooth',block:'center'});
+
+  if (SCRIPT_URL && !SCRIPT_URL.includes('TU_APPS_SCRIPT')) {
+    document.getElementById('sending').classList.add('show');
+    const now = new Date();
+    fetch(SCRIPT_URL, {method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({capitulo:'Capítulo 4',nombre,comision:comision||'—',
+        fecha:now.toLocaleDateString('es-AR'),hora:now.toLocaleTimeString('es-AR'),
+        puntaje:correct,total:20,porcentaje:pct})
+    })
+    .then(()=>{ document.getElementById('sending').classList.remove('show'); document.getElementById('r-ok').classList.add('show'); })
+    .catch(()=>{ document.getElementById('sending').classList.remove('show'); document.getElementById('r-err').classList.add('show'); });
+  }
+});
+</script>
+</body>
+</html>
