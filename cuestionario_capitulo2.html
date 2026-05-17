@@ -110,7 +110,7 @@ a{text-decoration:none;}
 <nav class="topnav">
   <div class="nav-brand">Potrero <span>Digital</span></div>
   <a href="index.html">Inicio</a>
-  <a href="capitulo2_armado.html">← Capítulo 2</a>
+  <a href="index.html">← Inicio</a>
   <a href="#" class="active">Cuestionario 2</a>
 </nav>
 
@@ -409,7 +409,7 @@ a{text-decoration:none;}
     <div class="result-sheet-err" id="sheet-err">⚠️ No se pudo registrar en Google Sheets. Verificá la URL del script.</div>
     <div class="result-actions">
       <button class="btn-retry" onclick="location.reload()">Intentar nuevamente</button>
-      <a href="capitulo2_armado.html" class="btn-back">← Volver al Capítulo 2</a>
+      <a href="index.html" class="btn-back">← Volver al Inicio</a>
     </div>
   </div>
 
@@ -419,7 +419,10 @@ a{text-decoration:none;}
 // ════════════════════════════════════════════════════
 // ⚙️  CONFIGURACIÓN — pegá aquí la URL de tu Apps Script
 // ════════════════════════════════════════════════════
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxGFvKGjCiimFbNjdtLYcam_TvWEBRyZIAu__Y5ysqJ8zC75S0hP_vuNScqnuznwsZKIw/exec';
+const SCRIPT_URL = 'TU_APPS_SCRIPT_URL_AQUI';
+//
+// ⚠️  IMPORTANTE: reemplazá TU_APPS_SCRIPT_URL_AQUI con la URL de tu Apps Script
+//     Ejemplo: 'https://script.google.com/macros/s/AKfycby.../exec'
 // Ejemplo: 'https://script.google.com/macros/s/AKfycbxGFvKGjCiimFbNjdtLYcam_TvWEBRyZIAu__Y5ysqJ8zC75S0hP_vuNScqnuznwsZKIw/exec'
 // ════════════════════════════════════════════════════
 
@@ -512,9 +515,9 @@ document.getElementById('btn-submit').addEventListener('click', () => {
       comision: comision || '—',
       fecha,
       hora,
-      puntaje: `${correct}/20`,
-      porcentaje: pct + '%',
-      resultado: pct >= 70 ? 'APROBADO' : 'REPROBADO'
+      puntaje: correct,   // número de correctas (ej: 15)
+      total: 20,          // total de preguntas
+      porcentaje: pct     // número sin % (ej: 75) — el script agrega el % al guardar
     };
     fetch(SCRIPT_URL, {
       method:'POST',
