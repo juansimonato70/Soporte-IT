@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cuestionario — Capítulo 3 | Potrero Digital</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--green:#7ac143;--green-dark:#5c9430;--bg:#111;--bg2:#1a1a1a;--bg3:#222;--bg4:#2a2a2a;--text:#e8e8e8;--muted:#888;--border:rgba(122,193,67,.22);--white:#fff;--red:#e53e3e;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font-size:15px;line-height:1.7;}
+a{text-decoration:none;}
+.topnav{background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 28px;position:sticky;top:0;z-index:100;height:48px;}
+.nav-brand{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;color:var(--white);padding-right:20px;border-right:1px solid var(--border);margin-right:8px;}
+.nav-brand span{color:var(--green);}
+.topnav a{color:var(--muted);font-size:.8rem;font-weight:500;padding:0 14px;height:48px;display:flex;align-items:center;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s;}
+.topnav a:hover{color:var(--text);}
+.topnav a.active{color:var(--green);border-bottom-color:var(--green);font-weight:600;}
+.hero{background:linear-gradient(135deg,#0d1f06,#1a2a0d);border-bottom:2px solid var(--green);padding:52px 60px 44px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;right:-60px;top:-60px;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(122,193,67,.07),transparent 70%);pointer-events:none;}
+.hero-tag{display:inline-block;background:var(--green);color:#000;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.72rem;letter-spacing:2.5px;text-transform:uppercase;padding:4px 12px;border-radius:3px;margin-bottom:14px;}
+.hero-title{font-family:'Barlow Condensed',sans-serif;font-size:3rem;font-weight:800;line-height:1;color:var(--white);text-transform:uppercase;}
+.hero-title em{color:var(--green);font-style:normal;}
+.hero-sub{margin-top:10px;font-size:.9rem;color:rgba(255,255,255,.5);max-width:520px;}
+.hero-meta{margin-top:20px;display:flex;gap:20px;flex-wrap:wrap;}
+.hero-badge{display:flex;align-items:center;gap:6px;font-size:.82rem;color:var(--muted);}
+.hero-badge strong{color:var(--text);}
+.main{max-width:820px;margin:0 auto;padding:52px 40px 80px;}
+.student-fields{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:24px 28px;margin-bottom:32px;}
+.sf-title{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;}
+.sf-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.sf-group{display:flex;flex-direction:column;gap:6px;}
+.sf-label{font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;}
+.sf-input{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:10px 14px;font-family:'Barlow',sans-serif;font-size:.9rem;color:var(--text);outline:none;transition:border-color .2s;width:100%;}
+.sf-input:focus{border-color:var(--green);}
+.sf-input.error{border-color:var(--red);}
+.progress-label{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted);margin-bottom:8px;}
+.progress-bar-wrap{background:var(--bg3);border-radius:100px;height:6px;margin-bottom:32px;overflow:hidden;}
+.progress-bar{height:100%;background:var(--green);border-radius:100px;transition:width .5s ease;}
+.question-block{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:28px 30px;margin-bottom:16px;transition:border-color .2s;}
+.question-block.answered{border-color:rgba(122,193,67,.4);}
+.question-block.wrong{border-color:rgba(229,62,62,.4);}
+.q-number{font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;color:var(--green);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+.q-text{font-size:1rem;font-weight:500;color:var(--white);line-height:1.5;margin-bottom:18px;}
+.options{display:flex;flex-direction:column;gap:8px;}
+.option{display:flex;align-items:flex-start;gap:12px;background:var(--bg3);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:12px 16px;cursor:pointer;transition:all .18s;font-size:.9rem;color:var(--text);}
+.option:hover:not(.locked){background:var(--bg4);border-color:rgba(122,193,67,.3);}
+.option.selected{background:rgba(122,193,67,.1);border-color:var(--green);color:var(--white);}
+.option.correct{background:rgba(122,193,67,.15);border-color:var(--green);color:#a8d87a;}
+.option.incorrect{background:rgba(229,62,62,.08);border-color:var(--red);color:#f08080;}
+.option.locked{cursor:default;}
+.opt-letter{width:24px;height:24px;border-radius:50%;background:var(--bg4);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:800;color:var(--muted);flex-shrink:0;transition:all .18s;}
+.option.selected .opt-letter{background:var(--green);color:#000;border-color:var(--green);}
+.option.correct .opt-letter{background:var(--green);color:#000;border-color:var(--green);}
+.option.incorrect .opt-letter{background:var(--red);color:#fff;border-color:var(--red);}
+.explanation{margin-top:14px;padding:12px 16px;background:rgba(122,193,67,.06);border-left:3px solid var(--green);border-radius:0 6px 6px 0;font-size:.86rem;color:var(--muted);display:none;line-height:1.6;}
+.explanation.show{display:block;}
+.explanation strong{color:var(--green);}
+.submit-area{text-align:center;margin-top:40px;}
+.btn-submit{background:var(--green);color:#000;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;letter-spacing:1.5px;text-transform:uppercase;padding:14px 40px;border-radius:8px;border:none;cursor:pointer;transition:all .2s;}
+.btn-submit:hover{background:var(--green-dark);transform:translateY(-2px);}
+.btn-submit:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+.sending-msg{display:none;margin-top:16px;font-size:.88rem;color:var(--muted);text-align:center;}
+.sending-msg.show{display:block;}
+.result-panel{display:none;background:linear-gradient(135deg,#0d1f06,#1a2a0d);border:1px solid var(--green);border-radius:14px;padding:40px;text-align:center;margin-top:40px;}
+.result-panel.show{display:block;}
+.result-score{font-family:'Barlow Condensed',sans-serif;font-size:5rem;font-weight:900;color:var(--green);line-height:1;}
+.result-label{font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:800;color:var(--white);text-transform:uppercase;margin-top:6px;}
+.result-student{margin-top:12px;font-size:.88rem;color:var(--muted);}
+.result-msg{color:var(--muted);margin:10px auto 0;max-width:380px;font-size:.9rem;}
+.result-sheet-ok{display:none;margin-top:14px;background:rgba(122,193,67,.08);border:1px solid rgba(122,193,67,.25);border-radius:8px;padding:10px 16px;font-size:.83rem;color:#a8d87a;}
+.result-sheet-ok.show{display:block;}
+.result-sheet-err{display:none;margin-top:14px;background:rgba(229,62,62,.08);border:1px solid rgba(229,62,62,.3);border-radius:8px;padding:10px 16px;font-size:.83rem;color:#f08080;}
+.result-sheet-err.show{display:block;}
+.result-actions{margin-top:24px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.btn-retry{background:transparent;color:var(--green);border:1px solid var(--green);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.9rem;letter-spacing:1px;text-transform:uppercase;padding:10px 24px;border-radius:6px;cursor:pointer;transition:all .2s;}
+.btn-retry:hover{background:var(--green);color:#000;}
+.btn-back{background:var(--bg3);color:var(--text);border:1px solid var(--border);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.9rem;letter-spacing:1px;text-transform:uppercase;padding:10px 24px;border-radius:6px;display:inline-flex;align-items:center;}
+.btn-back:hover{border-color:rgba(122,193,67,.4);}
+@media(max-width:600px){.hero{padding:32px 24px;}.hero-title{font-size:2rem;}.main{padding:28px 16px 60px;}.question-block{padding:20px 18px;}.sf-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="nav-brand">Potrero <span>Digital</span></div>
+  <a href="index.html">Inicio</a>
+  <a href="capitulo3.html">← Capítulo 3</a>
+  <a href="#" class="active">Cuestionario 3</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">Cuestionario</div>
+  <h1 class="hero-title">Capítulo 3 — <em>Hardware<br>Avanzado</em></h1>
+  <p class="hero-sub">Placa madre, CPU, RAM, refrigeración, tarjetas adaptadoras, fuentes, BIOS/UEFI, overclocking y RAID.</p>
+  <div class="hero-meta">
+    <div class="hero-badge">📋 <strong>20 preguntas</strong></div>
+    <div class="hero-badge">✅ <strong>Aprobación: 70%</strong></div>
+    <div class="hero-badge">📊 <strong>Registro automático</strong></div>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="student-fields">
+    <div class="sf-title">👤 Datos del alumno</div>
+    <div class="sf-grid">
+      <div class="sf-group">
+        <label class="sf-label" for="input-nombre">Nombre completo</label>
+        <input class="sf-input" type="text" id="input-nombre" placeholder="Ej: Juan Pérez" autocomplete="off">
+      </div>
+      <div class="sf-group">
+        <label class="sf-label" for="input-comision">Comisión</label>
+        <input class="sf-input" type="text" id="input-comision" placeholder="Ej: 3A" autocomplete="off">
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-label">
+    <span id="prog-text">0 de 20 respondidas</span>
+    <span id="prog-pct">0%</span>
+  </div>
+  <div class="progress-bar-wrap"><div class="progress-bar" id="prog-bar" style="width:0%"></div></div>
+
+  <!-- PREGUNTAS -->
+  <div class="question-block" id="q1">
+    <div class="q-number">Pregunta 01</div>
+    <div class="q-text">¿Por qué se dice que la placa madre es el componente más importante de una PC?</div>
+    <div class="options">
+      <div class="option" data-q="1" data-val="a"><div class="opt-letter">A</div>Porque es el componente más caro del sistema</div>
+      <div class="option" data-q="1" data-val="b"><div class="opt-letter">B</div>Porque es el circuito principal al que se conectan todos los demás componentes, haciendo posible la comunicación entre ellos</div>
+      <div class="option" data-q="1" data-val="c"><div class="opt-letter">C</div>Porque contiene el sistema operativo instalado</div>
+      <div class="option" data-q="1" data-val="d"><div class="opt-letter">D</div>Porque genera la mayor cantidad de calor del sistema</div>
+    </div>
+    <div class="explanation" id="exp1"><strong>Correcto:</strong> La placa madre es el hub central de comunicación. Sin ella, la CPU no puede acceder a la RAM, el almacenamiento ni los periféricos. Todos los componentes se interconectan a través de ella.</div>
+  </div>
+
+  <div class="question-block" id="q2">
+    <div class="q-number">Pregunta 02</div>
+    <div class="q-text">¿Qué significa que las ranuras de expansión "vienen de fábrica" en la placa madre?</div>
+    <div class="options">
+      <div class="option" data-q="2" data-val="a"><div class="opt-letter">A</div>Que se pueden agregar más ranuras soldando nuevas en la placa madre</div>
+      <div class="option" data-q="2" data-val="b"><div class="opt-letter">B</div>Que la cantidad de ranuras disponibles es fija y no se puede incrementar después de la compra</div>
+      <div class="option" data-q="2" data-val="c"><div class="opt-letter">C</div>Que todas las placas madre tienen la misma cantidad de ranuras PCIe</div>
+      <div class="option" data-q="2" data-val="d"><div class="opt-letter">D</div>Que las ranuras vienen ocupadas con tarjetas desde fábrica</div>
+    </div>
+    <div class="explanation" id="exp2"><strong>Correcto:</strong> Las ranuras de expansión PCIe y PCI están integradas en la placa madre y su cantidad no puede modificarse. Si necesitás más slots de expansión, debés cambiar la placa madre por una que tenga más.</div>
+  </div>
+
+  <div class="question-block" id="q3">
+    <div class="q-number">Pregunta 03</div>
+    <div class="q-text">¿Qué es la memoria caché en un procesador?</div>
+    <div class="options">
+      <div class="option" data-q="3" data-val="a"><div class="opt-letter">A</div>Una memoria de almacenamiento permanente dentro del procesador</div>
+      <div class="option" data-q="3" data-val="b"><div class="opt-letter">B</div>Una memoria de muy alta velocidad integrada en la CPU que almacena instrucciones y datos en uso para acceder a ellos sin ir a la RAM principal</div>
+      <div class="option" data-q="3" data-val="c"><div class="opt-letter">C</div>El espacio virtual que el sistema operativo reserva en el disco duro</div>
+      <div class="option" data-q="3" data-val="d"><div class="opt-letter">D</div>La RAM de video integrada en el procesador</div>
+    </div>
+    <div class="explanation" id="exp3"><strong>Correcto:</strong> La memoria caché (L1, L2, L3) está integrada dentro del chip del procesador y opera a velocidades mucho mayores que la RAM DDR. Al almacenar los datos más usados cerca de los núcleos, evita esperas y mejora enormemente el rendimiento.</div>
+  </div>
+
+  <div class="question-block" id="q4">
+    <div class="q-number">Pregunta 04</div>
+    <div class="q-text">¿Cuál es la diferencia entre Hyperthreading (Intel) e HyperTransport (AMD)?</div>
+    <div class="options">
+      <div class="option" data-q="4" data-val="a"><div class="opt-letter">A</div>Hyperthreading duplica la cantidad de núcleos físicos; HyperTransport aumenta la frecuencia del reloj</div>
+      <div class="option" data-q="4" data-val="b"><div class="opt-letter">B</div>Hyperthreading permite a cada núcleo procesar dos hilos simultáneos; HyperTransport es una tecnología de comunicación de alta velocidad entre el procesador y el sistema</div>
+      <div class="option" data-q="4" data-val="c"><div class="opt-letter">C</div>Son nombres distintos para la misma tecnología, usados por cada empresa</div>
+      <div class="option" data-q="4" data-val="d"><div class="opt-letter">D</div>HyperTransport es la versión mejorada del Hyperthreading de Intel</div>
+    </div>
+    <div class="explanation" id="exp4"><strong>Correcto:</strong> Hyperthreading (Intel) divide cada núcleo físico en dos núcleos lógicos, permitiendo procesar dos hilos simultáneamente. HyperTransport (AMD) es un bus de alta velocidad que mejora la comunicación entre la CPU, memoria y chipset, reduciendo la latencia del sistema.</div>
+  </div>
+
+  <div class="question-block" id="q5">
+    <div class="q-number">Pregunta 05</div>
+    <div class="q-text">¿Cuántos núcleos tiene un procesador "quad-core"?</div>
+    <div class="options">
+      <div class="option" data-q="5" data-val="a"><div class="opt-letter">A</div>2 núcleos</div>
+      <div class="option" data-q="5" data-val="b"><div class="opt-letter">B</div>6 núcleos</div>
+      <div class="option" data-q="5" data-val="c"><div class="opt-letter">C</div>4 núcleos</div>
+      <div class="option" data-q="5" data-val="d"><div class="opt-letter">D</div>8 núcleos</div>
+    </div>
+    <div class="explanation" id="exp5"><strong>Correcto:</strong> "Quad" significa cuatro en latín. Un procesador quad-core tiene 4 núcleos independientes en el mismo chip. Dual = 2, Triple = 3, Quad = 4, Hexa = 6, Octa = 8.</div>
+  </div>
+
+  <div class="question-block" id="q6">
+    <div class="q-number">Pregunta 06</div>
+    <div class="q-text">¿Cuál es la función de la pasta térmica entre el procesador y el disipador?</div>
+    <div class="options">
+      <div class="option" data-q="6" data-val="a"><div class="opt-letter">A</div>Fijar mecánicamente el disipador a la CPU</div>
+      <div class="option" data-q="6" data-val="b"><div class="opt-letter">B</div>Llenar los microscopios huecos entre las superficies del procesador y el disipador para mejorar la transferencia de calor entre ambos</div>
+      <div class="option" data-q="6" data-val="c"><div class="opt-letter">C</div>Aislar eléctricamente el procesador del disipador</div>
+      <div class="option" data-q="6" data-val="d"><div class="opt-letter">D</div>Lubricar el ventilador del disipador para que gire más rápido</div>
+    </div>
+    <div class="explanation" id="exp6"><strong>Correcto:</strong> Las superficies del procesador y el disipador tienen microscópicas imperfecciones. La pasta térmica rellena esos huecos de aire (que son malos conductores de calor) con un compuesto de alta conductividad térmica, maximizando la transferencia de calor hacia el disipador.</div>
+  </div>
+
+  <div class="question-block" id="q7">
+    <div class="q-number">Pregunta 07</div>
+    <div class="q-text">¿Qué ventaja tienen los sistemas de refrigeración líquida AIO sobre los disipadores de torre?</div>
+    <div class="options">
+      <div class="option" data-q="7" data-val="a"><div class="opt-letter">A</div>Son más económicos y fáciles de fabricar</div>
+      <div class="option" data-q="7" data-val="b"><div class="opt-letter">B</div>Mayor capacidad de disipación de calor, menor altura sobre la CPU (mejor compatibilidad con gabinetes compactos) y a menudo menor ruido</div>
+      <div class="option" data-q="7" data-val="c"><div class="opt-letter">C</div>No requieren ventiladores, son completamente silenciosos</div>
+      <div class="option" data-q="7" data-val="d"><div class="opt-letter">D</div>Pueden instalarse sin pasta térmica</div>
+    </div>
+    <div class="explanation" id="exp7"><strong>Correcto:</strong> Los AIOs (All-In-One) usan líquido para transferir el calor a un radiador externo, logrando mayor superficie de disipación que una torre. Además, al ser más bajos sobre la CPU, son compatibles con gabinetes donde una torre grande no entraría.</div>
+  </div>
+
+  <div class="question-block" id="q8">
+    <div class="q-number">Pregunta 08</div>
+    <div class="q-text">¿Qué verificación debe hacerse SIEMPRE antes de instalar una GPU discreta de gama alta?</div>
+    <div class="options">
+      <div class="option" data-q="8" data-val="a"><div class="opt-letter">A</div>Verificar que el monitor tenga el conector correcto</div>
+      <div class="option" data-q="8" data-val="b"><div class="opt-letter">B</div>Verificar en el datasheet si la GPU requiere conectores de alimentación PCIe adicionales y si la fuente de la PC tiene la potencia necesaria</div>
+      <div class="option" data-q="8" data-val="c"><div class="opt-letter">C</div>Verificar que el sistema operativo sea Windows 10 o superior</div>
+      <div class="option" data-q="8" data-val="d"><div class="opt-letter">D</div>Verificar que el procesador sea de la misma marca que la GPU</div>
+    </div>
+    <div class="explanation" id="exp8"><strong>Correcto:</strong> Las GPUs de gama media y alta requieren conectores de alimentación directos de la fuente (6-pin, 8-pin o 16-pin PCIe). Si la fuente no tiene los conectores o no tiene la potencia suficiente, el sistema puede reiniciarse, fallar o dañarse. Siempre consultar el datasheet antes de instalar.</div>
+  </div>
+
+  <div class="question-block" id="q9">
+    <div class="q-number">Pregunta 09</div>
+    <div class="q-text">¿Qué indica la certificación "80 PLUS Gold" en una fuente de alimentación?</div>
+    <div class="options">
+      <div class="option" data-q="9" data-val="a"><div class="opt-letter">A</div>Que la fuente tiene color dorado y se conecta con cable de oro</div>
+      <div class="option" data-q="9" data-val="b"><div class="opt-letter">B</div>Que la fuente tiene al menos 87% de eficiencia al 20% y 100% de carga, y 90% al 50% — convirtiendo el 90% de la energía de la red en energía útil</div>
+      <div class="option" data-q="9" data-val="c"><div class="opt-letter">C</div>Que la fuente garantiza 80 años de vida útil</div>
+      <div class="option" data-q="9" data-val="d"><div class="opt-letter">D</div>Que la fuente puede entregar exactamente 80W más que su potencia nominal</div>
+    </div>
+    <div class="explanation" id="exp9"><strong>Correcto:</strong> 80 PLUS es un programa de certificación que garantiza un nivel mínimo de eficiencia energética. Gold significa 87-90% de eficiencia: de cada 100W que consume de la red, al menos 87-90W se convierten en energía útil para los componentes; el resto se disipa como calor.</div>
+  </div>
+
+  <div class="question-block" id="q10">
+    <div class="q-number">Pregunta 10</div>
+    <div class="q-text">¿Qué es un datasheet y para qué lo usa un técnico?</div>
+    <div class="options">
+      <div class="option" data-q="10" data-val="a"><div class="opt-letter">A</div>Una hoja de precios de los componentes en el mercado local</div>
+      <div class="option" data-q="10" data-val="b"><div class="opt-letter">B</div>El documento técnico oficial del fabricante con todas las especificaciones de un componente, usado para verificar compatibilidad y requerimientos antes de instalar</div>
+      <div class="option" data-q="10" data-val="c"><div class="opt-letter">C</div>El manual de usuario en idioma local que viene en la caja del producto</div>
+      <div class="option" data-q="10" data-val="d"><div class="opt-letter">D</div>Una planilla donde el técnico anota los datos del cliente</div>
+    </div>
+    <div class="explanation" id="exp10"><strong>Correcto:</strong> El datasheet es la fuente de información técnica más confiable de un componente. Incluye voltajes de operación, frecuencias, dimensiones, temperatura máxima, compatibilidades y consumo. Se obtiene desde la página del fabricante ingresando el número de modelo.</div>
+  </div>
+
+  <div class="question-block" id="q11">
+    <div class="q-number">Pregunta 11</div>
+    <div class="q-text">¿Qué es el POST y cuándo ocurre?</div>
+    <div class="options">
+      <div class="option" data-q="11" data-val="a"><div class="opt-letter">A</div>Es el proceso de instalación del sistema operativo, ocurre al formatear el disco</div>
+      <div class="option" data-q="11" data-val="b"><div class="opt-letter">B</div>Es la verificación automática de hardware que hace el BIOS cada vez que se enciende la computadora, antes de cargar el sistema operativo</div>
+      <div class="option" data-q="11" data-val="c"><div class="opt-letter">C</div>Es el proceso de actualización del BIOS, ocurre cuando hay una nueva versión disponible</div>
+      <div class="option" data-q="11" data-val="d"><div class="opt-letter">D</div>Es el protocolo de red que asigna direcciones IP automáticamente</div>
+    </div>
+    <div class="explanation" id="exp11"><strong>Correcto:</strong> POST (Power-On Self-Test) es la primera cosa que ejecuta el BIOS al encender el equipo. Verifica CPU, memoria, almacenamiento y video. Si detecta un fallo crítico emite códigos de sonido (beep codes) para indicar al técnico qué componente está fallando.</div>
+  </div>
+
+  <div class="question-block" id="q12">
+    <div class="q-number">Pregunta 12</div>
+    <div class="q-text">Si la fecha y hora del sistema siempre están incorrectas al iniciar la PC, ¿qué componente probablemente está fallando?</div>
+    <div class="options">
+      <div class="option" data-q="12" data-val="a"><div class="opt-letter">A</div>El disco rígido, que no puede guardar la configuración de tiempo</div>
+      <div class="option" data-q="12" data-val="b"><div class="opt-letter">B</div>La batería CMOS, que mantiene la configuración del BIOS (incluyendo fecha y hora) cuando el equipo está apagado</div>
+      <div class="option" data-q="12" data-val="c"><div class="opt-letter">C</div>El procesador, que no puede calcular el tiempo correctamente</div>
+      <div class="option" data-q="12" data-val="d"><div class="opt-letter">D</div>La fuente de alimentación, que provee voltaje incorrecto al reloj de la placa madre</div>
+    </div>
+    <div class="explanation" id="exp12"><strong>Correcto:</strong> La batería CMOS (CR2032) alimenta el chip de configuración del BIOS mientras el equipo está apagado, manteniendo la fecha, hora y otras configuraciones. Si la batería está agotada, estas configuraciones se pierden al apagar. Se reemplaza fácilmente sin abrir la fuente.</div>
+  </div>
+
+  <div class="question-block" id="q13">
+    <div class="q-number">Pregunta 13</div>
+    <div class="q-text">¿Qué ventaja principal tiene UEFI sobre el BIOS tradicional?</div>
+    <div class="options">
+      <div class="option" data-q="13" data-val="a"><div class="opt-letter">A</div>UEFI consume menos energía que el BIOS tradicional</div>
+      <div class="option" data-q="13" data-val="b"><div class="opt-letter">B</div>UEFI soporta discos de más de 2 TB, tiene interfaz gráfica con mouse, Secure Boot y arranque más rápido</div>
+      <div class="option" data-q="13" data-val="c"><div class="opt-letter">C</div>UEFI permite instalar cualquier sistema operativo sin restricciones de licencia</div>
+      <div class="option" data-q="13" data-val="d"><div class="opt-letter">D</div>UEFI es exclusivo de computadoras Apple</div>
+    </div>
+    <div class="explanation" id="exp13"><strong>Correcto:</strong> El BIOS tradicional tenía limitaciones importantes: no podía arrancar desde discos mayores a 2 TB y su interfaz era solo de teclado. UEFI resuelve esto con soporte para discos grandes, interfaz gráfica, Secure Boot (protección contra bootkits), Fast Boot y mejor gestión de energía.</div>
+  </div>
+
+  <div class="question-block" id="q14">
+    <div class="q-number">Pregunta 14</div>
+    <div class="q-text">¿Por qué los módulos de RAM DDR4 no pueden instalarse en un slot DDR3?</div>
+    <div class="options">
+      <div class="option" data-q="14" data-val="a"><div class="opt-letter">A</div>Porque DDR4 requiere más corriente eléctrica de la que puede proveer el slot DDR3</div>
+      <div class="option" data-q="14" data-val="b"><div class="opt-letter">B</div>Porque cada generación DDR tiene el muesca (notch) en una posición diferente del módulo, lo que impide físicamente la inserción incorrecta</div>
+      <div class="option" data-q="14" data-val="c"><div class="opt-letter">C</div>Porque DDR4 usa un conector HDMI diferente al de DDR3</div>
+      <div class="option" data-q="14" data-val="d"><div class="opt-letter">D</div>Porque DDR4 solo funciona con procesadores de última generación</div>
+    </div>
+    <div class="explanation" id="exp14"><strong>Correcto:</strong> Cada generación de RAM (DDR3, DDR4, DDR5) tiene el muesca o ranura de indexación en una posición diferente del borde del módulo. Esto es un diseño intencional para prevenir la instalación en slots incompatibles, que podría dañar los componentes.</div>
+  </div>
+
+  <div class="question-block" id="q15">
+    <div class="q-number">Pregunta 15</div>
+    <div class="q-text">¿Cuál es la configuración de almacenamiento recomendada para una PC de uso general?</div>
+    <div class="options">
+      <div class="option" data-q="15" data-val="a"><div class="opt-letter">A</div>Solo HDD de gran capacidad para todo</div>
+      <div class="option" data-q="15" data-val="b"><div class="opt-letter">B</div>SSD para el sistema operativo y programas + HDD para almacenamiento masivo de datos</div>
+      <div class="option" data-q="15" data-val="c"><div class="opt-letter">C</div>Solo SSD para todo, sin HDD</div>
+      <div class="option" data-q="15" data-val="d"><div class="opt-letter">D</div>Dos HDD en RAID 0 para mayor velocidad</div>
+    </div>
+    <div class="explanation" id="exp15"><strong>Correcto:</strong> La combinación SSD + HDD es la más eficiente en costo/rendimiento: el SSD provee inicio rápido del sistema operativo y carga veloz de aplicaciones, mientras el HDD ofrece gran capacidad a bajo precio para fotos, videos y documentos.</div>
+  </div>
+
+  <div class="question-block" id="q16">
+    <div class="q-number">Pregunta 16</div>
+    <div class="q-text">¿Para qué tipo de uso está indicado el disco Western Digital WD Red?</div>
+    <div class="options">
+      <div class="option" data-q="16" data-val="a"><div class="opt-letter">A</div>Gaming de alto rendimiento</div>
+      <div class="option" data-q="16" data-val="b"><div class="opt-letter">B</div>Sistemas NAS (Network Attached Storage), diseñado para funcionar 24/7 en servidores de almacenamiento en red</div>
+      <div class="option" data-q="16" data-val="c"><div class="opt-letter">C</div>Videovigilancia y grabación continua de cámaras de seguridad</div>
+      <div class="option" data-q="16" data-val="d"><div class="opt-letter">D</div>Uso cotidiano en computadoras de escritorio</div>
+    </div>
+    <div class="explanation" id="exp16"><strong>Correcto:</strong> WD Red está optimizado para NAS (Network Attached Storage): discos que trabajan continuamente en servidores de almacenamiento en red domésticos o de pequeñas empresas. Para videovigilancia se usa WD Purple; para gaming, WD Black; para uso diario, WD Blue.</div>
+  </div>
+
+  <div class="question-block" id="q17">
+    <div class="q-number">Pregunta 17</div>
+    <div class="q-text">¿Por qué el overclocking NO se recomienda para técnicos en formación?</div>
+    <div class="options">
+      <div class="option" data-q="17" data-val="a"><div class="opt-letter">A</div>Porque requiere descargar software de sitios poco confiables</div>
+      <div class="option" data-q="17" data-val="b"><div class="opt-letter">B</div>Porque puede causar daños permanentes al procesador y la placa madre, invalida la garantía y requiere conocimiento avanzado y refrigeración adecuada</div>
+      <div class="option" data-q="17" data-val="c"><div class="opt-letter">C</div>Porque solo funciona en computadoras Apple</div>
+      <div class="option" data-q="17" data-val="d"><div class="opt-letter">D</div>Porque está prohibido por las leyes de propiedad intelectual</div>
+    </div>
+    <div class="explanation" id="exp17"><strong>Correcto:</strong> El overclocking eleva la frecuencia del procesador más allá de sus especificaciones, generando más calor y tensión eléctrica. Sin el conocimiento, refrigeración y configuración adecuados, puede quemar el procesador, la placa madre o los módulos de RAM, además de perder la garantía.</div>
+  </div>
+
+  <div class="question-block" id="q18">
+    <div class="q-number">Pregunta 18</div>
+    <div class="q-text">¿Qué nivel de RAID ofrece la mayor velocidad de lectura/escritura pero sin ninguna redundancia?</div>
+    <div class="options">
+      <div class="option" data-q="18" data-val="a"><div class="opt-letter">A</div>RAID 1</div>
+      <div class="option" data-q="18" data-val="b"><div class="opt-letter">B</div>RAID 5</div>
+      <div class="option" data-q="18" data-val="c"><div class="opt-letter">C</div>RAID 0</div>
+      <div class="option" data-q="18" data-val="d"><div class="opt-letter">D</div>RAID 6</div>
+    </div>
+    <div class="explanation" id="exp18"><strong>Correcto:</strong> RAID 0 (Striping) divide los datos entre múltiples discos para maximizar la velocidad, pero si falla cualquiera de los discos se pierden todos los datos. Es el único nivel RAID sin ninguna tolerancia a fallos.</div>
+  </div>
+
+  <div class="question-block" id="q19">
+    <div class="q-number">Pregunta 19</div>
+    <div class="q-text">Un servidor tiene 4 discos de 2TB configurados en RAID 5. ¿Cuánto espacio de almacenamiento útil tiene disponible?</div>
+    <div class="options">
+      <div class="option" data-q="19" data-val="a"><div class="opt-letter">A</div>8 TB (4 × 2TB, sin pérdida)</div>
+      <div class="option" data-q="19" data-val="b"><div class="opt-letter">B</div>4 TB (solo la mitad por el espejado)</div>
+      <div class="option" data-q="19" data-val="c"><div class="opt-letter">C</div>6 TB ((N-1) × 2TB = 3 discos de datos + 1 de paridad)</div>
+      <div class="option" data-q="19" data-val="d"><div class="opt-letter">D</div>2 TB (solo un disco de datos)</div>
+    </div>
+    <div class="explanation" id="exp19"><strong>Correcto:</strong> En RAID 5 con N discos, la capacidad útil es (N-1) × tamaño_disco. Con 4 discos de 2TB: (4-1) × 2TB = 6TB de espacio útil. El espacio equivalente a 1 disco se usa para almacenar la paridad distribuida, que permite reconstruir los datos si falla un disco.</div>
+  </div>
+
+  <div class="question-block" id="q20">
+    <div class="q-number">Pregunta 20</div>
+    <div class="q-text">¿Por qué RAID no reemplaza a los backups?</div>
+    <div class="options">
+      <div class="option" data-q="20" data-val="a"><div class="opt-letter">A</div>Porque RAID solo funciona con discos de la misma marca</div>
+      <div class="option" data-q="20" data-val="b"><div class="opt-letter">B</div>Porque RAID protege contra falla física de discos pero no contra borrado accidental, ransomware, incendios o inundaciones que afectarían todos los discos simultáneamente</div>
+      <div class="option" data-q="20" data-val="c"><div class="opt-letter">C</div>Porque RAID ocupa demasiado espacio para ser una solución completa</div>
+      <div class="option" data-q="20" data-val="d"><div class="opt-letter">D</div>Porque los backups son más económicos que el RAID</div>
+    </div>
+    <div class="explanation" id="exp20"><strong>Correcto:</strong> El RAID protege contra el fallo físico de un disco, pero si alguien borra accidentalmente un archivo, ese borrado se replica en todos los discos del array. Del mismo modo, un ataque de ransomware que cifra los datos lo hace en todos los discos. Los backups offline son la única protección real contra esos escenarios.</div>
+  </div>
+
+  <div class="submit-area">
+    <button class="btn-submit" id="btn-submit" disabled>Verificar y registrar respuestas</button>
+    <div class="sending-msg" id="sending-msg">⏳ Enviando resultados a Google Sheets…</div>
+  </div>
+
+  <div class="result-panel" id="result-panel">
+    <div class="result-score" id="result-score">0%</div>
+    <div class="result-label" id="result-label">—</div>
+    <div class="result-student" id="result-student"></div>
+    <div class="result-msg" id="result-msg"></div>
+    <div class="result-sheet-ok" id="sheet-ok">📊 Resultado registrado en Google Sheets correctamente.</div>
+    <div class="result-sheet-err" id="sheet-err">⚠️ No se pudo registrar en Google Sheets. Verificá la URL del script.</div>
+    <div class="result-actions">
+      <button class="btn-retry" onclick="location.reload()">Intentar nuevamente</button>
+      <a href="capitulo3.html" class="btn-back">← Volver al Capítulo 3</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ════════════════════════════════════════════════════
+// ⚙️  PASO 1: REEMPLAZÁ LA LÍNEA DE ABAJO CON TU URL
+//     Google Sheets → Extensiones → Apps Script
+//     → Implementar → Administrar implementaciones → copiar URL
+// ════════════════════════════════════════════════════
+const SCRIPT_URL = 'TU_APPS_SCRIPT_URL_AQUI';
+// ════════════════════════════════════════════════════
+
+const ANSWERS = {
+  1:'b', 2:'b', 3:'b', 4:'b', 5:'c',
+  6:'b', 7:'b', 8:'b', 9:'b', 10:'b',
+  11:'b', 12:'b', 13:'b', 14:'b', 15:'b',
+  16:'b', 17:'b', 18:'c', 19:'c', 20:'b'
+};
+
+const selected = {};
+let submitted = false;
+
+function updateProgress() {
+  const count = Object.keys(selected).length;
+  const pct = Math.round(count / 20 * 100);
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('prog-text').textContent = count + ' de 20 respondidas';
+  document.getElementById('prog-pct').textContent = pct + '%';
+  const nombre = document.getElementById('input-nombre').value.trim();
+  document.getElementById('btn-submit').disabled = (count < 20 || !nombre);
+}
+
+document.getElementById('input-nombre').addEventListener('input', updateProgress);
+
+document.querySelectorAll('.option').forEach(opt => {
+  opt.addEventListener('click', () => {
+    if (submitted) return;
+    const q = opt.dataset.q;
+    document.querySelectorAll(`.option[data-q="${q}"]`).forEach(o => o.classList.remove('selected'));
+    opt.classList.add('selected');
+    selected[q] = opt.dataset.val;
+    document.getElementById('q' + q).classList.add('answered');
+    updateProgress();
+  });
+});
+
+document.getElementById('btn-submit').addEventListener('click', () => {
+  if (submitted) return;
+  const nombre = document.getElementById('input-nombre').value.trim();
+  const comision = document.getElementById('input-comision').value.trim();
+  if (!nombre) { document.getElementById('input-nombre').classList.add('error'); document.getElementById('input-nombre').focus(); return; }
+  submitted = true;
+  document.getElementById('btn-submit').disabled = true;
+
+  let correct = 0;
+  for (let i = 1; i <= 20; i++) {
+    const userAns = selected[String(i)];
+    const correctAns = ANSWERS[i];
+    document.querySelectorAll(`.option[data-q="${i}"]`).forEach(opt => {
+      opt.classList.add('locked');
+      if (opt.dataset.val === correctAns) opt.classList.add('correct');
+      else if (opt.dataset.val === userAns && userAns !== correctAns) opt.classList.add('incorrect');
+    });
+    document.getElementById('exp' + i).classList.add('show');
+    if (userAns === correctAns) correct++;
+    else { document.getElementById('q' + i).classList.remove('answered'); document.getElementById('q' + i).classList.add('wrong'); }
+  }
+
+  const pct = Math.round(correct / 20 * 100);
+  let label, msg;
+  if (pct >= 90)      { label = '🏆 Excelente';  msg = `Obtuviste ${correct}/20 correctas. ¡Dominio completo del capítulo!`; }
+  else if (pct >= 70) { label = '✅ Aprobado';    msg = `Obtuviste ${correct}/20 correctas. Aprobado. Revisá las incorrectas para reforzar.`; }
+  else                { label = '❌ A repasar';   msg = `Obtuviste ${correct}/20 correctas. Repasá el Capítulo 3 antes de continuar.`; }
+
+  document.getElementById('result-score').textContent = pct + '%';
+  document.getElementById('result-label').textContent = label;
+  document.getElementById('result-student').textContent = nombre + (comision ? ' — Comisión: ' + comision : '');
+  document.getElementById('result-msg').textContent = msg;
+  document.getElementById('result-panel').classList.add('show');
+  document.getElementById('result-panel').scrollIntoView({behavior:'smooth', block:'center'});
+
+  if (SCRIPT_URL && !SCRIPT_URL.includes('TU_APPS_SCRIPT')) {
+    document.getElementById('sending-msg').classList.add('show');
+    const now = new Date();
+    fetch(SCRIPT_URL, {
+      method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        capitulo: 'Capítulo 3',
+        nombre, comision: comision || '—',
+        fecha: now.toLocaleDateString('es-AR'),
+        hora:  now.toLocaleTimeString('es-AR'),
+        puntaje: correct, total: 20, porcentaje: pct
+      })
+    })
+    .then(() => { document.getElementById('sending-msg').classList.remove('show'); document.getElementById('sheet-ok').classList.add('show'); })
+    .catch(() => { document.getElementById('sending-msg').classList.remove('show'); document.getElementById('sheet-err').classList.add('show'); });
+  }
+});
+</script>
+</body>
+</html>

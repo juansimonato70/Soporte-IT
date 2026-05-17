@@ -107,13 +107,14 @@ a{text-decoration:none;}
 .td-num{color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:.8rem;width:36px;}
 .td-name{font-weight:500;}
 
-/* TOGGLE */
-.toggle{position:relative;width:40px;height:22px;cursor:pointer;flex-shrink:0;}
-.toggle input{opacity:0;width:0;height:0;position:absolute;}
-.toggle-track{position:absolute;inset:0;background:var(--bg4);border:1px solid rgba(255,255,255,.1);border-radius:100px;transition:all .22s;}
-.toggle input:checked + .toggle-track{background:var(--green);border-color:var(--green);}
-.toggle-thumb{position:absolute;top:3px;left:3px;width:14px;height:14px;background:var(--muted);border-radius:50%;transition:all .22s;pointer-events:none;}
-.toggle input:checked ~ .toggle-thumb{left:21px;background:#000;}
+/* TOGGLE — botón confiable, sin checkbox oculto */
+.tog-btn{display:inline-flex;align-items:center;gap:8px;cursor:pointer;background:none;border:none;padding:0;}
+.tog-track{width:44px;height:24px;border-radius:100px;background:var(--bg4);border:2px solid rgba(255,255,255,.15);position:relative;transition:background .22s,border-color .22s;flex-shrink:0;}
+.tog-track.on{background:var(--green);border-color:var(--green);}
+.tog-thumb{width:16px;height:16px;border-radius:50%;background:var(--muted);position:absolute;top:2px;left:2px;transition:left .22s,background .22s;}
+.tog-track.on .tog-thumb{left:22px;background:#000;}
+.tog-lbl{font-size:.78rem;color:var(--muted);min-width:72px;}
+.tog-track.on + .tog-lbl{color:var(--green);}
 
 @media(max-width:700px){
   .hero{padding:40px 24px 40px;} .hero-title{font-size:2.8rem;}
@@ -409,20 +410,29 @@ function fillAdminTable(items, sk, tbodyId) {
       <td class="td-num">${String(item.num).padStart(2,'0')}</td>
       <td class="td-name">${item.title}</td>
       <td>
-        <label class="toggle">
-          <input type="checkbox" ${enabled?'checked':''} onchange="toggleItem('${sk}',${item.num},this.checked)">
-          <div class="toggle-track"></div>
-          <div class="toggle-thumb"></div>
-        </label>
+        <button class="tog-btn" onclick="toggleItem('${sk}',${item.num})" id="tog_${sk}_${item.num}">
+          <div class="tog-track ${enabled ? 'on' : ''}"><div class="tog-thumb"></div></div>
+          <span class="tog-lbl">${enabled ? 'Activo' : 'Bloqueado'}</span>
+        </button>
       </td>`;
     tbody.appendChild(tr);
   });
 }
 
-function toggleItem(sk, num, value) {
-  state[sk][num] = value;
+function toggleItem(sk, num) {
+  state[sk][num] = !state[sk][num];          // flip
   saveState(state);
   renderAll();
+  // update just the one button without re-rendering the whole panel
+  const btn = document.getElementById('tog_' + sk + '_' + num);
+  if (btn) {
+    const track = btn.querySelector('.tog-track');
+    const lbl   = btn.querySelector('.tog-lbl');
+    const on = state[sk][num];
+    track.classList.toggle('on', on);
+    lbl.textContent = on ? 'Activo' : 'Bloqueado';
+  }
+  updateLabels();
 }
 function setAll(sk, value) {
   const items = sk === 'chapters' ? CHAPTERS : QUIZZES;
