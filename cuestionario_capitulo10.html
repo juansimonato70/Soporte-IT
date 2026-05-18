@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cuestionario &mdash; Capitulo 10 | Potrero Digital</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--green:#7ac143;--green-dark:#5c9430;--bg:#111;--bg2:#1a1a1a;--bg3:#222;--bg4:#2a2a2a;--text:#e8e8e8;--muted:#888;--border:rgba(122,193,67,.22);--white:#fff;--red:#e53e3e;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font-size:15px;line-height:1.7;}
+a{text-decoration:none;}
+.topnav{background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 28px;position:sticky;top:0;z-index:100;height:48px;}
+.nav-brand{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;color:var(--white);padding-right:20px;border-right:1px solid var(--border);margin-right:8px;}
+.nav-brand span{color:var(--green);}
+.topnav a{color:var(--muted);font-size:.8rem;font-weight:500;padding:0 14px;height:48px;display:flex;align-items:center;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s;}
+.topnav a.active{color:var(--green);border-bottom-color:var(--green);font-weight:600;}
+.hero{background:linear-gradient(135deg,#0d1f06,#1a2a0d);border-bottom:2px solid var(--green);padding:52px 60px 44px;}
+.hero-tag{display:inline-block;background:var(--green);color:#000;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.72rem;letter-spacing:2.5px;text-transform:uppercase;padding:4px 12px;border-radius:3px;margin-bottom:14px;}
+.hero-title{font-family:'Barlow Condensed',sans-serif;font-size:3rem;font-weight:800;line-height:1;color:var(--white);text-transform:uppercase;}
+.hero-title em{color:var(--green);font-style:normal;}
+.hero-sub{margin-top:10px;font-size:.9rem;color:rgba(255,255,255,.5);max-width:540px;}
+.hero-meta{margin-top:20px;display:flex;gap:20px;flex-wrap:wrap;}
+.hero-badge{display:flex;align-items:center;gap:6px;font-size:.82rem;color:var(--muted);}
+.hero-badge strong{color:var(--text);}
+.main{max-width:820px;margin:0 auto;padding:52px 40px 80px;}
+.sf{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:24px 28px;margin-bottom:32px;}
+.sf-title{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;}
+.sf-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.sf-g{display:flex;flex-direction:column;gap:6px;}
+.sf-label{font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;}
+.sf-input{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:10px 14px;font-family:'Barlow',sans-serif;font-size:.9rem;color:var(--text);outline:none;transition:border-color .2s;width:100%;}
+.sf-input:focus{border-color:var(--green);}
+.sf-input.error{border-color:var(--red);}
+.prog-label{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted);margin-bottom:8px;}
+.prog-wrap{background:var(--bg3);border-radius:100px;height:6px;margin-bottom:32px;overflow:hidden;}
+.prog-bar{height:100%;background:var(--green);border-radius:100px;transition:width .5s ease;}
+.qb{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:28px 30px;margin-bottom:16px;transition:border-color .2s;}
+.qb.answered{border-color:rgba(122,193,67,.4);}
+.qb.wrong{border-color:rgba(229,62,62,.4);}
+.q-num{font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;color:var(--green);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+.q-text{font-size:1rem;font-weight:500;color:var(--white);line-height:1.5;margin-bottom:18px;}
+.opts{display:flex;flex-direction:column;gap:8px;}
+.opt{display:flex;align-items:flex-start;gap:12px;background:var(--bg3);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:12px 16px;cursor:pointer;transition:all .18s;font-size:.9rem;color:var(--text);}
+.opt:hover:not(.locked){background:var(--bg4);border-color:rgba(122,193,67,.3);}
+.opt.selected{background:rgba(122,193,67,.1);border-color:var(--green);color:var(--white);}
+.opt.correct{background:rgba(122,193,67,.15);border-color:var(--green);color:#a8d87a;}
+.opt.incorrect{background:rgba(229,62,62,.08);border-color:var(--red);color:#f08080;}
+.opt.locked{cursor:default;}
+.ol{width:24px;height:24px;border-radius:50%;background:var(--bg4);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:800;color:var(--muted);flex-shrink:0;transition:all .18s;}
+.opt.selected .ol,.opt.correct .ol{background:var(--green);color:#000;border-color:var(--green);}
+.opt.incorrect .ol{background:var(--red);color:#fff;border-color:var(--red);}
+.exp{margin-top:14px;padding:12px 16px;background:rgba(122,193,67,.06);border-left:3px solid var(--green);border-radius:0 6px 6px 0;font-size:.86rem;color:var(--muted);display:none;line-height:1.6;}
+.exp.show{display:block;}
+.exp strong{color:var(--green);}
+.submit-area{text-align:center;margin-top:40px;}
+.btn-submit{background:var(--green);color:#000;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;letter-spacing:1.5px;text-transform:uppercase;padding:14px 40px;border-radius:8px;border:none;cursor:pointer;transition:all .2s;}
+.btn-submit:hover{background:var(--green-dark);transform:translateY(-2px);}
+.btn-submit:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+.sending{display:none;margin-top:16px;font-size:.88rem;color:var(--muted);text-align:center;}
+.sending.show{display:block;}
+.result{display:none;background:linear-gradient(135deg,#0d1f06,#1a2a0d);border:1px solid var(--green);border-radius:14px;padding:40px;text-align:center;margin-top:40px;}
+.result.show{display:block;}
+.r-score{font-family:'Barlow Condensed',sans-serif;font-size:5rem;font-weight:900;color:var(--green);line-height:1;}
+.r-label{font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:800;color:var(--white);text-transform:uppercase;margin-top:6px;}
+.r-student{margin-top:12px;font-size:.88rem;color:var(--muted);}
+.r-msg{color:var(--muted);margin:10px auto 0;max-width:380px;font-size:.9rem;}
+.r-ok{display:none;margin-top:14px;background:rgba(122,193,67,.08);border:1px solid rgba(122,193,67,.25);border-radius:8px;padding:10px 16px;font-size:.83rem;color:#a8d87a;}
+.r-ok.show{display:block;}
+.r-err{display:none;margin-top:14px;background:rgba(229,62,62,.08);border:1px solid rgba(229,62,62,.3);border-radius:8px;padding:10px 16px;font-size:.83rem;color:#f08080;}
+.r-err.show{display:block;}
+.r-actions{margin-top:24px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.btn-retry{background:transparent;color:var(--green);border:1px solid var(--green);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.9rem;letter-spacing:1px;text-transform:uppercase;padding:10px 24px;border-radius:6px;cursor:pointer;transition:all .2s;}
+.btn-retry:hover{background:var(--green);color:#000;}
+.btn-home{background:var(--bg3);color:var(--text);border:1px solid var(--border);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.9rem;letter-spacing:1px;text-transform:uppercase;padding:10px 24px;border-radius:6px;display:inline-flex;align-items:center;}
+@media(max-width:600px){.hero{padding:32px 24px;}.hero-title{font-size:2rem;}.main{padding:28px 16px 60px;}.qb{padding:20px 18px;}.sf-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <div class="nav-brand">Potrero <span>Digital</span></div>
+  <a href="index.html">&larr; Inicio</a>
+  <a href="#" class="active">Cuestionario 10</a>
+</nav>
+<div class="hero">
+  <div class="hero-tag">Cuestionario</div>
+  <h1 class="hero-title">Capitulo 10 &mdash;<br><em>Administraci&oacute;n del Sistema</em></h1>
+  <p class="hero-sub">Herramientas administrativas, Visor de eventos, Registro de Windows, Administraci&oacute;n de discos, instalaci&oacute;n de aplicaciones y seguridad.</p>
+  <div class="hero-meta">
+    <div class="hero-badge">&#128203; <strong>20 preguntas</strong></div>
+    <div class="hero-badge">&#9989; <strong>Aprobaci&oacute;n: 70%</strong></div>
+    <div class="hero-badge">&#128202; <strong>Registro autom&aacute;tico</strong></div>
+  </div>
+</div>
+<div class="main">
+<div class="sf">
+  <div class="sf-title">&#128100; Datos del alumno</div>
+  <div class="sf-grid">
+    <div class="sf-g"><label class="sf-label">Nombre completo</label><input class="sf-input" type="text" id="inp-nombre" placeholder="Ej: Juan P&eacute;rez" autocomplete="off"></div>
+    <div class="sf-g"><label class="sf-label">Comisi&oacute;n</label><input class="sf-input" type="text" id="inp-comision" placeholder="Ej: 6A" autocomplete="off"></div>
+  </div>
+</div>
+<div class="prog-label"><span id="prog-txt">0 de 20 respondidas</span><span id="prog-pct">0%</span></div>
+<div class="prog-wrap"><div class="prog-bar" id="prog-bar" style="width:0%"></div></div>
+
+<div class="qb" id="q1"><div class="q-num">Pregunta 01</div>
+<div class="q-text">&iquest;Qu&eacute; es el Panel de Control de Herramientas Administrativas en Windows?</div>
+<div class="opts">
+  <div class="opt" data-q="1" data-val="a"><div class="ol">A</div>Un panel donde se configuran la apariencia y los colores del escritorio de Windows</div>
+  <div class="opt" data-q="1" data-val="b"><div class="ol">B</div>Un conjunto de accesos directos a utilidades que permiten supervisar y configurar el funcionamiento de Windows, como Administraci&oacute;n de equipos, Visor de eventos, Servicios y m&aacute;s</div>
+  <div class="opt" data-q="1" data-val="c"><div class="ol">C</div>Una secci&oacute;n del Panel de Control que gestiona exclusivamente los usuarios y sus contrase&ntilde;as</div>
+  <div class="opt" data-q="1" data-val="d"><div class="ol">D</div>El men&uacute; de configuraci&oacute;n de red e internet de Windows</div>
+</div>
+<div class="exp" id="exp1"><strong>Correcto &mdash; Opci&oacute;n B:</strong> Las Herramientas Administrativas son un conjunto de accesos directos a utilidades de supervisi&oacute;n y configuraci&oacute;n de Windows. Incluyen: Computer Management, Event Viewer, Services, Performance Monitor, Print Management, Registry Editor, System Configuration, Windows Memory Diagnostic, entre otras. Evolucion&oacute; con cada versi&oacute;n de Windows.</div></div>
+
+<div class="qb" id="q2"><div class="q-num">Pregunta 02</div>
+<div class="q-text">&iquest;Cu&aacute;les son los tres grupos de utilidades que proporciona la consola de Administraci&oacute;n de Computadoras (compmgmt.msc)?</div>
+<div class="opts">
+  <div class="opt" data-q="2" data-val="a"><div class="ol">A</div>Hardware, Software y Red</div>
+  <div class="opt" data-q="2" data-val="b"><div class="ol">B</div>Herramientas del sistema, Almacenamiento, y Servicios y aplicaciones</div>
+  <div class="opt" data-q="2" data-val="c"><div class="ol">C</div>Usuarios, Discos y Rendimiento</div>
+  <div class="opt" data-q="2" data-val="d"><div class="ol">D</div>Seguridad, Actualizaciones y Configuraci&oacute;n</div>
+</div>
+<div class="exp" id="exp2"><strong>Correcto &mdash; Opci&oacute;n B:</strong> Computer Management organiza sus herramientas en tres grupos: 1) Herramientas del sistema (Task Scheduler, Event Viewer, Shared Folders, Local Users and Groups, Performance, Device Manager), 2) Almacenamiento (Disk Management) y 3) Servicios y aplicaciones (Services, WMI Control). Tambi&eacute;n permite gestionar equipos remotos.</div></div>
+
+<div class="qb" id="q3"><div class="q-num">Pregunta 03</div>
+<div class="q-text">En el Visor de Eventos, &iquest;qu&eacute; nivel indica que un evento requiere atenci&oacute;n inmediata y generalmente se relaciona con fallas o bloqueos del sistema?</div>
+<div class="opts">
+  <div class="opt" data-q="3" data-val="a"><div class="ol">A</div>Error</div>
+  <div class="opt" data-q="3" data-val="b"><div class="ol">B</div>Advertencia</div>
+  <div class="opt" data-q="3" data-val="c"><div class="ol">C</div>Cr&iacute;tico</div>
+  <div class="opt" data-q="3" data-val="d"><div class="ol">D</div>Informaci&oacute;n</div>
+</div>
+<div class="exp" id="exp3"><strong>Correcto &mdash; Opci&oacute;n C:</strong> El nivel Cr&iacute;tico es el m&aacute;s grave: indica que se requiere atenci&oacute;n inmediata y generalmente est&aacute; relacionado con fallas o bloqueos del sistema o software. Error indica un problema que no requiere acci&oacute;n inmediata; Advertencia es un posible problema; Informaci&oacute;n indica un evento exitoso.</div></div>
+
+<div class="qb" id="q4"><div class="q-num">Pregunta 04</div>
+<div class="q-text">&iquest;Cu&aacute;l de los siguientes grupos de usuarios locales en Windows tiene control total del equipo y acceso a todas las carpetas?</div>
+<div class="opts">
+  <div class="opt" data-q="4" data-val="a"><div class="ol">A</div>Usuarios, porque son la cuenta predeterminada para todos</div>
+  <div class="opt" data-q="4" data-val="b"><div class="ol">B</div>Invitados, porque tienen acceso temporal sin restricciones</div>
+  <div class="opt" data-q="4" data-val="c"><div class="ol">C</div>Administradores, con control total del equipo y acceso a todas las carpetas del sistema</div>
+  <div class="opt" data-q="4" data-val="d"><div class="ol">D</div>Power Users, porque tienen m&aacute;s privilegios que los usuarios est&aacute;ndar</div>
+</div>
+<div class="exp" id="exp4"><strong>Correcto &mdash; Opci&oacute;n C:</strong> El grupo Administradores tiene control total del equipo y acceso a todas las carpetas. Los Usuarios pueden realizar tareas comunes (ejecutar apps, imprimir) con un perfil persistente. Los Invitados tienen un perfil temporal creado al iniciar sesi&oacute;n y eliminado al cerrarla, y est&aacute;n deshabilitados por defecto.</div></div>
+
+<div class="qb" id="q5"><div class="q-num">Pregunta 05</div>
+<div class="q-text">&iquest;Qu&eacute; es un servicio en Windows y qu&eacute; buena pr&aacute;ctica de seguridad aplica a su gesti&oacute;n?</div>
+<div class="opts">
+  <div class="opt" data-q="5" data-val="a"><div class="ol">A</div>Es un tipo de archivo del sistema; siempre se deben iniciar todos los servicios disponibles para garantizar el m&aacute;ximo rendimiento</div>
+  <div class="opt" data-q="5" data-val="b"><div class="ol">B</div>Es una aplicaci&oacute;n de usuario que se ejecuta en primer plano; se recomienda activarlos todos al inicio</div>
+  <div class="opt" data-q="5" data-val="c"><div class="ol">C</div>Es un tipo de aplicaci&oacute;n que se ejecuta en segundo plano; la buena pr&aacute;ctica es iniciar solo los servicios necesarios para reducir la superficie de ataque</div>
+  <div class="opt" data-q="5" data-val="d"><div class="ol">D</div>Es un controlador de hardware; debe estar siempre en modo autom&aacute;tico para garantizar compatibilidad</div>
+</div>
+<div class="exp" id="exp5"><strong>Correcto &mdash; Opci&oacute;n C:</strong> Un servicio es una aplicaci&oacute;n que se ejecuta en segundo plano para cumplir una funci&oacute;n espec&iacute;fica o esperar solicitudes. La consola services.msc permite gestionarlos. La buena pr&aacute;ctica de seguridad es iniciar solo los servicios necesarios, ya que cada servicio activo es una posible superficie de ataque para exploits o escalada de privilegios.</div></div>
+
+<div class="qb" id="q6"><div class="q-num">Pregunta 06</div>
+<div class="q-text">&iquest;Para qu&eacute; sirve la herramienta msinfo32 y c&oacute;mo se abre?</div>
+<div class="opts">
+  <div class="opt" data-q="6" data-val="a"><div class="ol">A</div>Para configurar el arranque seguro de Windows; se abre desde la BIOS presionando F2</div>
+  <div class="opt" data-q="6" data-val="b"><div class="ol">B</div>Para recopilar y mostrar informaci&oacute;n detallada del hardware, controladores, componentes y software del equipo; se abre ejecutando msinfo32 desde Win+R o el s&iacute;mbolo del sistema</div>
+  <div class="opt" data-q="6" data-val="c"><div class="ol">C</div>Para gestionar los servicios del sistema; se abre desde el Panel de Control &rarr; Servicios</div>
+  <div class="opt" data-q="6" data-val="d"><div class="ol">D</div>Para diagnosticar problemas de DirectX en videojuegos; se abre desde la Tienda Microsoft</div>
+</div>
+<div class="exp" id="exp6"><strong>Correcto &mdash; Opci&oacute;n B:</strong> msinfo32 (Informaci&oacute;n del sistema) recopila y muestra datos detallados sobre el equipo: SO, versi&oacute;n, procesador, BIOS, tipo de sistema, drivers, componentes de hardware y software. Se puede exportar un informe completo. Se abre con Win+R &rarr; msinfo32, o desde el s&iacute;mbolo del sistema.</div></div>
+
+<div class="qb" id="q7"><div class="q-num">Pregunta 07</div>
+<div class="q-text">&iquest;Qu&eacute; hace la herramienta msconfig y para qu&eacute; se usa principalmente?</div>
+<div class="opts">
+  <div class="opt" data-q="7" data-val="a"><div class="ol">A</div>Configura la conexi&oacute;n a internet y los servidores DNS del equipo</div>
+  <div class="opt" data-q="7" data-val="b"><div class="ol">B</div>Identifica y resuelve problemas que impiden que Windows inicie correctamente, permitiendo configurar el tipo de arranque, deshabilitar servicios y administrar el inicio</div>
+  <div class="opt" data-q="7" data-val="c"><div class="ol">C</div>Gestiona las actualizaciones autom&aacute;ticas de Windows y las aplicaciones instaladas</div>
+  <div class="opt" data-q="7" data-val="d"><div class="ol">D</div>Permite crear y gestionar m&aacute;quinas virtuales dentro de Windows 10</div>
+</div>
+<div class="exp" id="exp7"><strong>Correcto &mdash; Opci&oacute;n B:</strong> msconfig (Configuraci&oacute;n del sistema) es la herramienta de diagn&oacute;stico de arranque. Sus pesta&ntilde;as permiten: elegir tipo de inicio (Normal, Diagn&oacute;stico, Selectivo), configurar el Arranque Seguro, deshabilitar servicios individuales para diagn&oacute;stico, gestionar programas de inicio y acceder a herramientas de diagn&oacute;stico. Se ejecuta con Win+R &rarr; msconfig.</div></div>
+
+<div class="qb" id="q8"><div class="q-num">Pregunta 08</div>
+<div class="q-text">&iquest;Qu&eacute; es el Registro de Windows y c&oacute;mo se organiza internamente?</div>
+<div class="opts">
+  <div class="opt" data-q="8" data-val="a"><div class="ol">A</div>Es un archivo de texto donde Windows guarda el historial de eventos del sistema, organizado por fechas</div>
+  <div class="opt" data-q="8" data-val="b"><div class="ol">B</div>Es la base de datos central donde se almacena toda la configuraci&oacute;n de Windows y aplicaciones, organizada en una jerarqu&iacute;a de claves y subclaves (hasta 512 niveles), almacenada como archivos de base de datos llamados colmenas</div>
+  <div class="opt" data-q="8" data-val="c"><div class="ol">C</div>Es el directorio donde Windows guarda los archivos temporales y la cach&eacute; del navegador</div>
+  <div class="opt" data-q="8" data-val="d"><div class="ol">D</div>Es una lista de todos los programas instalados en el sistema, organizada alfab&eacute;ticamente</div>
+</div>
+<div class="exp" id="exp8"><strong>Correcto &mdash; Opci&oacute;n B:</strong> El Registro de Windows es la base de datos central que almacena toda la configuraci&oacute;n del SO y las aplicaciones. Se organiza jer&aacute;rquicamente en claves y subclaves (hasta 512 niveles de profundidad), almacenadas f&iacute;sicamente como archivos llamados colmenas. Cada clave tiene valores con nombre, tipo de datos y datos que le indican a Windows c&oacute;mo operar.</div></div>
+
+<div class="qb" id="q9"><div class="q-num">Pregunta 09</div>
+<div class="q-text">&iquest;Qu&eacute; clave ra&iacute;z del Registro almacena informaci&oacute;n sobre el estado f&iacute;sico de la computadora, incluyendo la configuraci&oacute;n de hardware y Plug and Play?</div>
+<div class="opts">
+  <div class="opt" data-q="9" data-val="a"><div class="ol">A</div>HKEY_CURRENT_USER</div>
+  <div class="opt" data-q="9" data-val="b"><div class="ol">B</div>HKEY_CLASSES_ROOT</div>
+  <div class="opt" data-q="9" data-val="c"><div class="ol">C</div>HKEY_LOCAL_MACHINE</div>
+  <div class="opt" data-q="9" data-val="d"><div class="ol">D</div>HKEY_CURRENT_CONFIG</div>
+</div>
+<div class="exp" id="exp9"><strong>Correcto &mdash; Opci&oacute;n C:</strong> HKEY_LOCAL_MACHINE (HKLM) almacena informaci&oacute;n sobre el estado f&iacute;sico del equipo: configuraci&oacute;n de hardware, informaci&oacute;n de inicio de sesi&oacute;n y seguridad de red, Plug and Play, etc. HKEY_CURRENT_USER tiene las preferencias del usuario actual; HKEY_CLASSES_ROOT tiene las asociaciones de archivos; HKEY_CURRENT_CONFIG tiene el perfil de hardware actual.</div></div>
+
+<div class="qb" id="q10"><div class="q-num">Pregunta 10</div>
+<div class="q-text">&iquest;Cu&aacute;l es el riesgo principal de usar incorrectamente el Editor del Registro (regedit)?</div>
+<div class="opts">
+  <div class="opt" data-q="10" data-val="a"><div class="ol">A</div>Que se pierda la conexi&oacute;n a internet hasta el pr&oacute;ximo reinicio del sistema</div>
+  <div class="opt" data-q="10" data-val="b"><div class="ol">B</div>Que las im&aacute;genes del fondo de pantalla se borren permanentemente</div>
+  <div class="opt" data-q="10" data-val="c"><div class="ol">C</div>Que se causen problemas de hardware, aplicaciones o del propio SO, que en casos graves pueden requerir reinstalar el sistema operativo</div>
+  <div class="opt" data-q="10" data-val="d"><div class="ol">D</div>Que el antivirus detecte el editor como software malicioso y lo elimine</div>
+</div>
+<div class="exp" id="exp10"><strong>Correcto &mdash; Opci&oacute;n C:</strong> El uso incorrecto de regedit puede causar problemas de hardware, aplicaciones y del SO, incluyendo casos tan graves que requieren reinstalar Windows. Por eso siempre se debe hacer una copia de seguridad del registro antes de modificarlo. regedit solo se puede abrir desde una b&uacute;squeda o desde el s&iacute;mbolo del sistema.</div></div>
+
+<div class="qb" id="q11"><div class="q-num">Pregunta 11</div>
+<div class="q-text">&iquest;Qu&eacute; es la Microsoft Management Console (MMC) y qu&eacute; son los complementos (snap-ins)?</div>
+<div class="opts">
+  <div class="opt" data-q="11" data-val="a"><div class="ol">A</div>Un navegador web de Microsoft para administrar servidores remotos v&iacute;a internet</div>
+  <div class="opt" data-q="11" data-val="b"><div class="ol">B</div>Una aplicaci&oacute;n que permite crear consolas de administraci&oacute;n personalizadas agregando herramientas llamadas complementos; estas consolas se pueden guardar y reutilizar para prop&oacute;sitos espec&iacute;ficos</div>
+  <div class="opt" data-q="11" data-val="c"><div class="ol">C</div>Un emulador de terminal para ejecutar comandos de administraci&oacute;n en Linux desde Windows</div>
+  <div class="opt" data-q="11" data-val="d"><div class="ol">D</div>La consola de PowerShell con soporte para m&oacute;dulos de administraci&oacute;n remota</div>
+</div>
+<div class="exp" id="exp11"><strong>Correcto &mdash; Opci&oacute;n B:</strong> La MMC es un marco vac&iacute;o al que se agregan complementos (snap-ins) &mdash; utilidades como Disk Management, Event Viewer, Device Manager, Certificates, etc. Tambi&eacute;n permite agregar enlaces web, carpetas y controles ActiveX. Se guarda la consola con exactamente las herramientas necesarias para una tarea administrativa espec&iacute;fica.</div></div>
+
+<div class="qb" id="q12"><div class="q-num">Pregunta 12</div>
+<div class="q-text">&iquest;Qu&eacute; muestra DxDiag y para qu&eacute; aplicaciones es especialmente &uacute;til?</div>
+<div class="opts">
+  <div class="opt" data-q="12" data-val="a"><div class="ol">A</div>Muestra el estado de todos los discos del sistema; es &uacute;til para detectar sectores da&ntilde;ados</div>
+  <div class="opt" data-q="12" data-val="b"><div class="ol">B</div>Muestra informaci&oacute;n de los controladores y componentes de DirectX instalados (gr&aacute;ficos, audio, input); es especialmente &uacute;til para diagnosticar problemas en videojuegos y aplicaciones multimedia</div>
+  <div class="opt" data-q="12" data-val="c"><div class="ol">C</div>Muestra el diagn&oacute;stico de la memoria RAM; es &uacute;til para detectar errores de hardware</div>
+  <div class="opt" data-q="12" data-val="d"><div class="ol">D</div>Muestra el estado de los servicios de red activos; es &uacute;til para troubleshooting de conectividad</div>
+</div>
+<div class="exp" id="exp12"><strong>Correcto &mdash; Opci&oacute;n B:</strong> DxDiag (DirectX Diagnostic Tool) informa sobre todos los controladores y componentes DirectX: versi&oacute;n de DirectX, adaptador de video, drivers de audio e input. DirectX es la API multimedia de Windows para gr&aacute;ficos 2D/3D, audio y codecs. Es la herramienta de referencia cuando un juego o aplicaci&oacute;n multimedia falla y se sospecha del driver de video o audio.</div></div>
+
+<div class="qb" id="q13"><div class="q-num">Pregunta 13</div>
+<div class="q-text">&iquest;C&oacute;mo se accede a la utilidad Administraci&oacute;n de Discos en Windows 10?</div>
+<div class="opts">
+  <div class="opt" data-q="13" data-val="a"><div class="ol">A</div>Solo desde el Explorador de archivos haciendo doble clic en "Este equipo"</div>
+  <div class="opt" data-q="13" data-val="b"><div class="ol">B</div>Haciendo clic derecho en "Este equipo" y seleccionando Administrar, o desde el men&uacute; Win+X y seleccionando Administraci&oacute;n de discos</div>
+  <div class="opt" data-q="13" data-val="c"><div class="ol">C</div>Solo a trav&eacute;s del s&iacute;mbolo del sistema con el comando diskpart</div>
+  <div class="opt" data-q="13" data-val="d"><div class="ol">D</div>Desde Configuraci&oacute;n &rarr; Actualizaci&oacute;n y seguridad &rarr; Recuperaci&oacute;n</div>
+</div>
+<div class="exp" id="exp13"><strong>Correcto &mdash; Opci&oacute;n B:</strong> Administraci&oacute;n de discos se puede abrir de varias formas: clic derecho en "Este equipo" &rarr; Administrar &rarr; Almacenamiento &rarr; Administraci&oacute;n de discos; desde el men&uacute; Win+X &rarr; Administraci&oacute;n de discos; o desde Computer Management. Tambi&eacute;n puede ejecutarse con diskmgmt.msc desde Win+R.</div></div>
+
+<div class="qb" id="q14"><div class="q-num">Pregunta 14</div>
+<div class="q-text">&iquest;Qu&eacute; significa el estado "Ilegible" en una unidad dentro de Administraci&oacute;n de Discos?</div>
+<div class="opts">
+  <div class="opt" data-q="14" data-val="a"><div class="ol">A</div>El disco est&aacute; encriptado con BitLocker y necesita la clave de recuperaci&oacute;n</div>
+  <div class="opt" data-q="14" data-val="b"><div class="ol">B</div>El disco es nuevo y a&uacute;n no fue inicializado con una firma v&aacute;lida</div>
+  <div class="opt" data-q="14" data-val="c"><div class="ol">C</div>El disco es un disco externo proveniente de otra computadora con Windows</div>
+  <div class="opt" data-q="14" data-val="d"><div class="ol">D</div>El disco b&aacute;sico o din&aacute;mico sufri&oacute; una falla de hardware, da&ntilde;os en la estructura o errores de entrada/salida</div>
+</div>
+<div class="exp" id="exp14"><strong>Correcto &mdash; Opci&oacute;n D:</strong> El estado "Ilegible" indica que el disco (b&aacute;sico o din&aacute;mico) experiment&oacute; una falla de hardware, da&ntilde;os en la estructura del disco o errores de E/S (Input/Output). El estado "Sin inicializar" corresponde a un disco nuevo sin firma; "Externo" es para discos din&aacute;micos de otra PC; "En l&iacute;nea" es el estado normal y correcto.</div></div>
+
+<div class="qb" id="q15"><div class="q-num">Pregunta 15</div>
+<div class="q-text">&iquest;Qu&eacute; es montar una imagen ISO en Windows y c&oacute;mo se accede al contenido montado?</div>
+<div class="opts">
+  <div class="opt" data-q="15" data-val="a"><div class="ol">A</div>Es grabar el archivo ISO en un pendrive; el contenido se accede desde el USB</div>
+  <div class="opt" data-q="15" data-val="b"><div class="ol">B</div>Es hacer que el archivo ISO sea accesible como una unidad virtual sin grabarlo en ning&uacute;n medio; Windows lo muestra como una unidad de medios extra&iacute;ble con su propia letra de unidad</div>
+  <div class="opt" data-q="15" data-val="c"><div class="ol">C</div>Es comprimir el archivo ISO para reducir su tama&ntilde;o en el disco duro</div>
+  <div class="opt" data-q="15" data-val="d"><div class="ol">D</div>Es convertir el archivo ISO al formato VHD para usarlo en m&aacute;quinas virtuales</div>
+</div>
+<div class="exp" id="exp15"><strong>Correcto &mdash; Opci&oacute;n B:</strong> Montar una ISO significa hacer que su contenido sea legible como una unidad f&iacute;sica sin grabarlo. En Windows: seleccionar el ISO en el Explorador &rarr; pesta&ntilde;a Administrar &rarr; Montar. El ISO aparece como una unidad DVD Drive con su propia letra, accesible desde el Explorador de archivos. Es muy &uacute;til para instalar software o acceder a contenido sin necesidad de un DVD f&iacute;sico.</div></div>
+
+<div class="qb" id="q16"><div class="q-num">Pregunta 16</div>
+<div class="q-text">&iquest;Por qu&eacute; NO se debe desfragmentar un SSD (disco de estado s&oacute;lido)?</div>
+<div class="opts">
+  <div class="opt" data-q="16" data-val="a"><div class="ol">A</div>Porque los SSD no pueden fragmentarse al no tener partes m&oacute;viles, por lo que la operaci&oacute;n es completamente innecesaria</div>
+  <div class="opt" data-q="16" data-val="b"><div class="ol">B</div>Porque la desfragmentaci&oacute;n en SSD no mejora el rendimiento (ya se optimizan con su controladora y TRIM) y genera ciclos de escritura innecesarios que reducen la vida &uacute;til del dispositivo</div>
+  <div class="opt" data-q="16" data-val="c"><div class="ol">C</div>Porque Windows no tiene una herramienta de desfragmentaci&oacute;n compatible con unidades SSD</div>
+  <div class="opt" data-q="16" data-val="d"><div class="ol">D</div>Porque los SSD solo pueden ser optimizados por el fabricante mediante actualizaciones de firmware</div>
+</div>
+<div class="exp" id="exp16"><strong>Correcto &mdash; Opci&oacute;n B:</strong> Los SSD tienen acceso uniforme a todas las celdas (no importa la ubicaci&oacute;n f&iacute;sica de los datos), por lo que la fragmentaci&oacute;n no afecta el rendimiento. Adem&aacute;s, la desfragmentaci&oacute;n genera ciclos de escritura innecesarios que reducen la vida &uacute;til del SSD (que tiene ciclos de escritura limitados). Los SSD se optimizan con su propia controladora y el comando TRIM.</div></div>
+
+<div class="qb" id="q17"><div class="q-num">Pregunta 17</div>
+<div class="q-text">&iquest;Qu&eacute; extensiones de archivo tiene t&iacute;picamente un instalador de aplicaciones en Windows?</div>
+<div class="opts">
+  <div class="opt" data-q="17" data-val="a"><div class="ol">A</div>.ZIP y .RAR</div>
+  <div class="opt" data-q="17" data-val="b"><div class="ol">B</div>.ISO y .IMG</div>
+  <div class="opt" data-q="17" data-val="c"><div class="ol">C</div>.EXE o .MSI (Microsoft Silent Installer)</div>
+  <div class="opt" data-q="17" data-val="d"><div class="ol">D</div>.BAT y .CMD</div>
+</div>
+<div class="exp" id="exp17"><strong>Correcto &mdash; Opci&oacute;n C:</strong> Los instaladores de Windows tienen t&iacute;picamente extensi&oacute;n .EXE (ejecutable) o .MSI (Microsoft Installer, anteriormente llamado Microsoft Silent Installer). Si la instalaci&oacute;n no inicia autom&aacute;ticamente al insertar el medio, se busca y ejecuta manualmente el archivo .EXE o .MSI en los medios de instalaci&oacute;n.</div></div>
+
+<div class="qb" id="q18"><div class="q-num">Pregunta 18</div>
+<div class="q-text">&iquest;C&oacute;mo se configura el Modo de Compatibilidad para una aplicaci&oacute;n antigua que no funciona correctamente en Windows 10?</div>
+<div class="opts">
+  <div class="opt" data-q="18" data-val="a"><div class="ol">A</div>Reinstalando el sistema operativo en modo legado desde la configuraci&oacute;n de Windows Update</div>
+  <div class="opt" data-q="18" data-val="b"><div class="ol">B</div>Clic derecho en el ejecutable &rarr; Propiedades &rarr; pesta&ntilde;a Compatibilidad &rarr; configurar la versi&oacute;n de Windows a emular o ejecutar el Solucionador de problemas de compatibilidad</div>
+  <div class="opt" data-q="18" data-val="c"><div class="ol">C</div>Abriendo msconfig y seleccionando el modo de inicio de diagn&oacute;stico para emular Windows anterior</div>
+  <div class="opt" data-q="18" data-val="d"><div class="ol">D</div>Desde la Tienda Microsoft &rarr; secci&oacute;n "Apps legado" &rarr; seleccionar la versi&oacute;n compatible</div>
+</div>
+<div class="exp" id="exp18"><strong>Correcto &mdash; Opci&oacute;n B:</strong> El Modo de Compatibilidad se configura desde las propiedades del ejecutable: clic derecho &rarr; Abrir ubicaci&oacute;n del archivo &rarr; clic derecho en el .exe &rarr; Propiedades &rarr; pesta&ntilde;a Compatibilidad. Desde ah&iacute; se puede ejecutar el Solucionador autom&aacute;tico o configurar manualmente la emulaci&oacute;n de Windows 7, 8, Vista, XP, etc.</div></div>
+
+<div class="qb" id="q19"><div class="q-num">Pregunta 19</div>
+<div class="q-text">&iquest;Por qu&eacute; Microsoft recomienda usar "Programas y caracter&iacute;sticas" del Panel de Control para desinstalar apps, en lugar de borrar manualmente los archivos?</div>
+<div class="opts">
+  <div class="opt" data-q="19" data-val="a"><div class="ol">A</div>Porque es el &uacute;nico m&eacute;todo que elimina el icono del escritorio adem&aacute;s del programa</div>
+  <div class="opt" data-q="19" data-val="b"><div class="ol">B</div>Porque elimina correctamente todos los archivos instalados y las entradas del Registro, evitando que queden residuos que consumen espacio y ralentizan el sistema</div>
+  <div class="opt" data-q="19" data-val="c"><div class="ol">C</div>Porque el borrado manual de carpetas de programa est&aacute; bloqueado por Windows por razones de seguridad</div>
+  <div class="opt" data-q="19" data-val="d"><div class="ol">D</div>Porque genera autom&aacute;ticamente una copia de seguridad del programa antes de eliminarlo</div>
+</div>
+<div class="exp" id="exp19"><strong>Correcto &mdash; Opci&oacute;n B:</strong> Borrar manualmente los archivos de una app deja entradas hu&eacute;rfanas en el Registro y otros archivos dispersos por el sistema, que consumen espacio y pueden ralentizar el registro. Programas y caracter&iacute;sticas (appwiz.cpl) usa el propio desinstalador de la aplicaci&oacute;n, que elimina todos los archivos, entradas del registro y configuraciones creadas durante la instalaci&oacute;n.</div></div>
+
+<div class="qb" id="q20"><div class="q-num">Pregunta 20</div>
+<div class="q-text">&iquest;Por qu&eacute; permitir que los usuarios instalen software libremente en equipos corporativos representa un riesgo de seguridad?</div>
+<div class="opts">
+  <div class="opt" data-q="20" data-val="a"><div class="ol">A</div>Porque puede aumentar el consumo de ancho de banda de la red al descargar actualizaciones</div>
+  <div class="opt" data-q="20" data-val="b"><div class="ol">B</div>Porque los usuarios pueden ser enga&ntilde;ados para descargar malware que puede robar o destruir datos e infectar todos los equipos conectados a la red corporativa</div>
+  <div class="opt" data-q="20" data-val="c"><div class="ol">C</div>Porque instalar demasiados programas fragmenta el disco duro y reduce el espacio disponible</div>
+  <div class="opt" data-q="20" data-val="d"><div class="ol">D</div>Porque Windows Defender se desactiva autom&aacute;ticamente cuando detecta software de terceros</div>
+</div>
+<div class="exp" id="exp20"><strong>Correcto &mdash; Opci&oacute;n B:</strong> El riesgo principal es el malware: los usuarios pueden ser v&iacute;ctimas de ingenier&iacute;a social y descargar software malicioso disfrazado de aplicaci&oacute;n leg&iacute;tima. Este malware puede robar credenciales, cifrar datos (ransomware) o propagarse a otros equipos de la red. El t&eacute;cnico debe aplicar pol&iacute;ticas de instalaci&oacute;n (AppLocker, GPO) y mantener Windows Defender actualizado.</div></div>
+
+<div class="submit-area">
+  <button class="btn-submit" id="btn-submit" disabled>Verificar y registrar respuestas</button>
+  <div class="sending" id="sending">&#9203; Enviando resultados a Google Sheets&hellip;</div>
+</div>
+<div class="result" id="result">
+  <div class="r-score" id="r-score">0%</div>
+  <div class="r-label" id="r-label">&mdash;</div>
+  <div class="r-student" id="r-student"></div>
+  <div class="r-msg" id="r-msg"></div>
+  <div class="r-ok" id="r-ok">&#128202; Resultado registrado en Google Sheets correctamente.</div>
+  <div class="r-err" id="r-err">&#9888;&#65039; No se pudo registrar en Google Sheets. Verific&aacute; la URL del script.</div>
+  <div class="r-actions">
+    <button class="btn-retry" onclick="location.reload()">Intentar nuevamente</button>
+    <a href="index.html" class="btn-home">&larr; Volver al Inicio</a>
+  </div>
+</div>
+</div>
+<script>
+// ================================================
+// REEMPLAZA CON LA URL DE TU APPS SCRIPT
+// ================================================
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycbwGHiqk4czVQNDQgPKisTPOmf2u-uP7lbXeh6TWFoEB4pkqc19lxM2GbOomWrtGLdpf/exec';
+// ================================================
+const ANSWERS={1:'b',2:'b',3:'c',4:'c',5:'c',6:'b',7:'b',8:'b',9:'c',10:'c',11:'b',12:'b',13:'b',14:'d',15:'b',16:'b',17:'c',18:'b',19:'b',20:'b'};
+const TOTAL=20;const sel={};let submitted=false;
+function updProg(){const n=Object.keys(sel).length,p=Math.round(n/TOTAL*100);document.getElementById('prog-bar').style.width=p+'%';document.getElementById('prog-txt').textContent=n+' de '+TOTAL+' respondidas';document.getElementById('prog-pct').textContent=p+'%';document.getElementById('btn-submit').disabled=(n<TOTAL||!document.getElementById('inp-nombre').value.trim());}
+document.getElementById('inp-nombre').addEventListener('input',updProg);
+document.querySelectorAll('.opt').forEach(o=>{o.addEventListener('click',()=>{if(submitted)return;const q=o.dataset.q;document.querySelectorAll('.opt[data-q="'+q+'"]').forEach(x=>x.classList.remove('selected'));o.classList.add('selected');sel[q]=o.dataset.val;document.getElementById('q'+q).classList.add('answered');updProg();});});
+document.getElementById('btn-submit').addEventListener('click',()=>{
+  if(submitted)return;
+  const nombre=document.getElementById('inp-nombre').value.trim(),comision=document.getElementById('inp-comision').value.trim();
+  if(!nombre){document.getElementById('inp-nombre').classList.add('error');document.getElementById('inp-nombre').focus();return;}
+  submitted=true;document.getElementById('btn-submit').disabled=true;
+  let correct=0;
+  for(let i=1;i<=TOTAL;i++){const ua=sel[String(i)],ca=ANSWERS[i];document.querySelectorAll('.opt[data-q="'+i+'"]').forEach(o=>{o.classList.add('locked');if(o.dataset.val===ca)o.classList.add('correct');else if(o.dataset.val===ua&&ua!==ca)o.classList.add('incorrect');});document.getElementById('exp'+i).classList.add('show');if(ua===ca)correct++;else{document.getElementById('q'+i).classList.remove('answered');document.getElementById('q'+i).classList.add('wrong');}}
+  const pct=Math.round(correct/TOTAL*100),label=pct>=90?'&#127942; Excelente':pct>=70?'&#9989; Aprobado':'&#10060; A repasar',msg=pct>=90?'Obtuviste '+correct+'/'+TOTAL+'. &#161;Excelente dominio del cap&iacute;tulo!':pct>=70?'Obtuviste '+correct+'/'+TOTAL+'. Aprobado. Revis&aacute; las incorrectas.':'Obtuviste '+correct+'/'+TOTAL+'. Repas&aacute; el Cap&iacute;tulo 10 antes de continuar.';
+  document.getElementById('r-score').textContent=pct+'%';document.getElementById('r-label').innerHTML=label;document.getElementById('r-student').textContent=nombre+(comision?' &mdash; Comisi&oacute;n: '+comision:'');document.getElementById('r-msg').innerHTML=msg;document.getElementById('result').classList.add('show');document.getElementById('result').scrollIntoView({behavior:'smooth',block:'center'});
+  if(SCRIPT_URL&&!SCRIPT_URL.includes('TU_APPS_SCRIPT')){document.getElementById('sending').classList.add('show');const now=new Date();fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({capitulo:'Capitulo 10',nombre,comision:comision||'&mdash;',fecha:now.toLocaleDateString('es-AR'),hora:now.toLocaleTimeString('es-AR'),puntaje:correct,total:TOTAL,porcentaje:pct})}).then(()=>{document.getElementById('sending').classList.remove('show');document.getElementById('r-ok').classList.add('show');}).catch(()=>{document.getElementById('sending').classList.remove('show');document.getElementById('r-err').classList.add('show');});}
+});
+</script>
+</body>
+</html>

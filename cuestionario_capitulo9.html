@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cuestionario — Capítulo 9 | Potrero Digital</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--green:#7ac143;--green-dark:#5c9430;--bg:#111;--bg2:#1a1a1a;--bg3:#222;--bg4:#2a2a2a;--text:#e8e8e8;--muted:#888;--border:rgba(122,193,67,.22);--white:#fff;--red:#e53e3e;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font-size:15px;line-height:1.7;}
+a{text-decoration:none;}
+.topnav{background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 28px;position:sticky;top:0;z-index:100;height:48px;}
+.nav-brand{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;color:var(--white);padding-right:20px;border-right:1px solid var(--border);margin-right:8px;}
+.nav-brand span{color:var(--green);}
+.topnav a{color:var(--muted);font-size:.8rem;font-weight:500;padding:0 14px;height:48px;display:flex;align-items:center;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s;}
+.topnav a:hover{color:var(--text);}
+.topnav a.active{color:var(--green);border-bottom-color:var(--green);font-weight:600;}
+.hero{background:linear-gradient(135deg,#0d1f06,#1a2a0d);border-bottom:2px solid var(--green);padding:52px 60px 44px;}
+.hero-tag{display:inline-block;background:var(--green);color:#000;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.72rem;letter-spacing:2.5px;text-transform:uppercase;padding:4px 12px;border-radius:3px;margin-bottom:14px;}
+.hero-title{font-family:'Barlow Condensed',sans-serif;font-size:3rem;font-weight:800;line-height:1;color:var(--white);text-transform:uppercase;}
+.hero-title em{color:var(--green);font-style:normal;}
+.hero-sub{margin-top:10px;font-size:.9rem;color:rgba(255,255,255,.5);max-width:540px;}
+.hero-meta{margin-top:20px;display:flex;gap:20px;flex-wrap:wrap;}
+.hero-badge{display:flex;align-items:center;gap:6px;font-size:.82rem;color:var(--muted);}
+.hero-badge strong{color:var(--text);}
+.main{max-width:820px;margin:0 auto;padding:52px 40px 80px;}
+.sf{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:24px 28px;margin-bottom:32px;}
+.sf-title{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;}
+.sf-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.sf-g{display:flex;flex-direction:column;gap:6px;}
+.sf-label{font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;}
+.sf-input{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:10px 14px;font-family:'Barlow',sans-serif;font-size:.9rem;color:var(--text);outline:none;transition:border-color .2s;width:100%;}
+.sf-input:focus{border-color:var(--green);}
+.sf-input.error{border-color:var(--red);}
+.prog-label{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted);margin-bottom:8px;}
+.prog-wrap{background:var(--bg3);border-radius:100px;height:6px;margin-bottom:32px;overflow:hidden;}
+.prog-bar{height:100%;background:var(--green);border-radius:100px;transition:width .5s ease;}
+.qb{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:28px 30px;margin-bottom:16px;transition:border-color .2s;}
+.qb.answered{border-color:rgba(122,193,67,.4);}
+.qb.wrong{border-color:rgba(229,62,62,.4);}
+.q-num{font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;color:var(--green);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+.q-text{font-size:1rem;font-weight:500;color:var(--white);line-height:1.5;margin-bottom:18px;}
+.opts{display:flex;flex-direction:column;gap:8px;}
+.opt{display:flex;align-items:flex-start;gap:12px;background:var(--bg3);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:12px 16px;cursor:pointer;transition:all .18s;font-size:.9rem;color:var(--text);}
+.opt:hover:not(.locked){background:var(--bg4);border-color:rgba(122,193,67,.3);}
+.opt.selected{background:rgba(122,193,67,.1);border-color:var(--green);color:var(--white);}
+.opt.correct{background:rgba(122,193,67,.15);border-color:var(--green);color:#a8d87a;}
+.opt.incorrect{background:rgba(229,62,62,.08);border-color:var(--red);color:#f08080;}
+.opt.locked{cursor:default;}
+.ol{width:24px;height:24px;border-radius:50%;background:var(--bg4);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:800;color:var(--muted);flex-shrink:0;transition:all .18s;}
+.opt.selected .ol,.opt.correct .ol{background:var(--green);color:#000;border-color:var(--green);}
+.opt.incorrect .ol{background:var(--red);color:#fff;border-color:var(--red);}
+.exp{margin-top:14px;padding:12px 16px;background:rgba(122,193,67,.06);border-left:3px solid var(--green);border-radius:0 6px 6px 0;font-size:.86rem;color:var(--muted);display:none;line-height:1.6;}
+.exp.show{display:block;}
+.exp strong{color:var(--green);}
+.submit-area{text-align:center;margin-top:40px;}
+.btn-submit{background:var(--green);color:#000;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;letter-spacing:1.5px;text-transform:uppercase;padding:14px 40px;border-radius:8px;border:none;cursor:pointer;transition:all .2s;}
+.btn-submit:hover{background:var(--green-dark);transform:translateY(-2px);}
+.btn-submit:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+.sending{display:none;margin-top:16px;font-size:.88rem;color:var(--muted);text-align:center;}
+.sending.show{display:block;}
+.result{display:none;background:linear-gradient(135deg,#0d1f06,#1a2a0d);border:1px solid var(--green);border-radius:14px;padding:40px;text-align:center;margin-top:40px;}
+.result.show{display:block;}
+.r-score{font-family:'Barlow Condensed',sans-serif;font-size:5rem;font-weight:900;color:var(--green);line-height:1;}
+.r-label{font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:800;color:var(--white);text-transform:uppercase;margin-top:6px;}
+.r-student{margin-top:12px;font-size:.88rem;color:var(--muted);}
+.r-msg{color:var(--muted);margin:10px auto 0;max-width:380px;font-size:.9rem;}
+.r-ok{display:none;margin-top:14px;background:rgba(122,193,67,.08);border:1px solid rgba(122,193,67,.25);border-radius:8px;padding:10px 16px;font-size:.83rem;color:#a8d87a;}
+.r-ok.show{display:block;}
+.r-err{display:none;margin-top:14px;background:rgba(229,62,62,.08);border:1px solid rgba(229,62,62,.3);border-radius:8px;padding:10px 16px;font-size:.83rem;color:#f08080;}
+.r-err.show{display:block;}
+.r-actions{margin-top:24px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.btn-retry{background:transparent;color:var(--green);border:1px solid var(--green);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.9rem;letter-spacing:1px;text-transform:uppercase;padding:10px 24px;border-radius:6px;cursor:pointer;transition:all .2s;}
+.btn-retry:hover{background:var(--green);color:#000;}
+.btn-home{background:var(--bg3);color:var(--text);border:1px solid var(--border);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.9rem;letter-spacing:1px;text-transform:uppercase;padding:10px 24px;border-radius:6px;display:inline-flex;align-items:center;}
+@media(max-width:600px){.hero{padding:32px 24px;}.hero-title{font-size:2rem;}.main{padding:28px 16px 60px;}.qb{padding:20px 18px;}.sf-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <div class="nav-brand">Potrero <span>Digital</span></div>
+  <a href="index.html">&#8592; Inicio</a>
+  <a href="#" class="active">Cuestionario 9</a>
+</nav>
+<div class="hero">
+  <div class="hero-tag">Cuestionario</div>
+  <h1 class="hero-title">Capitulo 9 &#8212;<br><em>Conceptos de Redes</em></h1>
+  <p class="hero-sub">NIC, dispositivos de red, topolog&#237;as, tipos de conexi&#243;n a internet, protocolos inal&#225;mbricos, direccionamiento IP, servicios de red, TCP/UDP y cableado estructurado.</p>
+  <div class="hero-meta">
+    <div class="hero-badge">&#128203; <strong>20 preguntas</strong></div>
+    <div class="hero-badge">&#9989; <strong>Aprobaci&#243;n: 70%</strong></div>
+    <div class="hero-badge">&#128202; <strong>Registro autom&#225;tico</strong></div>
+  </div>
+</div>
+<div class="main">
+<div class="sf">
+  <div class="sf-title">&#128100; Datos del alumno</div>
+  <div class="sf-grid">
+    <div class="sf-g"><label class="sf-label">Nombre completo</label><input class="sf-input" type="text" id="inp-nombre" placeholder="Ej: Juan P&#233;rez" autocomplete="off"></div>
+    <div class="sf-g"><label class="sf-label">Comisi&#243;n</label><input class="sf-input" type="text" id="inp-comision" placeholder="Ej: 6A" autocomplete="off"></div>
+  </div>
+</div>
+<div class="prog-label"><span id="prog-txt">0 de 20 respondidas</span><span id="prog-pct">0%</span></div>
+<div class="prog-wrap"><div class="prog-bar" id="prog-bar" style="width:0%"></div></div>
+
+<div class="qb" id="q1"><div class="q-num">Pregunta 01</div>
+<div class="q-text">&#191;Cu&#225;l es la funci&#243;n principal de una Tarjeta de Interfaz de Red (NIC)?</div>
+<div class="opts">
+  <div class="opt" data-q="1" data-val="a"><div class="ol">A</div>Aumentar la velocidad del procesador para mejorar la navegaci&#243;n web</div>
+  <div class="opt" data-q="1" data-val="b"><div class="ol">B</div>Almacenar las contrase&#241;as de las redes WiFi a las que se conect&#243; el equipo</div>
+  <div class="opt" data-q="1" data-val="c"><div class="ol">C</div>Conectar el dispositivo a una red (cableada o inal&#225;mbrica) y tiene una direcci&#243;n MAC &#250;nica grabada por el fabricante que lo identifica en la red</div>
+  <div class="opt" data-q="1" data-val="d"><div class="ol">D</div>Convertir la se&#241;al de internet del proveedor al formato que usa la computadora</div>
+</div>
+<div class="exp" id="exp1"><strong>Correcto &#8212; Opci&#243;n C:</strong> La NIC (Network Interface Card) es el componente de hardware que conecta un dispositivo a la red. Puede ser cableada (Ethernet con RJ-45), inal&#225;mbrica (WiFi) o USB. Cada NIC tiene una direcci&#243;n MAC &#250;nica e irrepetible grabada por el fabricante, que la identifica a nivel de la capa 2 (enlace de datos) del modelo OSI.</div></div>
+
+<div class="qb" id="q2"><div class="q-num">Pregunta 02</div>
+<div class="q-text">&#191;Cu&#225;l es la diferencia fundamental entre un Hub (concentrador) y un Switch (conmutador)?</div>
+<div class="opts">
+  <div class="opt" data-q="2" data-val="a"><div class="ol">A</div>El hub es m&#225;s r&#225;pido que el switch porque no necesita leer las direcciones MAC</div>
+  <div class="opt" data-q="2" data-val="b"><div class="ol">B</div>El switch env&#237;a los datos &#250;nicamente al puerto del dispositivo de destino usando una tabla de direcciones MAC; el hub env&#237;a los datos a todos los puertos simult&#225;neamente generando colisiones</div>
+  <div class="opt" data-q="2" data-val="c"><div class="ol">C</div>El hub es inal&#225;mbrico y el switch es siempre cableado</div>
+  <div class="opt" data-q="2" data-val="d"><div class="ol">D</div>No hay diferencia pr&#225;ctica; el switch es simplemente un hub m&#225;s moderno con el mismo funcionamiento</div>
+</div>
+<div class="exp" id="exp2"><strong>Correcto &#8212; Opci&#243;n B:</strong> El hub reenv&#237;a los datos a TODOS los puertos (broadcast), generando colisiones y desperdiciando ancho de banda. El switch aprende las direcciones MAC de cada puerto y env&#237;a los datos s&#243;lo al puerto correcto, eliminando colisiones y otorgando ancho de banda dedicado. Por eso los hubs est&#225;n en desuso.</div></div>
+
+<div class="qb" id="q3"><div class="q-num">Pregunta 03</div>
+<div class="q-text">&#191;Qu&#233; dispositivo de red conecta diferentes redes entre s&#237; usando direcciones IP para reenviar el tr&#225;fico?</div>
+<div class="opts">
+  <div class="opt" data-q="3" data-val="a"><div class="ol">A</div>Switch</div>
+  <div class="opt" data-q="3" data-val="b"><div class="ol">B</div>Repetidor</div>
+  <div class="opt" data-q="3" data-val="c"><div class="ol">C</div>Router</div>
+  <div class="opt" data-q="3" data-val="d"><div class="ol">D</div>Bridge</div>
+</div>
+<div class="exp" id="exp3"><strong>Correcto &#8212; Opci&#243;n C:</strong> El router opera en la capa 3 (red) del modelo OSI y conecta redes distintas entre s&#237; usando direcciones IP para tomar decisiones de enrutamiento. Los routers dom&#233;sticos modernos son multiprop&#243;sito: integran switch, punto de acceso WiFi y firewall. El switch conecta dispositivos dentro de una misma LAN; el bridge segmenta una red en dos; el repetidor regenera la se&#241;al.</div></div>
+
+<div class="qb" id="q4"><div class="q-num">Pregunta 04</div>
+<div class="q-text">&#191;Para qu&#233; sirve un Firewall y qu&#233; herramienta usa para controlar el tr&#225;fico de red?</div>
+<div class="opts">
+  <div class="opt" data-q="4" data-val="a"><div class="ol">A</div>Para aumentar la velocidad de la red filtrando paquetes duplicados</div>
+  <div class="opt" data-q="4" data-val="b"><div class="ol">B</div>Para asignar direcciones IP autom&#225;ticamente a los dispositivos de la red</div>
+  <div class="opt" data-q="4" data-val="c"><div class="ol">C</div>Para conectar redes inal&#225;mbricas con redes cableadas en el mismo edificio</div>
+  <div class="opt" data-q="4" data-val="d"><div class="ol">D</div>Para proteger los datos y dispositivos usando listas de control de acceso (ACL), que son reglas que determinan si se permite o deniega el tr&#225;fico seg&#250;n origen, destino y puerto</div>
+</div>
+<div class="exp" id="exp4"><strong>Correcto &#8212; Opci&#243;n D:</strong> El firewall protege la red filtrando el tr&#225;fico entrante y saliente mediante ACL (Access Control Lists). Cada regla define si un paquete se permite o deniega seg&#250;n criterios como la IP de origen/destino, el protocolo y el n&#250;mero de puerto. Puede ser un dispositivo independiente o una funci&#243;n integrada en el router.</div></div>
+
+<div class="qb" id="q5"><div class="q-num">Pregunta 05</div>
+<div class="q-text">&#191;Qu&#233; es una VLAN y cu&#225;l es su principal ventaja respecto a una LAN tradicional?</div>
+<div class="opts">
+  <div class="opt" data-q="5" data-val="a"><div class="ol">A</div>Una red inal&#225;mbrica de alta velocidad que supera los l&#237;mites f&#237;sicos del cable UTP</div>
+  <div class="opt" data-q="5" data-val="b"><div class="ol">B</div>Una red virtual que agrupa usuarios l&#243;gicamente (por departamento, funci&#243;n o piso) independientemente de su ubicaci&#243;n f&#237;sica, mejorando seguridad y rendimiento sin infraestructura adicional</div>
+  <div class="opt" data-q="5" data-val="c"><div class="ol">C</div>Una versi&#243;n m&#225;s econ&#243;mica de la LAN que usa cables de menor categor&#237;a</div>
+  <div class="opt" data-q="5" data-val="d"><div class="ol">D</div>Una red que conecta m&#250;ltiples sucursales de una empresa a trav&#233;s de internet</div>
+</div>
+<div class="exp" id="exp5"><strong>Correcto &#8212; Opci&#243;n B:</strong> Una VLAN (Virtual LAN) es una segmentaci&#243;n l&#243;gica de la red. Permite agrupar dispositivos en distintos segmentos aunque est&#233;n f&#237;sicamente en el mismo switch, o unir dispositivos de diferentes pisos en un mismo grupo l&#243;gico. Mejora la seguridad (a&#237;sla departamentos), reduce el broadcast y simplifica la administraci&#243;n.</div></div>
+
+<div class="qb" id="q6"><div class="q-num">Pregunta 06</div>
+<div class="q-text">&#191;Qu&#233; tipo de conexi&#243;n a internet usa la red de televisi&#243;n por cable (HFC) y qu&#233; caracter&#237;stica tiene?</div>
+<div class="opts">
+  <div class="opt" data-q="6" data-val="a"><div class="ol">A</div>DSL: usa las l&#237;neas telef&#243;nicas y tiene velocidad sim&#233;trica garantizada</div>
+  <div class="opt" data-q="6" data-val="b"><div class="ol">B</div>Fibra &#243;ptica: transmite datos mediante pulsos de luz con latencia m&#237;nima</div>
+  <div class="opt" data-q="6" data-val="c"><div class="ol">C</div>Cable: usa la infraestructura de TV por cable y comparte el ancho de banda entre los suscriptores del mismo vecindario, por lo que la velocidad puede variar seg&#250;n la hora del d&#237;a</div>
+  <div class="opt" data-q="6" data-val="d"><div class="ol">D</div>Sat&#233;lite: usa una antena y tiene alta latencia debido a la distancia al sat&#233;lite</div>
+</div>
+<div class="exp" id="exp6"><strong>Correcto &#8212; Opci&#243;n C:</strong> La conexi&#243;n por cable usa la red HFC (Hybrid Fiber-Coaxial) de las empresas de TV por cable. El medio es compartido entre todos los usuarios del mismo segmento, por lo que el ancho de banda puede reducirse en horas pico. El est&#225;ndar actual es DOCSIS 3.1 con velocidades de hasta 1 Gbps.</div></div>
+
+<div class="qb" id="q7"><div class="q-num">Pregunta 07</div>
+<div class="q-text">Un t&#233;cnico instala una antena en el techo de una casa rural apuntando a una torre del ISP a 5 km. &#191;Qu&#233; tipo de conexi&#243;n a internet es esta?</div>
+<div class="opts">
+  <div class="opt" data-q="7" data-val="a"><div class="ol">A</div>DSL, porque usa la infraestructura de telecomunicaciones existente en la zona</div>
+  <div class="opt" data-q="7" data-val="b"><div class="ol">B</div>Sat&#233;lite, porque la se&#241;al viaja hacia el espacio antes de llegar al ISP</div>
+  <div class="opt" data-q="7" data-val="c"><div class="ol">C</div>Conexi&#243;n inal&#225;mbrica de l&#237;nea de vista: usa se&#241;ales de radio entre la antena del cliente y la torre del ISP, requiriendo una ruta clara y despejada entre ambos puntos</div>
+  <div class="opt" data-q="7" data-val="d"><div class="ol">D</div>Celular 4G, porque usa torres de comunicaci&#243;n para proveer internet</div>
+</div>
+<div class="exp" id="exp7"><strong>Correcto &#8212; Opci&#243;n C:</strong> La conexi&#243;n inal&#225;mbrica de l&#237;nea de vista (WISP) usa se&#241;ales de radio entre la antena del cliente y la torre del ISP. Requiere una ruta clara y despejada entre ambos puntos; el clima puede afectar la se&#241;al. Es muy usada en zonas rurales o suburbanas donde no llega fibra ni cable.</div></div>
+
+<div class="qb" id="q8"><div class="q-num">Pregunta 08</div>
+<div class="q-text">&#191;Cu&#225;l es el est&#225;ndar WiFi m&#225;s reciente de la tabla del cap&#237;tulo y qu&#233; velocidad te&#243;rica m&#225;xima alcanza?</div>
+<div class="opts">
+  <div class="opt" data-q="8" data-val="a"><div class="ol">A</div>WiFi 5 (802.11ac), lanzado en 2014, con hasta 866 Mbps a 5.8 GHz</div>
+  <div class="opt" data-q="8" data-val="b"><div class="ol">B</div>WiFi 4 (802.11n), lanzado en 2009, con hasta 600 Mbps en bandas 2.4/5 GHz</div>
+  <div class="opt" data-q="8" data-val="c"><div class="ol">C</div>WiFi 6 (802.11ax), lanzado en 2018, con velocidades te&#243;ricas de hasta 10.000 Mbps (10 Gbps)</div>
+  <div class="opt" data-q="8" data-val="d"><div class="ol">D</div>802.11g, lanzado en 2003, con hasta 54 Mbps a 2.4 GHz</div>
+</div>
+<div class="exp" id="exp8"><strong>Correcto &#8212; Opci&#243;n C:</strong> WiFi 6 (802.11ax), lanzado en 2018, es el est&#225;ndar m&#225;s reciente listado. Alcanza velocidades te&#243;ricas de hasta 10 Gbps y opera a 5.8 GHz. Incluye mejoras como OFDMA y MU-MIMO para manejar m&#225;s dispositivos simult&#225;neamente, ideal para entornos de alta densidad.</div></div>
+
+<div class="qb" id="q9"><div class="q-num">Pregunta 09</div>
+<div class="q-text">&#191;Cu&#225;ntos dispositivos puede conectar Bluetooth en una PAN y en qu&#233; rango de frecuencias opera?</div>
+<div class="opts">
+  <div class="opt" data-q="9" data-val="a"><div class="ol">A</div>Hasta 7 dispositivos, en el rango de 2.4 a 2.485 GHz (est&#225;ndar IEEE 802.15.1)</div>
+  <div class="opt" data-q="9" data-val="b"><div class="ol">B</div>Hasta 232 dispositivos, en el rango de 868 MHz a 2.4 GHz</div>
+  <div class="opt" data-q="9" data-val="c"><div class="ol">C</div>Hasta 65.000 dispositivos, en el rango de 868 MHz a 2.4 GHz</div>
+  <div class="opt" data-q="9" data-val="d"><div class="ol">D</div>Hasta 4 dispositivos, en la banda de 5 GHz exclusivamente</div>
+</div>
+<div class="exp" id="exp9"><strong>Correcto &#8212; Opci&#243;n A:</strong> Bluetooth (IEEE 802.15.1) permite conectar hasta 7 dispositivos en una piconet, opera en el rango de 2.4 a 2.485 GHz con un alcance de ~10 m. Los 232 dispositivos corresponden a Z-Wave y los 65.000 a ZigBee, ambos protocolos IoT distintos de Bluetooth.</div></div>
+
+<div class="qb" id="q10"><div class="q-num">Pregunta 10</div>
+<div class="q-text">&#191;Qu&#233; es NFC y cu&#225;l es su caracter&#237;stica m&#225;s distintiva?</div>
+<div class="opts">
+  <div class="opt" data-q="10" data-val="a"><div class="ol">A</div>Protocolo de largo alcance (hasta 100 metros) para conectar dispositivos industriales en redes de malla</div>
+  <div class="opt" data-q="10" data-val="b"><div class="ol">B</div>Tecnolog&#237;a de comunicaci&#243;n de muy corto alcance (menos de 4 cm), usada para pagos sin contacto, accesos e impresiones, donde los dispositivos deben estar pr&#225;cticamente en contacto</div>
+  <div class="opt" data-q="10" data-val="c"><div class="ol">C</div>Versi&#243;n mejorada de Bluetooth 5.0 con mayor alcance y menor consumo de energ&#237;a</div>
+  <div class="opt" data-q="10" data-val="d"><div class="ol">D</div>Protocolo para conectar dispositivos IoT en hogares inteligentes a trav&#233;s de una red de malla</div>
+</div>
+<div class="exp" id="exp10"><strong>Correcto &#8212; Opci&#243;n B:</strong> NFC (Near Field Communication) opera a 13.56 MHz y requiere que los dispositivos est&#233;n a menos de 4 cm para intercambiar datos. Es la tecnolog&#237;a detr&#225;s de los pagos sin contacto (Visa tap, Google Pay, Apple Pay), accesos con tarjeta y algunas funciones de impresi&#243;n r&#225;pida.</div></div>
+
+<div class="qb" id="q11"><div class="q-num">Pregunta 11</div>
+<div class="q-text">&#191;Qu&#233; diferencia hay entre una direcci&#243;n MAC y una direcci&#243;n IP en cuanto a permanencia?</div>
+<div class="opts">
+  <div class="opt" data-q="11" data-val="a"><div class="ol">A</div>Ambas son permanentes y las asigna el proveedor de internet al contratar el servicio</div>
+  <div class="opt" data-q="11" data-val="b"><div class="ol">B</div>La direcci&#243;n MAC es temporal y cambia con cada conexi&#243;n; la IP es permanente y la graba el fabricante</div>
+  <div class="opt" data-q="11" data-val="c"><div class="ol">C</div>La direcci&#243;n MAC es &#250;nica y permanente, grabada en la NIC por el fabricante; la direcci&#243;n IP es asignada por la red o el administrador y puede cambiar al moverse a otra red</div>
+  <div class="opt" data-q="11" data-val="d"><div class="ol">D</div>La MAC identifica la red y la IP identifica el dispositivo; ambas pueden modificarse por software</div>
+</div>
+<div class="exp" id="exp11"><strong>Correcto &#8212; Opci&#243;n C:</strong> La direcci&#243;n MAC es un identificador de 48 bits &#250;nico grabado en la NIC por el fabricante; no cambia aunque el equipo se conecte a distintas redes. La direcci&#243;n IP es asignada por la red (DHCP) o manualmente, y cambia al moverse a otra red. Anolog&#237;a: la MAC es como la huella digital (siempre la misma), la IP es como la direcci&#243;n postal (cambia al mudarse).</div></div>
+
+<div class="qb" id="q12"><div class="q-num">Pregunta 12</div>
+<div class="q-text">&#191;Cu&#225;ntos bits tiene una direcci&#243;n IPv6 y c&#243;mo se representa?</div>
+<div class="opts">
+  <div class="opt" data-q="12" data-val="a"><div class="ol">A</div>32 bits, en 4 grupos decimales separados por puntos</div>
+  <div class="opt" data-q="12" data-val="b"><div class="ol">B</div>64 bits, en 6 grupos hexadecimales separados por guiones</div>
+  <div class="opt" data-q="12" data-val="c"><div class="ol">C</div>128 bits, en 8 grupos de 4 d&#237;gitos hexadecimales separados por dos puntos, con reglas de compresi&#243;n para simplificar su escritura</div>
+  <div class="opt" data-q="12" data-val="d"><div class="ol">D</div>256 bits, representados en formato binario para mayor seguridad</div>
+</div>
+<div class="exp" id="exp12"><strong>Correcto &#8212; Opci&#243;n C:</strong> IPv6 usa 128 bits (vs 32 de IPv4), en 8 grupos de 4 d&#237;gitos hexadecimales separados por &quot;:&quot;. Ejemplo: 2001:0db8:0000:1111:0000:0000:0000:0200. Para simplificar: se omiten ceros iniciales y se usa &quot;::&quot; para grupos de ceros consecutivos (solo una vez). Esto permite ~340 sextillones de direcciones, resolviendo el agotamiento de IPv4.</div></div>
+
+<div class="qb" id="q13"><div class="q-num">Pregunta 13</div>
+<div class="q-text">Al configurar una IP est&#225;tica en Windows, &#191;qu&#233; cuatro datos son necesarios para comunicarse con otras redes e internet?</div>
+<div class="opts">
+  <div class="opt" data-q="13" data-val="a"><div class="ol">A</div>Direcci&#243;n IP, nombre de usuario, contrase&#241;a WiFi y nombre del equipo</div>
+  <div class="opt" data-q="13" data-val="b"><div class="ol">B</div>Direcci&#243;n IP, m&#225;scara de subred, puerta de enlace predeterminada y servidor DNS</div>
+  <div class="opt" data-q="13" data-val="c"><div class="ol">C</div>Direcci&#243;n MAC, direcci&#243;n IP, nombre del dominio y velocidad del adaptador</div>
+  <div class="opt" data-q="13" data-val="d"><div class="ol">D</div>Direcci&#243;n IP, puerto del router, SSID de la red y clave de cifrado WPA2</div>
+</div>
+<div class="exp" id="exp13"><strong>Correcto &#8212; Opci&#243;n B:</strong> Para IP est&#225;tica se necesitan: 1) Direcci&#243;n IP (identifica el host), 2) M&#225;scara de subred (define los bits de red vs host), 3) Puerta de enlace predeterminada (direcci&#243;n del router para tener salida a otras redes) y 4) Servidor DNS (convierte nombres de dominio en IPs). Sin DNS el usuario no puede navegar por nombre aunque tenga conexi&#243;n perfecta.</div></div>
+
+<div class="qb" id="q14"><div class="q-num">Pregunta 14</div>
+<div class="q-text">&#191;Qu&#233; funci&#243;n cumple un servidor DHCP en una red?</div>
+<div class="opts">
+  <div class="opt" data-q="14" data-val="a"><div class="ol">A</div>Traduce los nombres de dominio (como www.google.com) en direcciones IP num&#233;ricas</div>
+  <div class="opt" data-q="14" data-val="b"><div class="ol">B</div>Filtra el tr&#225;fico malicioso de internet antes de que llegue a los equipos</div>
+  <div class="opt" data-q="14" data-val="c"><div class="ol">C</div>Permite a m&#250;ltiples clientes compartir una sola impresora de forma centralizada</div>
+  <div class="opt" data-q="14" data-val="d"><div class="ol">D</div>Asigna autom&#225;ticamente direcci&#243;n IP, m&#225;scara de subred, puerta de enlace y DNS a los dispositivos que se conectan, eliminando la configuraci&#243;n manual</div>
+</div>
+<div class="exp" id="exp14"><strong>Correcto &#8212; Opci&#243;n D:</strong> El servidor DHCP (Dynamic Host Configuration Protocol) asigna autom&#225;ticamente todos los par&#225;metros de red cuando un dispositivo se conecta: IP, m&#225;scara, gateway y DNS. Sin DHCP, habr&#237;a que configurar manualmente cada dispositivo. El router dom&#233;stico act&#250;a como servidor DHCP. La opci&#243;n A describe al servidor DNS.</div></div>
+
+<div class="qb" id="q15"><div class="q-num">Pregunta 15</div>
+<div class="q-text">&#191;Qu&#233; servidor traduce &quot;cisco.com&quot; en una direcci&#243;n IP y por qu&#233; es esencial para la navegaci&#243;n web?</div>
+<div class="opts">
+  <div class="opt" data-q="15" data-val="a"><div class="ol">A</div>Servidor DHCP, porque asigna las IPs a los sitios web cuando son visitados por primera vez</div>
+  <div class="opt" data-q="15" data-val="b"><div class="ol">B</div>Servidor FTP, porque gestiona las transferencias de archivos entre el navegador y el servidor web</div>
+  <div class="opt" data-q="15" data-val="c"><div class="ol">C</div>Servidor DNS (Domain Name System): los equipos se comunican por IP, no por nombres; sin DNS el usuario tendr&#237;a que memorizar la IP num&#233;rica de cada sitio web</div>
+  <div class="opt" data-q="15" data-val="d"><div class="ol">D</div>Servidor Proxy, porque intercepta las peticiones web y las redirige al destino correcto</div>
+</div>
+<div class="exp" id="exp15"><strong>Correcto &#8212; Opci&#243;n C:</strong> El servidor DNS es el &quot;directorio telef&#243;nico&quot; de internet: traduce nombres de dominio legibles (cisco.com) en direcciones IP num&#233;ricas que los equipos usan para comunicarse. Opera en el puerto UDP/TCP 53. Sin DNS funcional, el usuario no puede navegar por nombre aunque tenga conexi&#243;n perfecta.</div></div>
+
+<div class="qb" id="q16"><div class="q-num">Pregunta 16</div>
+<div class="q-text">&#191;En qu&#233; puerto TCP opera HTTPS y qu&#233; tecnolog&#237;a usa para cifrar la comunicaci&#243;n?</div>
+<div class="opts">
+  <div class="opt" data-q="16" data-val="a"><div class="ol">A</div>Puerto 80, usando cifrado WPA2 igual que el WiFi</div>
+  <div class="opt" data-q="16" data-val="b"><div class="ol">B</div>Puerto 443, usando SSL/TLS (Secure Sockets Layer / Transport Layer Security) para cifrar el tr&#225;fico entre el navegador y el servidor web</div>
+  <div class="opt" data-q="16" data-val="c"><div class="ol">C</div>Puerto 22, usando el protocolo SSH para proteger la conexi&#243;n</div>
+  <div class="opt" data-q="16" data-val="d"><div class="ol">D</div>Puerto 21, usando el mismo protocolo que FTP pero con cifrado adicional</div>
+</div>
+<div class="exp" id="exp16"><strong>Correcto &#8212; Opci&#243;n B:</strong> HTTPS opera en el puerto TCP 443 y usa SSL/TLS para cifrar la comunicaci&#243;n entre el navegador y el servidor. HTTP sin cifrar usa el puerto 80. SSL fue el protocolo original, reemplazado por TLS que es m&#225;s seguro. El candado en el navegador indica conexi&#243;n HTTPS/TLS activa. FTP usa los puertos 20/21 y SSH el 22.</div></div>
+
+<div class="qb" id="q17"><div class="q-num">Pregunta 17</div>
+<div class="q-text">&#191;Cu&#225;l es la diferencia principal entre TCP y UDP en cuanto a confiabilidad de entrega?</div>
+<div class="opts">
+  <div class="opt" data-q="17" data-val="a"><div class="ol">A</div>TCP es m&#225;s r&#225;pido porque no verifica que los datos lleguen; UDP es m&#225;s lento pero garantiza la entrega</div>
+  <div class="opt" data-q="17" data-val="b"><div class="ol">B</div>TCP garantiza la entrega con numeraci&#243;n, acuse de recibo (ACK) y retransmisi&#243;n de paquetes perdidos; UDP es m&#225;s r&#225;pido pero no garantiza entrega ni orden, siendo ideal para streaming y VoIP</div>
+  <div class="opt" data-q="17" data-val="c"><div class="ol">C</div>TCP es para redes inal&#225;mbricas; UDP es exclusivo de redes cableadas</div>
+  <div class="opt" data-q="17" data-val="d"><div class="ol">D</div>Ambos garantizan la entrega de datos, pero TCP usa IPv4 y UDP usa IPv6</div>
+</div>
+<div class="exp" id="exp17"><strong>Correcto &#8212; Opci&#243;n B:</strong> TCP es orientado a conexi&#243;n: numera los segmentos, espera el ACK y retransmite lo que no lleg&#243;, garantizando entrega completa y ordenada. Se usa en HTTP, FTP y correo. UDP no establece conexi&#243;n ni verifica la entrega: env&#237;a y olvida. Es m&#225;s r&#225;pido, ideal para VoIP, streaming y juegos online donde la latencia de retransmisi&#243;n es peor que un paquete perdido.</div></div>
+
+<div class="qb" id="q18"><div class="q-num">Pregunta 18</div>
+<div class="q-text">&#191;Cu&#225;l es la distancia m&#225;xima de un segmento de cable UTP y qu&#233; categor&#237;a es el est&#225;ndar actual para redes LAN Gigabit?</div>
+<div class="opts">
+  <div class="opt" data-q="18" data-val="a"><div class="ol">A</div>500 metros m&#225;ximo; el est&#225;ndar es Cat 3 para redes de 100 Mbps</div>
+  <div class="opt" data-q="18" data-val="b"><div class="ol">B</div>100 metros por segmento; Cat 5e soporta 1 Gbps a 100 MHz y Cat 6 soporta 1 Gbps a 250 MHz (Cat 6a hasta 10 Gbps), siendo Cat 5e o Cat 6 el est&#225;ndar actual en redes LAN</div>
+  <div class="opt" data-q="18" data-val="c"><div class="ol">C</div>200 metros m&#225;ximo; el est&#225;ndar es Cat 4 con velocidades de hasta 16 Mbps</div>
+  <div class="opt" data-q="18" data-val="d"><div class="ol">D</div>50 metros m&#225;ximo; se requiere Cat 7 para cualquier red que supere los 100 Mbps</div>
+</div>
+<div class="exp" id="exp18"><strong>Correcto &#8212; Opci&#243;n B:</strong> El l&#237;mite est&#225;ndar de un segmento UTP es 100 metros. Cat 5e soporta 1 Gbps a 100 MHz y es el m&#237;nimo recomendado hoy. Cat 6 soporta 1 Gbps a 250 MHz con mejor protecci&#243;n contra interferencias; Cat 6a llega a 10 Gbps hasta 100 m. Para superar 100 metros se necesita un switch o repetidor en el camino.</div></div>
+
+<div class="qb" id="q19"><div class="q-num">Pregunta 19</div>
+<div class="q-text">&#191;Qu&#233; definen los esquemas T568A y T568B y cu&#225;l es el m&#225;s usado en instalaciones comerciales?</div>
+<div class="opts">
+  <div class="opt" data-q="19" data-val="a"><div class="ol">A</div>Son est&#225;ndares para cables de fibra &#243;ptica; T568A es para monomodo y T568B para multimodo</div>
+  <div class="opt" data-q="19" data-val="b"><div class="ol">B</div>Definen el orden de los colores de los 8 pines del conector RJ-45 en cables UTP. Un cable directo usa el mismo est&#225;ndar en ambos extremos; T568B es el est&#225;ndar m&#225;s extendido en instalaciones comerciales</div>
+  <div class="opt" data-q="19" data-val="c"><div class="ol">C</div>Son velocidades de transferencia: T568A para 100 Mbps y T568B para 1 Gbps</div>
+  <div class="opt" data-q="19" data-val="d"><div class="ol">D</div>T568A es el est&#225;ndar europeo y T568B el americano; no son compatibles entre s&#237;</div>
+</div>
+<div class="exp" id="exp19"><strong>Correcto &#8212; Opci&#243;n B:</strong> T568A y T568B son los dos esquemas de terminaci&#243;n del conector RJ-45 para cables UTP; definen el orden de los 8 conductores de colores en los pines. Un cable directo (straight-through) usa el mismo est&#225;ndar en ambos extremos. Un cable cruzado usa T568A en un extremo y T568B en el otro (hoy en desuso por Auto-MDIX). T568B es el est&#225;ndar m&#225;s usado en Am&#233;rica.</div></div>
+
+<div class="qb" id="q20"><div class="q-num">Pregunta 20</div>
+<div class="q-text">&#191;Cu&#225;l es la principal ventaja del cable de fibra &#243;ptica sobre el cable UTP de par trenzado?</div>
+<div class="opts">
+  <div class="opt" data-q="20" data-val="a"><div class="ol">A</div>Es m&#225;s econ&#243;mico y f&#225;cil de instalar, por lo que reemplazar&#225; completamente al UTP en redes dom&#233;sticas</div>
+  <div class="opt" data-q="20" data-val="b"><div class="ol">B</div>Tiene conectores RJ-45 est&#225;ndar que permiten conectarlo a cualquier switch sin adaptadores</div>
+  <div class="opt" data-q="20" data-val="c"><div class="ol">C</div>Transmite datos mediante luz (no electricidad), lo que lo hace inmune a la interferencia electromagn&#233;tica (EMI/RFI) y permite mayores velocidades y distancias muy superiores a las del cobre</div>
+  <div class="opt" data-q="20" data-val="d"><div class="ol">D</div>Puede doblarse sin limitaciones y resistir da&#241;os f&#237;sicos mejor que cualquier cable de cobre</div>
+</div>
+<div class="exp" id="exp20"><strong>Correcto &#8212; Opci&#243;n C:</strong> La fibra &#243;ptica transmite datos mediante pulsos de luz en lugar de se&#241;ales el&#233;ctricas, siendo completamente inmune a EMI y RFI. Permite velocidades de Gbps a Tbps y distancias de cientos de metros (multimodo/MMF) hasta decenas de kil&#243;metros (monomodo/SMF). Sus desventajas son mayor costo y mayor dificultad de instalaci&#243;n y reparaci&#243;n respecto al UTP.</div></div>
+
+<div class="submit-area">
+  <button class="btn-submit" id="btn-submit" disabled>Verificar y registrar respuestas</button>
+  <div class="sending" id="sending">&#9203; Enviando resultados a Google Sheets&#8230;</div>
+</div>
+<div class="result" id="result">
+  <div class="r-score" id="r-score">0%</div>
+  <div class="r-label" id="r-label">&#8212;</div>
+  <div class="r-student" id="r-student"></div>
+  <div class="r-msg" id="r-msg"></div>
+  <div class="r-ok" id="r-ok">&#128202; Resultado registrado en Google Sheets correctamente.</div>
+  <div class="r-err" id="r-err">&#9888;&#65039; No se pudo registrar en Google Sheets. Verific&#225; la URL del script.</div>
+  <div class="r-actions">
+    <button class="btn-retry" onclick="location.reload()">Intentar nuevamente</button>
+    <a href="index.html" class="btn-home">&#8592; Volver al Inicio</a>
+  </div>
+</div>
+</div>
+<script>
+// ════════════════════════════════════════════════════
+// ⚙️  REEMPLAZÁ CON LA URL DE TU APPS SCRIPT
+// ════════════════════════════════════════════════════
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwbfWNTBCiqD52RAPGWEkk2IKqSgwAlzJhfJX4xKhS1vpJUk6usnS5HC5e4aWn_yRBDUw/exec';
+// ════════════════════════════════════════════════════
+const ANSWERS={1:'c',2:'b',3:'c',4:'d',5:'b',6:'c',7:'c',8:'c',9:'a',10:'b',11:'c',12:'c',13:'b',14:'d',15:'c',16:'b',17:'b',18:'b',19:'b',20:'c'};
+const TOTAL=20;const sel={};let submitted=false;
+function updProg(){const n=Object.keys(sel).length,p=Math.round(n/TOTAL*100);document.getElementById('prog-bar').style.width=p+'%';document.getElementById('prog-txt').textContent=n+' de '+TOTAL+' respondidas';document.getElementById('prog-pct').textContent=p+'%';document.getElementById('btn-submit').disabled=(n<TOTAL||!document.getElementById('inp-nombre').value.trim());}
+document.getElementById('inp-nombre').addEventListener('input',updProg);
+document.querySelectorAll('.opt').forEach(o=>{o.addEventListener('click',()=>{if(submitted)return;const q=o.dataset.q;document.querySelectorAll(`.opt[data-q="${q}"]`).forEach(x=>x.classList.remove('selected'));o.classList.add('selected');sel[q]=o.dataset.val;document.getElementById('q'+q).classList.add('answered');updProg();});});
+document.getElementById('btn-submit').addEventListener('click',()=>{
+  if(submitted)return;
+  const nombre=document.getElementById('inp-nombre').value.trim(),comision=document.getElementById('inp-comision').value.trim();
+  if(!nombre){document.getElementById('inp-nombre').classList.add('error');document.getElementById('inp-nombre').focus();return;}
+  submitted=true;document.getElementById('btn-submit').disabled=true;
+  let correct=0;
+  for(let i=1;i<=TOTAL;i++){const ua=sel[String(i)],ca=ANSWERS[i];document.querySelectorAll(`.opt[data-q="${i}"]`).forEach(o=>{o.classList.add('locked');if(o.dataset.val===ca)o.classList.add('correct');else if(o.dataset.val===ua&&ua!==ca)o.classList.add('incorrect');});document.getElementById('exp'+i).classList.add('show');if(ua===ca)correct++;else{document.getElementById('q'+i).classList.remove('answered');document.getElementById('q'+i).classList.add('wrong');}}
+  const pct=Math.round(correct/TOTAL*100),label=pct>=90?'&#127942; Excelente':pct>=70?'&#9989; Aprobado':'&#10060; A repasar',msg=pct>=90?`Obtuviste ${correct}/${TOTAL}. &#161;Excelente dominio del cap&#237;tulo!`:pct>=70?`Obtuviste ${correct}/${TOTAL}. Aprobado. Revis&#225; las incorrectas.`:`Obtuviste ${correct}/${TOTAL}. Repas&#225; el Capitulo 9 antes de continuar.`;
+  document.getElementById('r-score').textContent=pct+'%';document.getElementById('r-label').innerHTML=label;document.getElementById('r-student').textContent=nombre+(comision?' &#8212; Comisi&#243;n: '+comision:'');document.getElementById('r-msg').innerHTML=msg;document.getElementById('result').classList.add('show');document.getElementById('result').scrollIntoView({behavior:'smooth',block:'center'});
+  if(SCRIPT_URL&&!SCRIPT_URL.includes('TU_APPS_SCRIPT')){document.getElementById('sending').classList.add('show');const now=new Date();fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({capitulo:'Capitulo 9',nombre,comision:comision||'&#8212;',fecha:now.toLocaleDateString('es-AR'),hora:now.toLocaleTimeString('es-AR'),puntaje:correct,total:TOTAL,porcentaje:pct})}).then(()=>{document.getElementById('sending').classList.remove('show');document.getElementById('r-ok').classList.add('show');}).catch(()=>{document.getElementById('sending').classList.remove('show');document.getElementById('r-err').classList.add('show');});}
+});
+</script>
+</body>
+</html>
