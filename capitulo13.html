@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capítulo 13 — El Profesional de TI | Potrero Digital</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#7ac143;--green-dark:#5c9430;--green-glow:rgba(122,193,67,.12);
+  --bg:#111;--bg2:#1a1a1a;--bg3:#222;--bg4:#2a2a2a;
+  --text:#e8e8e8;--muted:#888;--border:rgba(122,193,67,.22);--white:#fff;
+  --red:#e53e3e;--yellow:#f0b429;--blue:#4a9eff;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font-size:15px;line-height:1.75;}
+a{text-decoration:none;}
+.topnav{background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 28px;position:sticky;top:0;z-index:100;height:48px;overflow-x:auto;}
+.nav-brand{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;color:var(--white);white-space:nowrap;padding-right:20px;border-right:1px solid var(--border);margin-right:8px;}
+.nav-brand span{color:var(--green);}
+.topnav a{color:var(--muted);font-size:.8rem;font-weight:500;padding:0 14px;height:48px;display:flex;align-items:center;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s;}
+.topnav a.active{color:var(--green);border-bottom-color:var(--green);font-weight:600;}
+.hero{position:relative;overflow:hidden;min-height:300px;display:flex;align-items:flex-end;}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(circle at 30% 20%,#1a2a0d,#0d0d0d 70%);filter:brightness(.9);}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(17,17,17,.97) 38%,transparent 100%);}
+.hero-content{position:relative;z-index:2;padding:52px 60px 48px;max-width:680px;}
+.hero-tag{display:inline-block;background:var(--green);color:#000;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.72rem;letter-spacing:2.5px;text-transform:uppercase;padding:4px 12px;border-radius:3px;margin-bottom:14px;}
+.hero-title{font-family:'Barlow Condensed',sans-serif;font-size:3.2rem;font-weight:900;line-height:.95;color:var(--white);text-transform:uppercase;}
+.hero-title em{color:var(--green);font-style:normal;}
+.hero-sub{margin-top:12px;font-size:.92rem;color:rgba(255,255,255,.48);line-height:1.6;}
+.hero-pills{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap;}
+.pill{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:100px;padding:4px 14px;font-size:.75rem;color:rgba(255,255,255,.55);}
+.pill.g{background:rgba(122,193,67,.12);border-color:var(--green);color:var(--green);}
+.content{max-width:900px;margin:0 auto;padding:52px 40px 80px;}
+.section{margin-bottom:52px;}
+.section-header{display:flex;align-items:center;gap:14px;margin-bottom:22px;}
+.section-icon{width:42px;height:42px;background:var(--green);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+.section-title{font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:800;color:var(--white);text-transform:uppercase;letter-spacing:.5px;line-height:1;}
+.subsection{font-family:'Barlow Condensed',sans-serif;font-size:1.25rem;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:.5px;margin:26px 0 11px;border-left:3px solid var(--green);padding-left:12px;}
+p{color:rgba(255,255,255,.7);margin-bottom:14px;}
+strong{color:var(--white);}
+ul,ol{color:rgba(255,255,255,.7);padding-left:22px;margin-bottom:14px;}
+li{margin-bottom:6px;line-height:1.6;}
+.divider{border:none;border-top:1px solid rgba(255,255,255,.07);margin:36px 0;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:18px 0;}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:18px 0;}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px 20px;}
+.card-title{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
+.img-block{margin:20px 0;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,.07);}
+.img-block img{width:100%;display:block;}
+.img-caption{background:var(--bg3);padding:9px 14px;font-size:.78rem;color:var(--muted);line-height:1.5;}
+.img-block.md{max-width:640px;margin:20px auto;}
+.img-block.sm{max-width:380px;margin:20px auto;}
+.highlight-box{background:var(--green-glow);border:1px solid var(--border);border-left:4px solid var(--green);border-radius:0 8px 8px 0;padding:15px 20px;margin:18px 0;}
+.highlight-box p{margin:0;color:rgba(255,255,255,.78);}
+.alert{display:flex;gap:14px;padding:15px 18px;border-radius:8px;margin:18px 0;align-items:flex-start;}
+.alert-green{background:rgba(122,193,67,.08);border:1px solid rgba(122,193,67,.25);}
+.alert-yellow{background:rgba(240,180,41,.08);border:1px solid rgba(240,180,41,.25);}
+.alert-blue{background:rgba(74,158,255,.08);border:1px solid rgba(74,158,255,.25);}
+.alert-red{background:rgba(229,62,62,.08);border:1px solid rgba(229,62,62,.25);}
+.alert-icon{font-size:1.25rem;flex-shrink:0;margin-top:1px;}
+.alert div{color:rgba(255,255,255,.72);font-size:.9rem;line-height:1.6;}
+.data-table{width:100%;border-collapse:collapse;margin:18px 0;font-size:.87rem;}
+.data-table th{background:var(--bg3);border-bottom:2px solid var(--green);padding:10px 14px;text-align:left;font-family:'Barlow Condensed',sans-serif;color:var(--green);font-size:.75rem;letter-spacing:1px;text-transform:uppercase;}
+.data-table td{padding:9px 14px;border-bottom:1px solid rgba(255,255,255,.05);color:rgba(255,255,255,.73);vertical-align:top;}
+.data-table tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+.dev-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin:18px 0;}
+.dev-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;padding:16px 16px 14px;}
+.dev-card-title{font-family:'Barlow Condensed',sans-serif;font-size:.95rem;font-weight:800;color:var(--green);text-transform:uppercase;margin-bottom:4px;}
+.dev-card-desc{font-size:.8rem;color:rgba(255,255,255,.6);}
+.code-block{background:#0d1117;border:1px solid rgba(122,193,67,.2);border-radius:8px;padding:18px 20px;margin:16px 0;font-family:'Courier New',monospace;font-size:.88rem;color:#86efac;line-height:1.8;}
+.practice-cta{background:linear-gradient(135deg,#0d1f06,#1a2a0d);border:1px solid var(--green);border-radius:14px;padding:40px;text-align:center;margin-top:52px;}
+.cta-title{font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:900;color:var(--white);text-transform:uppercase;margin-bottom:10px;}
+.cta-desc{color:rgba(255,255,255,.5);font-size:.92rem;margin-bottom:22px;}
+.btn-home{display:inline-block;background:var(--green);color:#000;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:.95rem;letter-spacing:1.5px;text-transform:uppercase;padding:13px 34px;border-radius:8px;transition:all .2s;}
+.btn-home:hover{background:var(--green-dark);transform:translateY(-2px);}
+.icon-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:18px 0;}
+.icon-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center;}
+.icon-card .ic{font-size:1.8rem;margin-bottom:8px;}
+.icon-card .it{font-family:'Barlow Condensed',sans-serif;font-weight:800;color:var(--white);font-size:.85rem;text-transform:uppercase;letter-spacing:.5px;}
+.quote-box{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px 20px;margin:14px 0;font-style:italic;color:rgba(255,255,255,.75);position:relative;}
+.quote-box::before{content:"\\201C";position:absolute;top:-6px;left:12px;font-size:2.5rem;color:var(--green);font-style:normal;opacity:.4;}
+.quote-box p{margin:0;padding-left:18px;}
+.timeline{display:flex;flex-direction:column;gap:0;margin:20px 0;}
+.t-step{display:flex;gap:16px;padding:14px 0;border-left:2px solid var(--green);margin-left:18px;padding-left:24px;position:relative;}
+.t-step:last-child{border-left:2px solid transparent;}
+.t-step::before{content:"";position:absolute;left:-7px;top:16px;width:12px;height:12px;border-radius:50%;background:var(--green);}
+.t-num{font-family:'Barlow Condensed',sans-serif;font-weight:900;color:var(--green);font-size:.75rem;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px;}
+.t-title{font-weight:700;color:var(--white);margin-bottom:4px;}
+@media(max-width:680px){
+  .hero-content{padding:32px 22px 36px;} .hero-title{font-size:2.2rem;}
+  .content{padding:28px 16px 60px;} .two-col,.three-col,.dev-grid,.icon-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="nav-brand">Potrero <span>Digital</span></div>
+  <a href="index.html" class="active">Capítulo 13 — El Profesional de TI</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Capítulo 13 — Soporte Informático</div>
+    <h1 class="hero-title">El Profesional<br><em>de TI</em></h1>
+    <p class="hero-sub">Comunicación con el cliente, escucha activa, resolución de problemas, conducta profesional, consideraciones éticas y legales, y protección de información sensible (PII, PCI, PHI).</p>
+    <div class="hero-pills">
+      <span class="pill g">🗣️ Comunicación</span>
+      <span class="pill g">👂 Escucha activa</span>
+      <span class="pill g">⚖️ Ética y legalidad</span>
+      <span class="pill">PII / PCI / PHI</span>
+      <span class="pill">HIPAA</span>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- ══════ 1. LA COMUNICACIÓN Y EL PROFESIONAL DE TI ══════ -->
+<div class="section" id="comunicacion">
+  <div class="section-header">
+    <div class="section-icon">🗣️</div>
+    <h2 class="section-title">La Comunicación y el Profesional de TI</h2>
+  </div>
+
+  <p>Para llevar a cabo la solución de problemas en una computadora, el técnico debe obtener los <strong>detalles del problema</strong> directamente del cliente. Esto convierte a la comunicación en una herramienta de trabajo tan importante como el conocimiento técnico.</p>
+
+  <div class="highlight-box"><p>La mayoría de las personas que necesitan que les reparen un problema de PC probablemente estén <strong>estresadas</strong>. Si el técnico establece una comunicación cordial, es posible que ayude al cliente a relajarse. Un cliente relajado es más propenso a proporcionar la información necesaria para determinar el origen del problema y poder repararlo.</p></div>
+
+  <div class="subsection">Habilidades Comunicativas y Conducta Profesional</div>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">🧑‍💻 En persona</div>
+      <p style="margin-bottom:0;">El cliente puede ver el <strong>lenguaje corporal</strong> del técnico: postura, gestos y expresiones influyen en la percepción de profesionalismo y confianza.</p>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--blue);">☎️ Por teléfono</div>
+      <p style="margin-bottom:0;">El cliente percibe el <strong>tono y la inflexión</strong> de la voz, e incluso puede notar si el técnico sonríe mientras habla.</p>
+    </div>
+  </div>
+  <div class="alert alert-green">
+    <div class="alert-icon">💡</div>
+    <div>Muchos técnicos de centros de atención telefónica tienen un <strong>espejo en el escritorio</strong> para poder ver sus propias expresiones faciales mientras hablan con el cliente, como recordatorio de mantener una actitud positiva.</div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════ 2. TRABAJAR CON UN CLIENTE — ESCUCHA ACTIVA ══════ -->
+<div class="section" id="escucha-activa">
+  <div class="section-header">
+    <div class="section-icon">👂</div>
+    <h2 class="section-title">Trabajar con un Cliente</h2>
+  </div>
+
+  <div class="subsection">Escucha Activa</div>
+  <p>Permitirle al cliente que cuente <strong>toda la historia</strong> del problema es el primer paso. Mientras el cliente explica, el técnico puede interrumpir ocasionalmente con una pequeña palabra o frase, como "Entiendo" o "Sí", para demostrar que está atento.</p>
+
+  <div class="alert alert-yellow">
+    <div class="alert-icon">⚠️</div>
+    <div>No se debe interrumpir al cliente para hacerle una pregunta o afirmar algo. Hay que <strong>escuchar atentamente</strong> y dejar que termine sus ideas antes de intervenir.</div>
+  </div>
+
+  <div class="timeline">
+    <div class="t-step">
+      <div>
+        <div class="t-num">Paso 1</div>
+        <div class="t-title">Pregunta abierta</div>
+        <p style="margin-bottom:0;">Permite obtener información sobre qué estaba haciendo el cliente, qué intentaba hacer y por qué se frustró.</p>
+      </div>
+    </div>
+    <div class="t-step">
+      <div>
+        <div class="t-num">Paso 2</div>
+        <div class="t-title">Resumir lo escuchado</div>
+        <p style="margin-bottom:0;">Después de escuchar al cliente explicar la totalidad del problema, el técnico resume lo que este acaba de decir.</p>
+      </div>
+    </div>
+    <div class="t-step">
+      <div>
+        <div class="t-num">Paso 3</div>
+        <div class="t-title">Preguntas cerradas</div>
+        <p style="margin-bottom:0;">Las preguntas adicionales deben ser cerradas, con un objetivo claro y basadas en la información obtenida, enfocadas en datos específicos.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="highlight-box"><p>El cliente debe poder responder una pregunta cerrada con un simple <strong>"sí"</strong> o <strong>"no"</strong>, o con una respuesta fáctica, como <strong>"Windows 10"</strong>.</p></div>
+
+  <div class="subsection">Cómo Mantener al Cliente Concentrado</div>
+  <div class="three-col">
+    <div class="card">
+      <div class="card-title">🗨️ Lenguaje correcto</div>
+      <p style="margin-bottom:0;">Sea claro y evite el lenguaje técnico que el cliente podría no entender.</p>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--blue);">❓ Escuche y pregunte</div>
+      <p style="margin-bottom:0;">Escuche cuidadosamente y deje que el cliente hable. Utilice preguntas abiertas y cerradas para conocer los detalles del problema.</p>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--yellow);">💬 Dé comentarios</div>
+      <p style="margin-bottom:0;">Hágale saber al cliente que comprende el problema y genere una conversación agradable y positiva.</p>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════ 3. CONSIDERACIONES ÉTICAS Y LEGALES ══════ -->
+<div class="section" id="etica-legal">
+  <div class="section-header">
+    <div class="section-icon">⚖️</div>
+    <h2 class="section-title">Consideraciones Éticas y Legales</h2>
+  </div>
+
+  <p>El técnico debe <strong>respetar a los clientes</strong>, así como a su propiedad. Las PC y los monitores son propiedad, pero también se considera propiedad a la <strong>información o los datos</strong> a los que posiblemente se pueda acceder durante el servicio técnico.</p>
+
+  <div class="icon-grid">
+    <div class="icon-card"><div class="ic">📧</div><div class="it">Correos electrónicos</div></div>
+    <div class="icon-card"><div class="ic">📇</div><div class="it">Listas de teléfonos y contactos</div></div>
+    <div class="icon-card"><div class="ic">🗃️</div><div class="it">Registros o datos en la PC</div></div>
+    <div class="icon-card"><div class="ic">🖨️</div><div class="it">Copias impresas dejadas en un escritorio</div></div>
+  </div>
+
+  <div class="alert alert-red">
+    <div class="alert-icon">🔒</div>
+    <div>Acceder, copiar, modificar o divulgar esta información sin autorización constituye una <strong>violación ética y, en muchos casos, legal</strong>. El profesional de TI debe mantener la confidencialidad de todo lo que vea u obtenga en el equipo de un cliente.</div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════ 4. PII — INFORMACIÓN DE IDENTIFICACIÓN PERSONAL ══════ -->
+<div class="section" id="pii">
+  <div class="section-header">
+    <div class="section-icon">🪪</div>
+    <h2 class="section-title">Información de Identificación Personal (PII)</h2>
+  </div>
+
+  <p>La <strong>Información de Identificación Personal (PII)</strong> es cualquier dato que pueda utilizarse, solo o combinado con otra información, para identificar a una persona en particular. Debe protegerse con especial cuidado.</p>
+
+  <table class="data-table">
+    <tr><th>Categoría</th><th>Ejemplos</th></tr>
+    <tr><td><strong>Nombres</strong></td><td>Nombre completo, nombre de soltera, nombre de soltera de la madre o alias.</td></tr>
+    <tr><td><strong>Números de identificación</strong></td><td>Número de seguro social (SSN), número de pasaporte, número de licencia de conducir, número de identificación de contribuyente, número de cuenta financiera o tarjeta de crédito.</td></tr>
+    <tr><td><strong>Datos de contacto</strong></td><td>Dirección postal (calle) o dirección de correo electrónico.</td></tr>
+    <tr><td><strong>Características personales</strong></td><td>Imágenes fotográficas (especialmente del rostro), huellas digitales, escritura u otros datos biométricos (escaneo de retina, firma de voz, geometría facial).</td></tr>
+  </table>
+
+  <div class="alert alert-blue">
+    <div class="alert-icon">🔎</div>
+    <div>La lista de ejemplos <strong>no es exhaustiva</strong>: cualquier dato que, combinado con otros, permita identificar unívocamente a una persona debe tratarse como PII.</div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════ 5. PCI — INDUSTRIA DE TARJETAS DE PAGO ══════ -->
+<div class="section" id="pci">
+  <div class="section-header">
+    <div class="section-icon">💳</div>
+    <h2 class="section-title">Industria de Tarjetas de Pago (PCI)</h2>
+  </div>
+
+  <p>La información de la <strong>Industria de Tarjetas de Pago (PCI)</strong> se considera información personal que debe protegerse, ya que incluye datos financieros sensibles vinculados directamente a una persona.</p>
+
+  <div class="highlight-box"><p>El <strong>Consejo de Estándares de Seguridad de PCI</strong> se formó en 2005 por las 5 principales empresas de tarjetas de crédito, en un esfuerzo por proteger los <strong>números de cuenta</strong>, las <strong>fechas de vencimiento</strong>, la <strong>banda magnética</strong> y los <strong>datos de los chips</strong> utilizados en transacciones en todo el mundo.</p></div>
+
+  <div class="alert alert-green">
+    <div class="alert-icon">🌐</div>
+    <div>Para obtener más información sobre PCI, se puede visitar <strong>www.pcisecuritystandards.org</strong>.</div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════ 6. PHI — INFORMACIÓN CONFIDENCIAL SOBRE LA SALUD ══════ -->
+<div class="section" id="phi">
+  <div class="section-header">
+    <div class="section-icon">🏥</div>
+    <h2 class="section-title">Información Confidencial sobre la Salud (PHI)</h2>
+  </div>
+
+  <p>La <strong>Información Confidencial sobre la Salud (PHI)</strong> es otra forma de PII que debe protegerse. Incluye nombres de pacientes, direcciones, fechas de visitas, números de teléfono y fax, y direcciones de correo electrónico.</p>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">📄 PHI</div>
+      <p style="margin-bottom:0;">Registros de salud en <strong>formato papel</strong> o tradicional: historia clínica, datos de contacto y de visitas del paciente.</p>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--blue);">💻 ePHI</div>
+      <p style="margin-bottom:0;">Con el paso de registros en papel a <strong>registros electrónicos</strong>, esta información también se regula como Información Electrónica Confidencial sobre la Salud.</p>
+    </div>
+  </div>
+
+  <div class="alert alert-red">
+    <div class="alert-icon">⚖️</div>
+    <div>Las sanciones por violaciones de PHI y ePHI son <strong>muy serias</strong> y están reguladas por la <strong>Ley de Portabilidad y Responsabilidad del Seguro Médico (HIPAA)</strong>, que exige medidas estrictas de protección y confidencialidad sobre estos datos.</div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="practice-cta">
+  <div class="cta-title">¿Todo listo con el Capítulo 13?</div>
+  <p class="cta-desc">Volvé al índice para continuar con el siguiente capítulo o repasar cualquier tema anterior.</p>
+  <a href="https://juansimonato70.github.io/Soporte-IT/" class="btn-home">&#8592; Volver al índice</a>
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cuestionario &mdash; Capitulo 13 | Potrero Digital</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--green:#7ac143;--green-dark:#5c9430;--bg:#111;--bg2:#1a1a1a;--bg3:#222;--bg4:#2a2a2a;--text:#e8e8e8;--muted:#888;--border:rgba(122,193,67,.22);--white:#fff;--red:#e53e3e;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font-size:15px;line-height:1.7;}
+a{text-decoration:none;}
+.topnav{background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 28px;position:sticky;top:0;z-index:100;height:48px;}
+.nav-brand{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;color:var(--white);padding-right:20px;border-right:1px solid var(--border);margin-right:8px;}
+.nav-brand span{color:var(--green);}
+.topnav a{color:var(--muted);font-size:.8rem;font-weight:500;padding:0 14px;height:48px;display:flex;align-items:center;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s;}
+.topnav a.active{color:var(--green);border-bottom-color:var(--green);font-weight:600;}
+.hero{background:linear-gradient(135deg,#0d1f06,#1a2a0d);border-bottom:2px solid var(--green);padding:52px 60px 44px;}
+.hero-tag{display:inline-block;background:var(--green);color:#000;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.72rem;letter-spacing:2.5px;text-transform:uppercase;padding:4px 12px;border-radius:3px;margin-bottom:14px;}
+.hero-title{font-family:'Barlow Condensed',sans-serif;font-size:3rem;font-weight:800;line-height:1;color:var(--white);text-transform:uppercase;}
+.hero-title em{color:var(--green);font-style:normal;}
+.hero-sub{margin-top:10px;font-size:.9rem;color:rgba(255,255,255,.5);max-width:540px;}
+.hero-meta{margin-top:20px;display:flex;gap:20px;flex-wrap:wrap;}
+.hero-badge{display:flex;align-items:center;gap:6px;font-size:.82rem;color:var(--muted);}
+.hero-badge strong{color:var(--text);}
+.main{max-width:820px;margin:0 auto;padding:52px 40px 80px;}
+.sf{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:24px 28px;margin-bottom:32px;}
+.sf-title{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;}
+.sf-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.sf-g{display:flex;flex-direction:column;gap:6px;}
+.sf-label{font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;}
+.sf-input{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:10px 14px;font-family:'Barlow',sans-serif;font-size:.9rem;color:var(--text);outline:none;transition:border-color .2s;width:100%;}
+.sf-input:focus{border-color:var(--green);}
+.sf-input.error{border-color:var(--red);}
+.prog-label{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted);margin-bottom:8px;}
+.prog-wrap{background:var(--bg3);border-radius:100px;height:6px;margin-bottom:32px;overflow:hidden;}
+.prog-bar{height:100%;background:var(--green);border-radius:100px;transition:width .5s ease;}
+.qb{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:28px 30px;margin-bottom:16px;transition:border-color .2s;}
+.qb.answered{border-color:rgba(122,193,67,.4);}
+.qb.wrong{border-color:rgba(229,62,62,.4);}
+.q-num{font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;color:var(--green);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+.q-text{font-size:1rem;font-weight:500;color:var(--white);line-height:1.5;margin-bottom:18px;}
+.opts{display:flex;flex-direction:column;gap:8px;}
+.opt{display:flex;align-items:flex-start;gap:12px;background:var(--bg3);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:12px 16px;cursor:pointer;transition:all .18s;font-size:.9rem;color:var(--text);}
+.opt:hover:not(.locked){background:var(--bg4);border-color:rgba(122,193,67,.3);}
+.opt.selected{background:rgba(122,193,67,.1);border-color:var(--green);color:var(--white);}
+.opt.correct{background:rgba(122,193,67,.15);border-color:var(--green);color:#a8d87a;}
+.opt.incorrect{background:rgba(229,62,62,.08);border-color:var(--red);color:#f08080;}
+.opt.locked{cursor:default;}
+.ol{width:24px;height:24px;border-radius:50%;background:var(--bg4);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:800;color:var(--muted);flex-shrink:0;transition:all .18s;}
+.opt.selected .ol,.opt.correct .ol{background:var(--green);color:#000;border-color:var(--green);}
+.opt.incorrect .ol{background:var(--red);color:#fff;border-color:var(--red);}
+.exp{margin-top:14px;padding:12px 16px;background:rgba(122,193,67,.06);border-left:3px solid var(--green);border-radius:0 6px 6px 0;font-size:.86rem;color:var(--muted);display:none;line-height:1.6;}
+.exp.show{display:block;}
+.exp strong{color:var(--green);}
+.submit-area{text-align:center;margin-top:40px;}
+.btn-submit{background:var(--green);color:#000;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;letter-spacing:1.5px;text-transform:uppercase;padding:14px 40px;border-radius:8px;border:none;cursor:pointer;transition:all .2s;}
+.btn-submit:hover{background:var(--green-dark);transform:translateY(-2px);}
+.btn-submit:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+.sending{display:none;margin-top:16px;font-size:.88rem;color:var(--muted);text-align:center;}
+.sending.show{display:block;}
+.result{display:none;background:linear-gradient(135deg,#0d1f06,#1a2a0d);border:1px solid var(--green);border-radius:14px;padding:40px;text-align:center;margin-top:40px;}
+.result.show{display:block;}
+.r-score{font-family:'Barlow Condensed',sans-serif;font-size:5rem;font-weight:900;color:var(--green);line-height:1;}
+.r-label{font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:800;color:var(--white);text-transform:uppercase;margin-top:6px;}
+.r-student{margin-top:12px;font-size:.88rem;color:var(--muted);}
+.r-msg{color:var(--muted);margin:10px auto 0;max-width:380px;font-size:.9rem;}
+.r-ok{display:none;margin-top:14px;background:rgba(122,193,67,.08);border:1px solid rgba(122,193,67,.25);border-radius:8px;padding:10px 16px;font-size:.83rem;color:#a8d87a;}
+.r-ok.show{display:block;}
+.r-err{display:none;margin-top:14px;background:rgba(229,62,62,.08);border:1px solid rgba(229,62,62,.3);border-radius:8px;padding:10px 16px;font-size:.83rem;color:#f08080;}
+.r-err.show{display:block;}
+.r-actions{margin-top:24px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.btn-retry{background:transparent;color:var(--green);border:1px solid var(--green);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.9rem;letter-spacing:1px;text-transform:uppercase;padding:10px 24px;border-radius:6px;cursor:pointer;transition:all .2s;}
+.btn-retry:hover{background:var(--green);color:#000;}
+.btn-home{background:var(--bg3);color:var(--text);border:1px solid var(--border);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.9rem;letter-spacing:1px;text-transform:uppercase;padding:10px 24px;border-radius:6px;display:inline-flex;align-items:center;}
+@media(max-width:600px){.hero{padding:32px 24px;}.hero-title{font-size:2rem;}.main{padding:28px 16px 60px;}.qb{padding:20px 18px;}.sf-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <div class="nav-brand">Potrero <span>Digital</span></div>
+  <a href="index.html">&larr; Inicio</a>
+  <a href="#" class="active">Cuestionario 13</a>
+</nav>
+<div class="hero">
+  <div class="hero-tag">Cuestionario</div>
+  <h1 class="hero-title">Capitulo 13 &mdash;<br><em>El Profesional de TI</em></h1>
+  <p class="hero-sub">Comunicaci&oacute;n con el cliente, escucha activa, resoluci&oacute;n de problemas, conducta profesional, consideraciones &eacute;ticas y legales, y protecci&oacute;n de PII, PCI y PHI.</p>
+  <div class="hero-meta">
+    <div class="hero-badge">&#128203; <strong>20 preguntas</strong></div>
+    <div class="hero-badge">&#9989; <strong>Aprobaci&oacute;n: 70%</strong></div>
+    <div class="hero-badge">&#128202; <strong>Registro autom&aacute;tico</strong></div>
+  </div>
+</div>
+<div class="main">
+<div class="sf">
+  <div class="sf-title">&#128100; Datos del alumno</div>
+  <div class="sf-grid">
+    <div class="sf-g"><label class="sf-label">Nombre completo</label><input class="sf-input" type="text" id="inp-nombre" placeholder="Ej: Juan P&eacute;rez" autocomplete="off"></div>
+    <div class="sf-g"><label class="sf-label">Comisi&oacute;n</label><input class="sf-input" type="text" id="inp-comision" placeholder="Ej: 6A" autocomplete="off"></div>
+  </div>
+</div>
+<div class="prog-label"><span id="prog-txt">0 de 20 respondidas</span><span id="prog-pct">0%</span></div>
+<div class="prog-wrap"><div class="prog-bar" id="prog-bar" style="width:0%"></div></div>
+
+<div class="qb" id="q1"><div class="q-num">Pregunta 01</div>
+<div class="q-text">¿Por qué es tan importante la comunicación para un profesional de TI al resolver un problema de PC?</div>
+<div class="opts">
+  <div class="opt" data-q="1" data-val="a"><div class="ol">A</div>Porque el técnico debe obtener del cliente los detalles del problema, y un cliente relajado por una comunicación cordial es más propenso a brindar la información necesaria para reparar el equipo</div>
+  <div class="opt" data-q="1" data-val="b"><div class="ol">B</div>Porque la comunicación reemplaza por completo la necesidad de conocimientos técnicos</div>
+  <div class="opt" data-q="1" data-val="c"><div class="ol">C</div>Porque los clientes nunca pueden describir correctamente un problema técnico sin ayuda de otro técnico</div>
+  <div class="opt" data-q="1" data-val="d"><div class="ol">D</div>Porque las empresas exigen que los técnicos completen un curso de oratoria antes de atender clientes</div>
+</div>
+<div class="exp" id="exp1"><strong>Correcto &mdash; Opci&oacute;n A:</strong> Para resolver un problema, el técnico necesita obtener los detalles directamente del cliente. Como la mayoría de las personas que solicitan reparación están estresadas, establecer una comunicación cordial ayuda a que el cliente se relaje, y un cliente relajado es más propenso a proporcionar la información necesaria para determinar el origen del problema.</div></div>
+
+<div class="qb" id="q2"><div class="q-num">Pregunta 02</div>
+<div class="q-text">¿Qué diferencia existe entre la comunicación con un cliente en persona y por teléfono?</div>
+<div class="opts">
+  <div class="opt" data-q="2" data-val="a"><div class="ol">A</div>No existe ninguna diferencia relevante entre ambos canales de comunicación</div>
+  <div class="opt" data-q="2" data-val="b"><div class="ol">B</div>En persona el cliente ve el lenguaje corporal del técnico, mientras que por teléfono percibe el tono e inflexión de la voz, e incluso puede notar si el técnico sonríe</div>
+  <div class="opt" data-q="2" data-val="c"><div class="ol">C</div>Por teléfono el cliente puede ver el lenguaje corporal del técnico a través de la cámara del dispositivo</div>
+  <div class="opt" data-q="2" data-val="d"><div class="ol">D</div>La comunicación telefónica es siempre más efectiva porque elimina cualquier posibilidad de malentendidos</div>
+</div>
+<div class="exp" id="exp2"><strong>Correcto &mdash; Opci&oacute;n B:</strong> Si el técnico habla con el cliente en persona, este puede ver su lenguaje corporal. Si habla por teléfono, el cliente percibe el tono e inflexión de su voz, y puede incluso darse cuenta si el técnico sonríe mientras habla, lo que influye en la percepción del cliente.</div></div>
+
+<div class="qb" id="q3"><div class="q-num">Pregunta 03</div>
+<div class="q-text">¿Por qué muchos técnicos de centros de atención telefónica tienen un espejo en su escritorio?</div>
+<div class="opts">
+  <div class="opt" data-q="3" data-val="a"><div class="ol">A</div>Para verificar su aspecto personal antes de las reuniones presenciales con clientes</div>
+  <div class="opt" data-q="3" data-val="b"><div class="ol">B</div>Para ver sus propias expresiones faciales mientras hablan con el cliente, como recordatorio de mantener una actitud positiva</div>
+  <div class="opt" data-q="3" data-val="c"><div class="ol">C</div>Es un requisito de seguridad exigido por las normativas de protección de datos</div>
+  <div class="opt" data-q="3" data-val="d"><div class="ol">D</div>Para poder leer instrucciones técnicas reflejadas sin tener que girar la cabeza</div>
+</div>
+<div class="exp" id="exp3"><strong>Correcto &mdash; Opci&oacute;n B:</strong> Los clientes pueden notar si un técnico sonríe al hablar por teléfono, aunque no puedan verlo. Por eso, muchos técnicos de centros de atención telefónica utilizan un espejo en su escritorio para observar sus propias expresiones faciales, como recordatorio de mantener una actitud positiva durante la llamada.</div></div>
+
+<div class="qb" id="q4"><div class="q-num">Pregunta 04</div>
+<div class="q-text">En la escucha activa, ¿qué debe hacer el técnico mientras el cliente cuenta la historia completa del problema?</div>
+<div class="opts">
+  <div class="opt" data-q="4" data-val="a"><div class="ol">A</div>Interrumpir inmediatamente para hacer preguntas cerradas y acelerar el diagnóstico</div>
+  <div class="opt" data-q="4" data-val="b"><div class="ol">B</div>Permanecer en silencio absoluto sin emitir ningún sonido hasta que el cliente termine por completo</div>
+  <div class="opt" data-q="4" data-val="c"><div class="ol">C</div>Permitir que el cliente cuente toda la historia, interrumpiendo ocasionalmente solo con una palabra o frase breve como 'Entiendo' o 'Sí', sin interrumpir para preguntar o afirmar algo</div>
+  <div class="opt" data-q="4" data-val="d"><div class="ol">D</div>Tomar notas exclusivamente sin prestar atención visual ni verbal al cliente</div>
+</div>
+<div class="exp" id="exp4"><strong>Correcto &mdash; Opci&oacute;n C:</strong> La escucha activa implica permitirle al cliente contar toda la historia del problema, interviniendo ocasionalmente solo con una pequeña palabra o frase como 'Entiendo' o 'Sí' para demostrar atención, sin interrumpir para hacer una pregunta o afirmar algo hasta que el cliente termine de explicar.</div></div>
+
+<div class="qb" id="q5"><div class="q-num">Pregunta 05</div>
+<div class="q-text">¿Cuál es la diferencia entre una pregunta abierta y una pregunta cerrada durante la atención a un cliente?</div>
+<div class="opts">
+  <div class="opt" data-q="5" data-val="a"><div class="ol">A</div>Una pregunta abierta obtiene información sobre lo que el cliente hacía, intentaba hacer y por qué se frustró; una pregunta cerrada se responde con un simple 'sí', 'no' o un dato fáctico específico como 'Windows 10'</div>
+  <div class="opt" data-q="5" data-val="b"><div class="ol">B</div>Una pregunta abierta solo puede hacerse por escrito, mientras que la cerrada solo puede hacerse verbalmente</div>
+  <div class="opt" data-q="5" data-val="c"><div class="ol">C</div>Ambos tipos de pregunta buscan exactamente el mismo tipo de respuesta y son intercambiables</div>
+  <div class="opt" data-q="5" data-val="d"><div class="ol">D</div>Una pregunta cerrada siempre debe hacerse antes que una pregunta abierta para no perder tiempo</div>
+</div>
+<div class="exp" id="exp5"><strong>Correcto &mdash; Opci&oacute;n A:</strong> Una pregunta abierta por lo general implica obtener información sobre lo que el cliente estaba haciendo, lo que intentaba hacer y por qué se frustró. Las preguntas cerradas, en cambio, tienen un objetivo específico y se responden con un simple 'sí' o 'no', o con un dato fáctico concreto, como 'Windows 10'.</div></div>
+
+<div class="qb" id="q6"><div class="q-num">Pregunta 06</div>
+<div class="q-text">Según la técnica de escucha activa, ¿qué debe hacer el técnico después de que el cliente termina de explicar la totalidad del problema?</div>
+<div class="opts">
+  <div class="opt" data-q="6" data-val="a"><div class="ol">A</div>Ignorar lo que dijo el cliente y comenzar directamente a reparar el equipo sin más comentarios</div>
+  <div class="opt" data-q="6" data-val="b"><div class="ol">B</div>Resumir lo que el cliente acaba de decir, y luego hacer preguntas adicionales cerradas basadas en esa información</div>
+  <div class="opt" data-q="6" data-val="c"><div class="ol">C</div>Pedirle al cliente que repita exactamente la misma explicación una segunda vez desde el principio</div>
+  <div class="opt" data-q="6" data-val="d"><div class="ol">D</div>Derivar automáticamente el caso a un supervisor sin intentar resolverlo personalmente</div>
+</div>
+<div class="exp" id="exp6"><strong>Correcto &mdash; Opci&oacute;n B:</strong> Después de escuchar al cliente explicar la totalidad del problema, el técnico debe resumir lo que este acaba de decir. Luego, las preguntas adicionales deben ser cerradas, con un objetivo claro, basadas en la información ya obtenida durante la escucha activa.</div></div>
+
+<div class="qb" id="q7"><div class="q-num">Pregunta 07</div>
+<div class="q-text">¿Qué recomendación de comunicación ayuda a mantener al cliente concentrado durante la atención técnica?</div>
+<div class="opts">
+  <div class="opt" data-q="7" data-val="a"><div class="ol">A</div>Utilizar el lenguaje técnico más avanzado posible para demostrar el nivel de conocimiento del técnico</div>
+  <div class="opt" data-q="7" data-val="b"><div class="ol">B</div>Utilizar un lenguaje claro evitando tecnicismos, escuchar y hacer preguntas abiertas y cerradas, y proporcionar comentarios que demuestren comprensión del problema</div>
+  <div class="opt" data-q="7" data-val="c"><div class="ol">C</div>Evitar por completo hacer preguntas al cliente para no parecer inseguro sobre el diagnóstico</div>
+  <div class="opt" data-q="7" data-val="d"><div class="ol">D</div>Hablar constantemente sin pausas para transmitir seguridad y evitar silencios incómodos</div>
+</div>
+<div class="exp" id="exp7"><strong>Correcto &mdash; Opci&oacute;n B:</strong> Para mantener al cliente concentrado se recomienda utilizar el lenguaje correcto (claro, sin tecnicismos que el cliente podría no entender), escuchar y hacer preguntas abiertas y cerradas para conocer los detalles del problema, y proporcionar comentarios que le hagan saber al cliente que se comprende el problema, generando una conversación agradable y positiva.</div></div>
+
+<div class="qb" id="q8"><div class="q-num">Pregunta 08</div>
+<div class="q-text">¿Por qué se considera 'propiedad' del cliente no solo su PC y monitor, sino también su información y datos?</div>
+<div class="opts">
+  <div class="opt" data-q="8" data-val="a"><div class="ol">A</div>Porque legalmente solo el hardware físico puede considerarse propiedad de una persona</div>
+  <div class="opt" data-q="8" data-val="b"><div class="ol">B</div>Porque correos electrónicos, listas de contactos, registros en la PC y copias impresas dejadas en un escritorio también constituyen propiedad del cliente que el técnico debe respetar</div>
+  <div class="opt" data-q="8" data-val="c"><div class="ol">C</div>Porque los datos digitales pertenecen automáticamente a la empresa que presta el servicio técnico</div>
+  <div class="opt" data-q="8" data-val="d"><div class="ol">D</div>Porque solo la información financiera del cliente puede considerarse propiedad protegida</div>
+</div>
+<div class="exp" id="exp8"><strong>Correcto &mdash; Opci&oacute;n B:</strong> Además de las PC y los monitores, se considera propiedad del cliente la información o los datos a los que el técnico pueda acceder durante el servicio: correos electrónicos, listas de teléfonos y contactos, registros o datos en la PC, y copias impresas de archivos o información dejadas en un escritorio. El técnico debe respetar toda esta propiedad.</div></div>
+
+<div class="qb" id="q9"><div class="q-num">Pregunta 09</div>
+<div class="q-text">¿Qué es la Información de Identificación Personal (PII)?</div>
+<div class="opts">
+  <div class="opt" data-q="9" data-val="a"><div class="ol">A</div>Únicamente el número de documento nacional de identidad de una persona</div>
+  <div class="opt" data-q="9" data-val="b"><div class="ol">B</div>Cualquier dato que, solo o combinado con otra información, pueda utilizarse para identificar a una persona en particular, como nombres, números de identificación, direcciones o características biométricas</div>
+  <div class="opt" data-q="9" data-val="c"><div class="ol">C</div>Un estándar técnico exclusivo para proteger contraseñas de redes WiFi corporativas</div>
+  <div class="opt" data-q="9" data-val="d"><div class="ol">D</div>Un tipo de malware diseñado específicamente para robar identidades bancarias</div>
+</div>
+<div class="exp" id="exp9"><strong>Correcto &mdash; Opci&oacute;n B:</strong> La PII es cualquier información que pueda utilizarse, sola o combinada con otros datos, para identificar a una persona en particular. Incluye nombres (nombre completo, de soltera, alias), números de identificación (SSN, pasaporte, licencia de conducir, cuenta financiera), direcciones y características personales como huellas digitales o datos biométricos.</div></div>
+
+<div class="qb" id="q10"><div class="q-num">Pregunta 10</div>
+<div class="q-text">¿Cuál de las siguientes opciones es un ejemplo correcto de PII según las categorías mencionadas?</div>
+<div class="opts">
+  <div class="opt" data-q="10" data-val="a"><div class="ol">A</div>El color de la carcasa de una computadora de escritorio</div>
+  <div class="opt" data-q="10" data-val="b"><div class="ol">B</div>El número de serie de un router doméstico sin vincular a ninguna persona</div>
+  <div class="opt" data-q="10" data-val="c"><div class="ol">C</div>El número de seguro social (SSN), el número de pasaporte o los datos biométricos como el escaneo de retina o la geometría facial de una persona</div>
+  <div class="opt" data-q="10" data-val="d"><div class="ol">D</div>La versión del sistema operativo instalado en un servidor corporativo genérico</div>
+</div>
+<div class="exp" id="exp10"><strong>Correcto &mdash; Opci&oacute;n C:</strong> Ejemplos de PII incluyen números de identificación personal como el SSN, el número de pasaporte, la licencia de conducir o el número de cuenta financiera, así como características personales incluyendo imágenes fotográficas, huellas digitales y otros datos biométricos como el escaneo de retina o la geometría facial.</div></div>
+
+<div class="qb" id="q11"><div class="q-num">Pregunta 11</div>
+<div class="q-text">¿Qué es el Consejo de Estándares de Seguridad de PCI y cuál es su objetivo principal?</div>
+<div class="opts">
+  <div class="opt" data-q="11" data-val="a"><div class="ol">A</div>Un organismo gubernamental creado en 1990 para regular exclusivamente el comercio electrónico internacional</div>
+  <div class="opt" data-q="11" data-val="b"><div class="ol">B</div>Un consejo formado en 2005 por las 5 principales empresas de tarjetas de crédito, con el objetivo de proteger números de cuenta, fechas de vencimiento, banda magnética y datos de chips en transacciones</div>
+  <div class="opt" data-q="11" data-val="c"><div class="ol">C</div>Una certificación opcional que solo aplica a bancos con sede en Estados Unidos</div>
+  <div class="opt" data-q="11" data-val="d"><div class="ol">D</div>Un protocolo de red utilizado exclusivamente para cifrar contraseñas de acceso a routers</div>
+</div>
+<div class="exp" id="exp11"><strong>Correcto &mdash; Opci&oacute;n B:</strong> El Consejo de Estándares de Seguridad de PCI se formó en 2005 por las 5 principales empresas de tarjetas de crédito, en un esfuerzo por proteger los números de cuenta, las fechas de vencimiento, la banda magnética y los datos de los chips utilizados en transacciones con tarjeta en todo el mundo.</div></div>
+
+<div class="qb" id="q12"><div class="q-num">Pregunta 12</div>
+<div class="q-text">¿Dónde se puede obtener más información oficial sobre los estándares de la Industria de Tarjetas de Pago (PCI)?</div>
+<div class="opts">
+  <div class="opt" data-q="12" data-val="a"><div class="ol">A</div>www.pcisecuritystandards.org</div>
+  <div class="opt" data-q="12" data-val="b"><div class="ol">B</div>www.hipaa.gov</div>
+  <div class="opt" data-q="12" data-val="c"><div class="ol">C</div>www.iso.org</div>
+  <div class="opt" data-q="12" data-val="d"><div class="ol">D</div>www.w3.org</div>
+</div>
+<div class="exp" id="exp12"><strong>Correcto &mdash; Opci&oacute;n A:</strong> Para obtener más información sobre PCI, se recomienda visitar el sitio oficial www.pcisecuritystandards.org, donde el Consejo de Estándares de Seguridad de PCI publica sus normativas.</div></div>
+
+<div class="qb" id="q13"><div class="q-num">Pregunta 13</div>
+<div class="q-text">¿Qué información incluye la PHI (Información Confidencial sobre la Salud)?</div>
+<div class="opts">
+  <div class="opt" data-q="13" data-val="a"><div class="ol">A</div>Exclusivamente los resultados de análisis de laboratorio de un paciente</div>
+  <div class="opt" data-q="13" data-val="b"><div class="ol">B</div>Nombres de pacientes, direcciones, fechas de visitas, números de teléfono y fax, y direcciones de correo electrónico</div>
+  <div class="opt" data-q="13" data-val="c"><div class="ol">C</div>Únicamente el historial de pagos de seguros médicos sin datos personales asociados</div>
+  <div class="opt" data-q="13" data-val="d"><div class="ol">D</div>Solamente los datos de contacto de los médicos que atendieron al paciente</div>
+</div>
+<div class="exp" id="exp13"><strong>Correcto &mdash; Opci&oacute;n B:</strong> La PHI (Información Confidencial sobre la Salud) es una forma de PII que incluye nombres de pacientes, direcciones, fechas de visitas, números de teléfono y fax, y direcciones de correo electrónico, entre otros datos vinculados a la atención médica de una persona.</div></div>
+
+<div class="qb" id="q14"><div class="q-num">Pregunta 14</div>
+<div class="q-text">¿Qué es la ePHI y por qué surgió como concepto adicional a la PHI?</div>
+<div class="opts">
+  <div class="opt" data-q="14" data-val="a"><div class="ol">A</div>Es un sinónimo exacto de PHI sin ninguna diferencia práctica o regulatoria</div>
+  <div class="opt" data-q="14" data-val="b"><div class="ol">B</div>Es la Información Electrónica Confidencial sobre la Salud, que se regula debido al paso de los registros de salud de copias en papel a registros electrónicos</div>
+  <div class="opt" data-q="14" data-val="c"><div class="ol">C</div>Es un estándar exclusivo para proteger datos de tarjetas de crédito en hospitales</div>
+  <div class="opt" data-q="14" data-val="d"><div class="ol">D</div>Es una tecnología de cifrado utilizada únicamente en dispositivos médicos portátiles</div>
+</div>
+<div class="exp" id="exp14"><strong>Correcto &mdash; Opci&oacute;n B:</strong> Con el paso de los registros de salud de copias en papel a registros electrónicos, surgió el concepto de ePHI: Información Electrónica Confidencial sobre la Salud, que también debe protegerse y está regulada de forma específica.</div></div>
+
+<div class="qb" id="q15"><div class="q-num">Pregunta 15</div>
+<div class="q-text">¿Qué ley regula las sanciones por violaciones de PHI y ePHI en Estados Unidos?</div>
+<div class="opts">
+  <div class="opt" data-q="15" data-val="a"><div class="ol">A</div>La Ley de Portabilidad y Responsabilidad del Seguro Médico (HIPAA)</div>
+  <div class="opt" data-q="15" data-val="b"><div class="ol">B</div>El Reglamento General de Protección de Datos (GDPR)</div>
+  <div class="opt" data-q="15" data-val="c"><div class="ol">C</div>La Ley de Protección al Consumidor Financiero</div>
+  <div class="opt" data-q="15" data-val="d"><div class="ol">D</div>El Estándar de Seguridad de Datos de la Industria de Tarjetas de Pago (PCI DSS)</div>
+</div>
+<div class="exp" id="exp15"><strong>Correcto &mdash; Opci&oacute;n A:</strong> Las sanciones por violaciones de PHI y ePHI son muy serias y están reguladas por la Ley de Portabilidad y Responsabilidad del Seguro Médico (HIPAA, por sus siglas en inglés), que exige medidas estrictas de protección sobre la información de salud de los pacientes.</div></div>
+
+<div class="qb" id="q16"><div class="q-num">Pregunta 16</div>
+<div class="q-text">¿Por qué se dice que la PHI es 'otra forma de PII'?</div>
+<div class="opts">
+  <div class="opt" data-q="16" data-val="a"><div class="ol">A</div>Porque ambos términos son completamente independientes y no tienen ninguna relación conceptual</div>
+  <div class="opt" data-q="16" data-val="b"><div class="ol">B</div>Porque la información de salud del paciente (nombres, direcciones, fechas de contacto) también puede utilizarse para identificar a una persona en particular, cumpliendo así la definición de PII</div>
+  <div class="opt" data-q="16" data-val="c"><div class="ol">C</div>Porque la PHI reemplaza por completo a la PII en el ámbito de la salud</div>
+  <div class="opt" data-q="16" data-val="d"><div class="ol">D</div>Porque solo los médicos pueden generar información considerada PII</div>
+</div>
+<div class="exp" id="exp16"><strong>Correcto &mdash; Opci&oacute;n B:</strong> La PHI se considera otra forma de PII porque la información de salud (nombres de pacientes, direcciones, fechas de visitas, contacto) puede utilizarse, sola o combinada, para identificar a una persona en particular, cumpliendo con la definición general de Información de Identificación Personal.</div></div>
+
+<div class="qb" id="q17"><div class="q-num">Pregunta 17</div>
+<div class="q-text">Durante una visita técnica, un cliente deja a la vista documentos impresos con información personal sobre su escritorio. Según las consideraciones éticas del profesional de TI, ¿qué corresponde hacer?</div>
+<div class="opts">
+  <div class="opt" data-q="17" data-val="a"><div class="ol">A</div>Leer los documentos con atención para verificar si contienen información útil para el diagnóstico técnico</div>
+  <div class="opt" data-q="17" data-val="b"><div class="ol">B</div>Tratar esos documentos como propiedad del cliente y respetar su confidencialidad, sin leerlos, copiarlos ni divulgarlos</div>
+  <div class="opt" data-q="17" data-val="c"><div class="ol">C</div>Fotografiar los documentos como respaldo en caso de futuros reclamos del cliente</div>
+  <div class="opt" data-q="17" data-val="d"><div class="ol">D</div>Ignorar completamente su existencia y moverlos sin cuidado para poder trabajar en el escritorio</div>
+</div>
+<div class="exp" id="exp17"><strong>Correcto &mdash; Opci&oacute;n B:</strong> Las copias impresas de archivos, información o datos dejados en un escritorio se consideran propiedad del cliente, igual que sus correos electrónicos o registros digitales. El profesional de TI debe respetar esa información y su confidencialidad, sin leerla, copiarla ni divulgarla, como parte de su conducta ética y profesional.</div></div>
+
+<div class="qb" id="q18"><div class="q-num">Pregunta 18</div>
+<div class="q-text">¿Cuál es el propósito principal de usar preguntas cerradas después de la escucha activa inicial?</div>
+<div class="opts">
+  <div class="opt" data-q="18" data-val="a"><div class="ol">A</div>Confundir al cliente con terminología técnica avanzada para acelerar el cierre del caso</div>
+  <div class="opt" data-q="18" data-val="b"><div class="ol">B</div>Obtener información específica y puntual, ya que se enfocan en un objetivo claro basado en lo que el cliente ya explicó</div>
+  <div class="opt" data-q="18" data-val="c"><div class="ol">C</div>Reemplazar por completo la necesidad de escuchar la historia completa del problema desde el inicio</div>
+  <div class="opt" data-q="18" data-val="d"><div class="ol">D</div>Determinar el precio final del servicio técnico antes de realizar cualquier diagnóstico</div>
+</div>
+<div class="exp" id="exp18"><strong>Correcto &mdash; Opci&oacute;n B:</strong> Las preguntas cerradas se utilizan después de la escucha activa y el resumen del problema, con el fin de obtener información específica y puntual. Se enfocan en un objetivo claro basado en la información ya obtenida, y el cliente puede responderlas con un simple 'sí', 'no' o un dato fáctico concreto.</div></div>
+
+<div class="qb" id="q19"><div class="q-num">Pregunta 19</div>
+<div class="q-text">¿Qué relación existe entre el trato profesional al cliente y la protección de PII, PCI y PHI dentro del rol de un técnico de soporte informático?</div>
+<div class="opts">
+  <div class="opt" data-q="19" data-val="a"><div class="ol">A</div>No existe relación alguna, son temas completamente independientes entre sí</div>
+  <div class="opt" data-q="19" data-val="b"><div class="ol">B</div>Ambos forman parte de la conducta ética y legal esperada del técnico: así como debe comunicarse con respeto y cordialidad, también debe proteger la información personal, financiera y de salud a la que accede durante su trabajo</div>
+  <div class="opt" data-q="19" data-val="c"><div class="ol">C</div>La protección de PII, PCI y PHI es responsabilidad exclusiva del departamento legal, nunca del técnico de soporte</div>
+  <div class="opt" data-q="19" data-val="d"><div class="ol">D</div>El trato profesional al cliente solo aplica en visitas presenciales, nunca en la protección de sus datos</div>
+</div>
+<div class="exp" id="exp19"><strong>Correcto &mdash; Opci&oacute;n B:</strong> Tanto la comunicación profesional y respetuosa con el cliente como la protección de su información sensible (PII, PCI, PHI) forman parte de las consideraciones éticas y legales del profesional de TI. El técnico debe respetar al cliente y su propiedad, incluyendo los datos a los que tiene acceso durante el servicio, sin importar si son de índole personal, financiera o de salud.</div></div>
+
+<div class="qb" id="q20"><div class="q-num">Pregunta 20</div>
+<div class="q-text">¿Por qué es importante que un técnico de soporte informático evite usar lenguaje técnico excesivo al hablar con un cliente no especializado?</div>
+<div class="opts">
+  <div class="opt" data-q="20" data-val="a"><div class="ol">A</div>Porque las empresas prohíben legalmente el uso de terminología técnica en la atención al cliente</div>
+  <div class="opt" data-q="20" data-val="b"><div class="ol">B</div>Porque el uso de un lenguaje claro y comprensible ayuda a mantener al cliente concentrado, evita confusión y facilita que brinde la información necesaria para resolver el problema</div>
+  <div class="opt" data-q="20" data-val="c"><div class="ol">C</div>Porque el lenguaje técnico siempre hace que el diagnóstico tarde más tiempo en completarse</div>
+  <div class="opt" data-q="20" data-val="d"><div class="ol">D</div>Porque los clientes solo pueden entender instrucciones si están escritas y nunca si son habladas</div>
+</div>
+<div class="exp" id="exp20"><strong>Correcto &mdash; Opci&oacute;n B:</strong> Una de las recomendaciones para mantener al cliente concentrado es utilizar el lenguaje correcto: ser claro y evitar el lenguaje técnico que el cliente podría no entender. Esto facilita la comunicación, reduce la frustración del cliente y ayuda a obtener la información necesaria para resolver el problema de manera eficiente.</div></div>
+
+<div class="submit-area">
+  <button class="btn-submit" id="btn-submit" disabled>Verificar y registrar respuestas</button>
+  <div class="sending" id="sending">&#9203; Enviando resultados a Google Sheets&hellip;</div>
+</div>
+<div class="result" id="result">
+  <div class="r-score" id="r-score">0%</div>
+  <div class="r-label" id="r-label">&mdash;</div>
+  <div class="r-student" id="r-student"></div>
+  <div class="r-msg" id="r-msg"></div>
+  <div class="r-ok" id="r-ok">&#128202; Resultado registrado en Google Sheets correctamente.</div>
+  <div class="r-err" id="r-err">&#9888;&#65039; No se pudo registrar en Google Sheets. Verific&aacute; la URL del script.</div>
+  <div class="r-actions">
+    <button class="btn-retry" onclick="location.reload()">Intentar nuevamente</button>
+    <a href="index.html" class="btn-home">&larr; Volver al Inicio</a>
+  </div>
+</div>
+</div>
+<script>
+// ================================================
+// REEMPLAZA CON LA URL DE TU APPS SCRIPT
+// ================================================
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycbx7-Amo_hJUwF7GWaFc_0oGKaZtGRQuMxCSDebKBxdMAJh9MgbmsmrBD-Mr99TBzWvzAw/exec';
+// ================================================
+const ANSWERS={1:'a',2:'b',3:'b',4:'c',5:'a',6:'b',7:'b',8:'b',9:'b',10:'c',11:'b',12:'a',13:'b',14:'b',15:'a',16:'b',17:'b',18:'b',19:'b',20:'b'};
+const TOTAL=20;const sel={};let submitted=false;
+function updProg(){const n=Object.keys(sel).length,p=Math.round(n/TOTAL*100);document.getElementById('prog-bar').style.width=p+'%';document.getElementById('prog-txt').textContent=n+' de '+TOTAL+' respondidas';document.getElementById('prog-pct').textContent=p+'%';document.getElementById('btn-submit').disabled=(n<TOTAL||!document.getElementById('inp-nombre').value.trim());}
+document.getElementById('inp-nombre').addEventListener('input',updProg);
+document.querySelectorAll('.opt').forEach(o=>{o.addEventListener('click',()=>{if(submitted)return;const q=o.dataset.q;document.querySelectorAll('.opt[data-q="'+q+'"]').forEach(x=>x.classList.remove('selected'));o.classList.add('selected');sel[q]=o.dataset.val;document.getElementById('q'+q).classList.add('answered');updProg();});});
+document.getElementById('btn-submit').addEventListener('click',()=>{
+  if(submitted)return;
+  const nombre=document.getElementById('inp-nombre').value.trim(),comision=document.getElementById('inp-comision').value.trim();
+  if(!nombre){document.getElementById('inp-nombre').classList.add('error');document.getElementById('inp-nombre').focus();return;}
+  submitted=true;document.getElementById('btn-submit').disabled=true;
+  let correct=0;
+  for(let i=1;i<=TOTAL;i++){const ua=sel[String(i)],ca=ANSWERS[i];document.querySelectorAll('.opt[data-q="'+i+'"]').forEach(o=>{o.classList.add('locked');if(o.dataset.val===ca)o.classList.add('correct');else if(o.dataset.val===ua&&ua!==ca)o.classList.add('incorrect');});document.getElementById('exp'+i).classList.add('show');if(ua===ca)correct++;else{document.getElementById('q'+i).classList.remove('answered');document.getElementById('q'+i).classList.add('wrong');}}
+  const pct=Math.round(correct/TOTAL*100),label=pct>=90?'&#127942; Excelente':pct>=70?'&#9989; Aprobado':'&#10060; A repasar',msg=pct>=90?'Obtuviste '+correct+'/'+TOTAL+'. &#161;Excelente dominio del cap&iacute;tulo!':pct>=70?'Obtuviste '+correct+'/'+TOTAL+'. Aprobado. Revis&aacute; las incorrectas.':'Obtuviste '+correct+'/'+TOTAL+'. Repas&aacute; el Cap&iacute;tulo 13 antes de continuar.';
+  document.getElementById('r-score').textContent=pct+'%';document.getElementById('r-label').innerHTML=label;document.getElementById('r-student').textContent=nombre+(comision?' &mdash; Comisi&oacute;n: '+comision:'');document.getElementById('r-msg').innerHTML=msg;document.getElementById('result').classList.add('show');document.getElementById('result').scrollIntoView({behavior:'smooth',block:'center'});
+  if(SCRIPT_URL&&!SCRIPT_URL.includes('TU_APPS_SCRIPT')){document.getElementById('sending').classList.add('show');const now=new Date();fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({capitulo:'Capitulo 13',nombre,comision:comision||'&mdash;',fecha:now.toLocaleDateString('es-AR'),hora:now.toLocaleTimeString('es-AR'),puntaje:correct,total:TOTAL,porcentaje:pct})}).then(()=>{document.getElementById('sending').classList.remove('show');document.getElementById('r-ok').classList.add('show');}).catch(()=>{document.getElementById('sending').classList.remove('show');document.getElementById('r-err').classList.add('show');});}
+});
+</script>
+</body>
+</html>
