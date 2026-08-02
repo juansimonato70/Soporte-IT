@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cuestionario &mdash; Capitulo 12 | Potrero Digital</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--green:#7ac143;--green-dark:#5c9430;--bg:#111;--bg2:#1a1a1a;--bg3:#222;--bg4:#2a2a2a;--text:#e8e8e8;--muted:#888;--border:rgba(122,193,67,.22);--white:#fff;--red:#e53e3e;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font-size:15px;line-height:1.7;}
+a{text-decoration:none;}
+.topnav{background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 28px;position:sticky;top:0;z-index:100;height:48px;}
+.nav-brand{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;color:var(--white);padding-right:20px;border-right:1px solid var(--border);margin-right:8px;}
+.nav-brand span{color:var(--green);}
+.topnav a{color:var(--muted);font-size:.8rem;font-weight:500;padding:0 14px;height:48px;display:flex;align-items:center;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s;}
+.topnav a.active{color:var(--green);border-bottom-color:var(--green);font-weight:600;}
+.hero{background:linear-gradient(135deg,#0d1f06,#1a2a0d);border-bottom:2px solid var(--green);padding:52px 60px 44px;}
+.hero-tag{display:inline-block;background:var(--green);color:#000;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:.72rem;letter-spacing:2.5px;text-transform:uppercase;padding:4px 12px;border-radius:3px;margin-bottom:14px;}
+.hero-title{font-family:'Barlow Condensed',sans-serif;font-size:3rem;font-weight:800;line-height:1;color:var(--white);text-transform:uppercase;}
+.hero-title em{color:var(--green);font-style:normal;}
+.hero-sub{margin-top:10px;font-size:.9rem;color:rgba(255,255,255,.5);max-width:540px;}
+.hero-meta{margin-top:20px;display:flex;gap:20px;flex-wrap:wrap;}
+.hero-badge{display:flex;align-items:center;gap:6px;font-size:.82rem;color:var(--muted);}
+.hero-badge strong{color:var(--text);}
+.main{max-width:820px;margin:0 auto;padding:52px 40px 80px;}
+.sf{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:24px 28px;margin-bottom:32px;}
+.sf-title{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;}
+.sf-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.sf-g{display:flex;flex-direction:column;gap:6px;}
+.sf-label{font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;}
+.sf-input{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:10px 14px;font-family:'Barlow',sans-serif;font-size:.9rem;color:var(--text);outline:none;transition:border-color .2s;width:100%;}
+.sf-input:focus{border-color:var(--green);}
+.sf-input.error{border-color:var(--red);}
+.prog-label{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted);margin-bottom:8px;}
+.prog-wrap{background:var(--bg3);border-radius:100px;height:6px;margin-bottom:32px;overflow:hidden;}
+.prog-bar{height:100%;background:var(--green);border-radius:100px;transition:width .5s ease;}
+.qb{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:28px 30px;margin-bottom:16px;transition:border-color .2s;}
+.qb.answered{border-color:rgba(122,193,67,.4);}
+.qb.wrong{border-color:rgba(229,62,62,.4);}
+.q-num{font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;color:var(--green);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+.q-text{font-size:1rem;font-weight:500;color:var(--white);line-height:1.5;margin-bottom:18px;}
+.opts{display:flex;flex-direction:column;gap:8px;}
+.opt{display:flex;align-items:flex-start;gap:12px;background:var(--bg3);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:12px 16px;cursor:pointer;transition:all .18s;font-size:.9rem;color:var(--text);}
+.opt:hover:not(.locked){background:var(--bg4);border-color:rgba(122,193,67,.3);}
+.opt.selected{background:rgba(122,193,67,.1);border-color:var(--green);color:var(--white);}
+.opt.correct{background:rgba(122,193,67,.15);border-color:var(--green);color:#a8d87a;}
+.opt.incorrect{background:rgba(229,62,62,.08);border-color:var(--red);color:#f08080;}
+.opt.locked{cursor:default;}
+.ol{width:24px;height:24px;border-radius:50%;background:var(--bg4);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:800;color:var(--muted);flex-shrink:0;transition:all .18s;}
+.opt.selected .ol,.opt.correct .ol{background:var(--green);color:#000;border-color:var(--green);}
+.opt.incorrect .ol{background:var(--red);color:#fff;border-color:var(--red);}
+.exp{margin-top:14px;padding:12px 16px;background:rgba(122,193,67,.06);border-left:3px solid var(--green);border-radius:0 6px 6px 0;font-size:.86rem;color:var(--muted);display:none;line-height:1.6;}
+.exp.show{display:block;}
+.exp strong{color:var(--green);}
+.submit-area{text-align:center;margin-top:40px;}
+.btn-submit{background:var(--green);color:#000;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1rem;letter-spacing:1.5px;text-transform:uppercase;padding:14px 40px;border-radius:8px;border:none;cursor:pointer;transition:all .2s;}
+.btn-submit:hover{background:var(--green-dark);transform:translateY(-2px);}
+.btn-submit:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+.sending{display:none;margin-top:16px;font-size:.88rem;color:var(--muted);text-align:center;}
+.sending.show{display:block;}
+.result{display:none;background:linear-gradient(135deg,#0d1f06,#1a2a0d);border:1px solid var(--green);border-radius:14px;padding:40px;text-align:center;margin-top:40px;}
+.result.show{display:block;}
+.r-score{font-family:'Barlow Condensed',sans-serif;font-size:5rem;font-weight:900;color:var(--green);line-height:1;}
+.r-label{font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:800;color:var(--white);text-transform:uppercase;margin-top:6px;}
+.r-student{margin-top:12px;font-size:.88rem;color:var(--muted);}
+.r-msg{color:var(--muted);margin:10px auto 0;max-width:380px;font-size:.9rem;}
+.r-ok{display:none;margin-top:14px;background:rgba(122,193,67,.08);border:1px solid rgba(122,193,67,.25);border-radius:8px;padding:10px 16px;font-size:.83rem;color:#a8d87a;}
+.r-ok.show{display:block;}
+.r-err{display:none;margin-top:14px;background:rgba(229,62,62,.08);border:1px solid rgba(229,62,62,.3);border-radius:8px;padding:10px 16px;font-size:.83rem;color:#f08080;}
+.r-err.show{display:block;}
+.r-actions{margin-top:24px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.btn-retry{background:transparent;color:var(--green);border:1px solid var(--green);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.9rem;letter-spacing:1px;text-transform:uppercase;padding:10px 24px;border-radius:6px;cursor:pointer;transition:all .2s;}
+.btn-retry:hover{background:var(--green);color:#000;}
+.btn-home{background:var(--bg3);color:var(--text);border:1px solid var(--border);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.9rem;letter-spacing:1px;text-transform:uppercase;padding:10px 24px;border-radius:6px;display:inline-flex;align-items:center;}
+@media(max-width:600px){.hero{padding:32px 24px;}.hero-title{font-size:2rem;}.main{padding:28px 16px 60px;}.qb{padding:20px 18px;}.sf-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <div class="nav-brand">Potrero <span>Digital</span></div>
+  <a href="index.html">&larr; Inicio</a>
+  <a href="#" class="active">Cuestionario 12</a>
+</nav>
+<div class="hero">
+  <div class="hero-tag">Cuestionario</div>
+  <h1 class="hero-title">Capitulo 12 &mdash;<br><em>Seguridad</em></h1>
+  <p class="hero-sub">Malware, ataques a la red, ingenier&iacute;a social, pol&iacute;ticas de seguridad, seguridad f&iacute;sica, protecci&oacute;n de datos, firewalls y seguridad web.</p>
+  <div class="hero-meta">
+    <div class="hero-badge">&#128203; <strong>20 preguntas</strong></div>
+    <div class="hero-badge">&#9989; <strong>Aprobaci&oacute;n: 70%</strong></div>
+    <div class="hero-badge">&#128202; <strong>Registro autom&aacute;tico</strong></div>
+  </div>
+</div>
+<div class="main">
+<div class="sf">
+  <div class="sf-title">&#128100; Datos del alumno</div>
+  <div class="sf-grid">
+    <div class="sf-g"><label class="sf-label">Nombre completo</label><input class="sf-input" type="text" id="inp-nombre" placeholder="Ej: Juan P&eacute;rez" autocomplete="off"></div>
+    <div class="sf-g"><label class="sf-label">Comisi&oacute;n</label><input class="sf-input" type="text" id="inp-comision" placeholder="Ej: 6A" autocomplete="off"></div>
+  </div>
+</div>
+<div class="prog-label"><span id="prog-txt">0 de 20 respondidas</span><span id="prog-pct">0%</span></div>
+<div class="prog-wrap"><div class="prog-bar" id="prog-bar" style="width:0%"></div></div>
+
+<div class="qb" id="q1"><div class="q-num">Pregunta 01</div>
+<div class="q-text">¿Qué caracteriza al malware y cómo suele instalarse en una computadora?</div>
+<div class="opts">
+  <div class="opt" data-q="1" data-val="a"><div class="ol">A</div>Es un tipo de hardware defectuoso que se detecta únicamente con diagnósticos de fábrica</div>
+  <div class="opt" data-q="1" data-val="b"><div class="ol">B</div>Es software malicioso que suele instalarse sin el conocimiento del usuario, y puede cambiar configuraciones, eliminar archivos, robar información o redirigir el navegador</div>
+  <div class="opt" data-q="1" data-val="c"><div class="ol">C</div>Es un protocolo de red obsoleto reemplazado completamente por TCP/IP moderno</div>
+  <div class="opt" data-q="1" data-val="d"><div class="ol">D</div>Es un tipo de licencia de software pirata que solo afecta al rendimiento del procesador</div>
+</div>
+<div class="exp" id="exp1"><strong>Correcto &mdash; Opci&oacute;n B:</strong> El malware (software malicioso) es la mayor amenaza para las computadoras y los datos. Se instala generalmente sin el conocimiento del usuario y, una vez que infecta un host, puede cambiar configuraciones, eliminar archivos o dañar discos, recopilar información sin consentimiento, o abrir ventanas y redirigir el navegador.</div></div>
+
+<div class="qb" id="q2"><div class="q-num">Pregunta 02</div>
+<div class="q-text">¿Cuál es la diferencia principal entre un virus y un caballo de Troya?</div>
+<div class="opts">
+  <div class="opt" data-q="2" data-val="a"><div class="ol">A</div>No hay diferencia, son sinónimos del mismo tipo de amenaza</div>
+  <div class="opt" data-q="2" data-val="b"><div class="ol">B</div>El virus solo afecta a redes corporativas, mientras que el caballo de Troya solo afecta a computadoras personales</div>
+  <div class="opt" data-q="2" data-val="c"><div class="ol">C</div>El virus requiere una acción humana para propagarse ocultándose en archivos o software, mientras que el caballo de Troya es un programa que parece útil pero transporta código malicioso oculto</div>
+  <div class="opt" data-q="2" data-val="d"><div class="ol">D</div>El caballo de Troya se autorreplica sin intervención humana, mientras que el virus necesita conexión a internet</div>
+</div>
+<div class="exp" id="exp2"><strong>Correcto &mdash; Opci&oacute;n C:</strong> El virus es el tipo más común de malware y requiere acción humana (abrir un archivo infectado) para propagarse, ya que se oculta uniéndose a código, software o documentos. El caballo de Troya es un programa que aparenta ser útil (por ejemplo, un juego gratuito) pero transporta código malicioso oculto en su interior.</div></div>
+
+<div class="qb" id="q3"><div class="q-num">Pregunta 03</div>
+<div class="q-text">¿Qué tipo de malware deniega al usuario el acceso a sus archivos mediante cifrado y exige un pago por la clave de descifrado?</div>
+<div class="opts">
+  <div class="opt" data-q="3" data-val="a"><div class="ol">A</div>Adware</div>
+  <div class="opt" data-q="3" data-val="b"><div class="ol">B</div>Spyware</div>
+  <div class="opt" data-q="3" data-val="c"><div class="ol">C</div>Ransomware</div>
+  <div class="opt" data-q="3" data-val="d"><div class="ol">D</div>Rootkit</div>
+</div>
+<div class="exp" id="exp3"><strong>Correcto &mdash; Opci&oacute;n C:</strong> El ransomware cifra los archivos del usuario y muestra un mensaje exigiendo un rescate a cambio de la clave de descifrado necesaria para recuperar el acceso a la información.</div></div>
+
+<div class="qb" id="q4"><div class="q-num">Pregunta 04</div>
+<div class="q-text">¿Qué distingue a los rootkits y a los gusanos de otros tipos de malware?</div>
+<div class="opts">
+  <div class="opt" data-q="4" data-val="a"><div class="ol">A</div>Los rootkits solo muestran publicidad no deseada, y los gusanos únicamente afectan a macOS</div>
+  <div class="opt" data-q="4" data-val="b"><div class="ol">B</div>Los rootkits son difíciles de detectar y se usan para obtener acceso de administrador, mientras que los gusanos se replican automáticamente sin intervención del usuario, explotando vulnerabilidades del software</div>
+  <div class="opt" data-q="4" data-val="c"><div class="ol">C</div>Ambos requieren obligatoriamente que el usuario abra un archivo adjunto de correo para poder propagarse</div>
+  <div class="opt" data-q="4" data-val="d"><div class="ol">D</div>Ambos son inofensivos y solo consumen espacio en disco sin afectar el rendimiento del sistema</div>
+</div>
+<div class="exp" id="exp4"><strong>Correcto &mdash; Opci&oacute;n B:</strong> Los rootkits son difíciles de detectar y se utilizan para obtener acceso de nivel de administrador a una computadora, ocultando su presencia y la de otro malware. Los gusanos, a diferencia de los virus que requieren acción humana, son programas de replicación automática que se propagan por sí solos aprovechando vulnerabilidades del software, sin necesitar intervención del usuario.</div></div>
+
+<div class="qb" id="q5"><div class="q-num">Pregunta 05</div>
+<div class="q-text">¿Cómo funcionan los programas antimalware para detectar amenazas?</div>
+<div class="opts">
+  <div class="opt" data-q="5" data-val="a"><div class="ol">A</div>Únicamente mediante el análisis del consumo de energía eléctrica del equipo</div>
+  <div class="opt" data-q="5" data-val="b"><div class="ol">B</div>Buscan continuamente patrones conocidos contra una base de datos de firmas de malware, y también pueden usar técnicas heurísticas para detectar comportamientos sospechosos</div>
+  <div class="opt" data-q="5" data-val="c"><div class="ol">C</div>Analizan exclusivamente el tráfico de red entrante sin revisar los archivos almacenados localmente</div>
+  <div class="opt" data-q="5" data-val="d"><div class="ol">D</div>Requieren que el usuario identifique manualmente cada amenaza antes de poder actuar</div>
+</div>
+<div class="exp" id="exp5"><strong>Correcto &mdash; Opci&oacute;n B:</strong> Los programas antimalware buscan continuamente patrones conocidos comparándolos contra una base de datos de firmas de malware conocidas. Además, pueden utilizar técnicas heurísticas, que permiten detectar comportamientos específicos asociados con ciertos tipos de malware, incluso si no están en la base de firmas.</div></div>
+
+<div class="qb" id="q6"><div class="q-num">Pregunta 06</div>
+<div class="q-text">Al reparar un sistema infectado con malware, ¿qué recomendación es correcta respecto a los puntos de restauración del sistema?</div>
+<div class="opts">
+  <div class="opt" data-q="6" data-val="a"><div class="ol">A</div>Deben mantenerse intactos, ya que Windows los protege automáticamente contra archivos maliciosos</div>
+  <div class="opt" data-q="6" data-val="b"><div class="ol">B</div>Una vez eliminado el malware, deben eliminarse también los archivos de restauración del sistema, ya que pueden contener copias infectadas</div>
+  <div class="opt" data-q="6" data-val="c"><div class="ol">C</div>Los puntos de restauración solo almacenan configuraciones de hardware y nunca archivos ejecutables</div>
+  <div class="opt" data-q="6" data-val="d"><div class="ol">D</div>Deben duplicarse antes de eliminar el malware para conservar una copia de la infección con fines de análisis</div>
+</div>
+<div class="exp" id="exp6"><strong>Correcto &mdash; Opci&oacute;n B:</strong> El servicio de restauración del sistema operativo puede incluir archivos infectados en un punto de restauración anterior. Por eso, una vez que se eliminó el malware de una computadora, es necesario eliminar también los archivos de restauración del sistema para evitar una reinfección.</div></div>
+
+<div class="qb" id="q7"><div class="q-num">Pregunta 07</div>
+<div class="q-text">¿Qué caracteriza a un ataque de Negación de Servicio Distribuido (DDoS) frente a un DoS simple?</div>
+<div class="opts">
+  <div class="opt" data-q="7" data-val="a"><div class="ol">A</div>El DDoS solo puede ejecutarse desde una única computadora sin necesidad de red</div>
+  <div class="opt" data-q="7" data-val="b"><div class="ol">B</div>El DDoS es un ataque de DoS amplificado que utiliza muchos hosts infectados, llamados zombis, para saturar simultáneamente a un mismo objetivo</div>
+  <div class="opt" data-q="7" data-val="c"><div class="ol">C</div>El DDoS únicamente afecta a servidores DNS y nunca a servidores web</div>
+  <div class="opt" data-q="7" data-val="d"><div class="ol">D</div>El DDoS es una variante de phishing dirigida a robar contraseñas de administradores</div>
+</div>
+<div class="exp" id="exp7"><strong>Correcto &mdash; Opci&oacute;n B:</strong> Mientras que un DoS es un ataque en el que un atacante inunda un dispositivo con solicitudes falsas, el DDoS es una versión amplificada de este ataque que utiliza muchos hosts comprometidos (zombis) para saturar a un mismo objetivo desde múltiples orígenes simultáneamente.</div></div>
+
+<div class="qb" id="q8"><div class="q-num">Pregunta 08</div>
+<div class="q-text">¿Qué diferencia hay entre un ataque de 'Hombre en el medio' (MITM) y un ataque de 'Repetición' (Replay)?</div>
+<div class="opts">
+  <div class="opt" data-q="8" data-val="a"><div class="ol">A</div>No existe diferencia, ambos términos describen exactamente el mismo tipo de ataque</div>
+  <div class="opt" data-q="8" data-val="b"><div class="ol">B</div>El MITM intercepta la comunicación entre dos hosts en tiempo real, mientras que el Replay captura un paquete autenticado, lo modifica y lo reenvía al destino original</div>
+  <div class="opt" data-q="8" data-val="c"><div class="ol">C</div>El MITM solo puede ejecutarse en redes cableadas, mientras que el Replay solo funciona en redes inalámbricas</div>
+  <div class="opt" data-q="8" data-val="d"><div class="ol">D</div>El MITM afecta exclusivamente a servidores web, mientras que el Replay afecta solo a impresoras de red</div>
+</div>
+<div class="exp" id="exp8"><strong>Correcto &mdash; Opci&oacute;n B:</strong> En un ataque MITM, el atacante se interpone e intercepta la comunicación entre dos hosts en tiempo real. En un ataque de repetición (Replay), en cambio, el atacante captura un paquete ya autenticado, lo modifica y lo reenvía al destino original para hacerse pasar por una comunicación legítima.</div></div>
+
+<div class="qb" id="q9"><div class="q-num">Pregunta 09</div>
+<div class="q-text">¿Qué es la ingeniería social y por qué suele combinarse con otros ataques a la red?</div>
+<div class="opts">
+  <div class="opt" data-q="9" data-val="a"><div class="ol">A</div>Es un ataque de acceso que manipula a las personas para que realicen acciones o divulguen información confidencial, aprovechando la naturaleza humana y la predisposición a ayudar; se combina con otros ataques para aumentar su efectividad</div>
+  <div class="opt" data-q="9" data-val="b"><div class="ol">B</div>Es una técnica exclusivamente automatizada que no requiere ninguna interacción humana</div>
+  <div class="opt" data-q="9" data-val="c"><div class="ol">C</div>Es un tipo de firewall que filtra el tráfico social de redes como Facebook o Twitter</div>
+  <div class="opt" data-q="9" data-val="d"><div class="ol">D</div>Es un protocolo de cifrado utilizado únicamente en comunicaciones gubernamentales</div>
+</div>
+<div class="exp" id="exp9"><strong>Correcto &mdash; Opci&oacute;n A:</strong> La ingeniería social es un ataque de acceso que intenta manipular a las personas para que realicen acciones o divulguen información confidencial, apoyándose en la naturaleza humana y en la predisposición de las personas a ayudar. Se utiliza frecuentemente junto con otros ataques a la red para facilitar su ejecución (por ejemplo, obteniendo credenciales antes de un ataque técnico).</div></div>
+
+<div class="qb" id="q10"><div class="q-num">Pregunta 10</div>
+<div class="q-text">En ingeniería social, ¿qué técnica consiste en que el atacante finge necesitar datos personales para confirmar la identidad del destinatario?</div>
+<div class="opts">
+  <div class="opt" data-q="10" data-val="a"><div class="ol">A</div>Señuelo</div>
+  <div class="opt" data-q="10" data-val="b"><div class="ol">B</div>Pretexto</div>
+  <div class="opt" data-q="10" data-val="c"><div class="ol">C</div>Hurgar en la basura</div>
+  <div class="opt" data-q="10" data-val="d"><div class="ol">D</div>Seguimiento</div>
+</div>
+<div class="exp" id="exp10"><strong>Correcto &mdash; Opci&oacute;n B:</strong> El pretexto es la técnica en la que el atacante finge necesitar datos personales del destinatario, alegando que los necesita para confirmar su identidad, con el fin de obtener información confidencial.</div></div>
+
+<div class="qb" id="q11"><div class="q-num">Pregunta 11</div>
+<div class="q-text">¿Qué diferencia hay entre 'phishing' y 'phishing focalizado' (spear phishing)?</div>
+<div class="opts">
+  <div class="opt" data-q="11" data-val="a"><div class="ol">A</div>El phishing es un ataque físico, mientras que el phishing focalizado es exclusivamente digital</div>
+  <div class="opt" data-q="11" data-val="b"><div class="ol">B</div>El phishing es un correo fraudulento genérico disfrazado de fuente confiable, mientras que el phishing focalizado está orientado específicamente a una organización o persona particular</div>
+  <div class="opt" data-q="11" data-val="c"><div class="ol">C</div>No existe ninguna diferencia entre ambos términos, se usan como sinónimos</div>
+  <div class="opt" data-q="11" data-val="d"><div class="ol">D</div>El phishing focalizado solo se realiza por mensaje de texto (SMS) y nunca por correo electrónico</div>
+</div>
+<div class="exp" id="exp11"><strong>Correcto &mdash; Opci&oacute;n B:</strong> El phishing es un correo electrónico fraudulento disfrazado como proveniente de una fuente confiable, enviado de forma más masiva. El phishing focalizado (spear phishing) es una variante más elaborada, dirigida específicamente a una organización o persona en particular.</div></div>
+
+<div class="qb" id="q12"><div class="q-num">Pregunta 12</div>
+<div class="q-text">¿Qué es una política de seguridad dentro de una organización?</div>
+<div class="opts">
+  <div class="opt" data-q="12" data-val="a"><div class="ol">A</div>Un documento estático que nunca se modifica una vez creado por el departamento legal</div>
+  <div class="opt" data-q="12" data-val="b"><div class="ol">B</div>Un conjunto de objetivos de seguridad que garantizan la protección de la red, los datos y las computadoras, generalmente creado por un comité de administración y personal de TI, y en constante evolución</div>
+  <div class="opt" data-q="12" data-val="c"><div class="ol">C</div>Un software antivirus específico que reemplaza la necesidad de capacitar a los empleados</div>
+  <div class="opt" data-q="12" data-val="d"><div class="ol">D</div>Un manual exclusivo para el hardware de red que no incluye procedimientos ni normas de comportamiento</div>
+</div>
+<div class="exp" id="exp12"><strong>Correcto &mdash; Opci&oacute;n B:</strong> Una política de seguridad es un conjunto de objetivos que garantizan la seguridad de la red, los datos y las computadoras de una organización. Es un documento en constante evolución según los cambios tecnológicos, del negocio y de los requisitos de los empleados, generalmente creado por un comité con miembros de la administración y del personal de TI, quien luego es responsable de implementarlo.</div></div>
+
+<div class="qb" id="q13"><div class="q-num">Pregunta 13</div>
+<div class="q-text">¿Qué diferencia existe entre las 'políticas de contraseña' y las 'políticas de uso aceptable'?</div>
+<div class="opts">
+  <div class="opt" data-q="13" data-val="a"><div class="ol">A</div>Las políticas de contraseña garantizan requisitos mínimos y cambios periódicos de contraseñas, mientras que las de uso aceptable identifican qué recursos y usos de red son aceptables para la organización</div>
+  <div class="opt" data-q="13" data-val="b"><div class="ol">B</div>Ambas políticas regulan exclusivamente el acceso físico a la sala de servidores</div>
+  <div class="opt" data-q="13" data-val="c"><div class="ol">C</div>Las políticas de contraseña solo aplican a los administradores de red, nunca a los empleados comunes</div>
+  <div class="opt" data-q="13" data-val="d"><div class="ol">D</div>Las políticas de uso aceptable determinan el hardware que se debe comprar para la empresa</div>
+</div>
+<div class="exp" id="exp13"><strong>Correcto &mdash; Opci&oacute;n A:</strong> Las políticas de contraseña garantizan que las contraseñas cumplan con requisitos mínimos de seguridad y se cambien periódicamente. Las políticas de uso aceptable, en cambio, identifican qué recursos y usos de la red son aceptables para la organización, y pueden incluir las consecuencias de violar dichas políticas.</div></div>
+
+<div class="qb" id="q14"><div class="q-num">Pregunta 14</div>
+<div class="q-text">¿Por qué la seguridad física es tan importante como la seguridad de los datos?</div>
+<div class="opts">
+  <div class="opt" data-q="14" data-val="a"><div class="ol">A</div>Porque si se roba una computadora, los datos que contiene también se pierden o se roban junto con el equipo</div>
+  <div class="opt" data-q="14" data-val="b"><div class="ol">B</div>Porque la seguridad física reemplaza completamente la necesidad de cifrar los datos</div>
+  <div class="opt" data-q="14" data-val="c"><div class="ol">C</div>Porque solo protege el hardware, sin ninguna relación con la protección de la información</div>
+  <div class="opt" data-q="14" data-val="d"><div class="ol">D</div>Porque únicamente aplica a servidores ubicados fuera del país</div>
+</div>
+<div class="exp" id="exp14"><strong>Correcto &mdash; Opci&oacute;n A:</strong> La seguridad física es tan importante como la seguridad de los datos porque, si una computadora es robada de una organización, los datos que contiene también se pierden o son robados junto con el equipo. La seguridad física implica proteger el acceso a la propiedad, a áreas restringidas y a la infraestructura de red y computación.</div></div>
+
+<div class="qb" id="q15"><div class="q-num">Pregunta 15</div>
+<div class="q-text">¿Qué tipo de bloqueo (candado) se desbloquea utilizando un escáner de huellas digitales?</div>
+<div class="opts">
+  <div class="opt" data-q="15" data-val="a"><div class="ol">A</div>Bloqueo convencional</div>
+  <div class="opt" data-q="15" data-val="b"><div class="ol">B</div>Bloqueo basado en tokens</div>
+  <div class="opt" data-q="15" data-val="c"><div class="ol">C</div>Bloqueo biométrico</div>
+  <div class="opt" data-q="15" data-val="d"><div class="ol">D</div>Bloqueo con cerrojo</div>
+</div>
+<div class="exp" id="exp15"><strong>Correcto &mdash; Opci&oacute;n C:</strong> El bloqueo biométrico se desbloquea mediante un escáner biométrico, como un lector de huellas digitales, que verifica una característica física única de la persona autorizada.</div></div>
+
+<div class="qb" id="q16"><div class="q-num">Pregunta 16</div>
+<div class="q-text">¿Cuál es la diferencia entre el cifrado EFS y BitLocker en Windows?</div>
+<div class="opts">
+  <div class="opt" data-q="16" data-val="a"><div class="ol">A</div>EFS cifra archivos y carpetas individuales vinculados a una cuenta de usuario específica, mientras que BitLocker permite cifrar una unidad de disco duro completa</div>
+  <div class="opt" data-q="16" data-val="b"><div class="ol">B</div>EFS y BitLocker son exactamente lo mismo, solo cambia el nombre según la versión de Windows</div>
+  <div class="opt" data-q="16" data-val="c"><div class="ol">C</div>BitLocker solo funciona en sistemas Linux, mientras que EFS es exclusivo de Windows</div>
+  <div class="opt" data-q="16" data-val="d"><div class="ol">D</div>EFS cifra unidades completas, mientras que BitLocker solo cifra archivos individuales</div>
+</div>
+<div class="exp" id="exp16"><strong>Correcto &mdash; Opci&oacute;n A:</strong> El sistema de encriptación de archivos (EFS) permite cifrar archivos o carpetas y está directamente vinculado a una cuenta de usuario determinada, de modo que solo quien cifró los datos puede acceder a ellos. BitLocker, en cambio, permite cifrar una unidad de disco duro completa.</div></div>
+
+<div class="qb" id="q17"><div class="q-num">Pregunta 17</div>
+<div class="q-text">¿Qué diferencia hay entre un firewall 'basado en host' y una solución de firewall 'SOHO'?</div>
+<div class="opts">
+  <div class="opt" data-q="17" data-val="a"><div class="ol">A</div>El firewall basado en host es software instalado en cada equipo (como Firewall de Windows Defender), mientras que la solución SOHO es una solución basada en la red que utiliza un router inalámbrico doméstico o de oficina pequeña</div>
+  <div class="opt" data-q="17" data-val="b"><div class="ol">B</div>Ambos términos describen exactamente la misma solución de hardware empresarial</div>
+  <div class="opt" data-q="17" data-val="c"><div class="ol">C</div>El firewall SOHO solo puede usarse en grandes corporaciones con miles de empleados</div>
+  <div class="opt" data-q="17" data-val="d"><div class="ol">D</div>El firewall basado en host requiere obligatoriamente un dispositivo Cisco ASA dedicado</div>
+</div>
+<div class="exp" id="exp17"><strong>Correcto &mdash; Opci&oacute;n A:</strong> El firewall basado en host es una solución de software instalada en el propio equipo, como el Firewall de Windows Defender. La solución SOHO (oficina pequeña/hogar), en cambio, es una solución basada en la red que utiliza un router inalámbrico doméstico o de oficina pequeña para filtrar el tráfico de toda la red.</div></div>
+
+<div class="qb" id="q18"><div class="q-num">Pregunta 18</div>
+<div class="q-text">¿Qué diferencia existe entre 'borrar el historial de navegación' y usar el 'modo InPrivate' en un navegador?</div>
+<div class="opts">
+  <div class="opt" data-q="18" data-val="a"><div class="ol">A</div>No hay diferencia, ambas acciones logran exactamente el mismo resultado en cualquier momento</div>
+  <div class="opt" data-q="18" data-val="b"><div class="ol">B</div>Borrar el historial elimina manualmente los datos ya guardados, mientras que el modo InPrivate almacena archivos y cookies temporalmente y los elimina automáticamente al finalizar la sesión</div>
+  <div class="opt" data-q="18" data-val="c"><div class="ol">C</div>El modo InPrivate solo está disponible en computadoras públicas, nunca en equipos personales</div>
+  <div class="opt" data-q="18" data-val="d"><div class="ol">D</div>Borrar el historial requiere permisos de administrador, mientras que el modo InPrivate no requiere ningún permiso especial</div>
+</div>
+<div class="exp" id="exp18"><strong>Correcto &mdash; Opci&oacute;n B:</strong> Borrar el historial de navegación es una acción manual que elimina el historial, las cookies y los archivos ya almacenados por el navegador. El modo InPrivate, en cambio, almacena los archivos y las cookies únicamente de forma temporal durante la sesión, y los elimina automáticamente cuando esta finaliza, sin necesidad de borrarlos manualmente después.</div></div>
+
+<div class="qb" id="q19"><div class="q-num">Pregunta 19</div>
+<div class="q-text">En Firewall de Windows Defender, ¿qué permite hacer la opción 'Permitir una aplicación o una función a través de Firewall de Windows'?</div>
+<div class="opts">
+  <div class="opt" data-q="19" data-val="a"><div class="ol">A</div>Desinstalar de forma permanente cualquier programa considerado peligroso por Windows</div>
+  <div class="opt" data-q="19" data-val="b"><div class="ol">B</div>Agregar, cambiar o eliminar programas y puertos permitidos a través del firewall</div>
+  <div class="opt" data-q="19" data-val="c"><div class="ol">C</div>Formatear el disco duro y reinstalar el sistema operativo de forma automática</div>
+  <div class="opt" data-q="19" data-val="d"><div class="ol">D</div>Configurar exclusivamente la resolución de pantalla y el brillo del monitor</div>
+</div>
+<div class="exp" id="exp19"><strong>Correcto &mdash; Opci&oacute;n B:</strong> Esta opción abre la ventana de aplicaciones permitidas, donde el usuario puede agregar un programa o puerto permitido, cambiar uno existente, o eliminar un programa o puerto que ya no debería tener acceso a través del firewall.</div></div>
+
+<div class="qb" id="q20"><div class="q-num">Pregunta 20</div>
+<div class="q-text">¿Por qué los hosts Windows modernos reemplazaron la 'ejecución automática' (autorun) por la 'reproducción automática' (autoplay), y cuál es la recomendación de seguridad más segura?</div>
+<div class="opts">
+  <div class="opt" data-q="20" data-val="a"><div class="ol">A</div>Porque la ejecución automática buscaba y ejecutaba automáticamente un archivo autorun.inf, lo cual era aprovechado por usuarios maliciosos; la recomendación más segura es desactivar la reproducción automática</div>
+  <div class="opt" data-q="20" data-val="b"><div class="ol">B</div>Porque la ejecución automática solo funcionaba con impresoras y no con unidades de almacenamiento</div>
+  <div class="opt" data-q="20" data-val="c"><div class="ol">C</div>Porque la reproducción automática es obligatoria por ley y no puede desactivarse en ningún caso</div>
+  <div class="opt" data-q="20" data-val="d"><div class="ol">D</div>Porque la ejecución automática consumía demasiada memoria RAM sin ningún riesgo de seguridad asociado</div>
+</div>
+<div class="exp" id="exp20"><strong>Correcto &mdash; Opci&oacute;n A:</strong> La ejecución automática (autorun) buscaba automáticamente un archivo llamado autorun.inf al insertar nuevos medios y lo ejecutaba sin intervención del usuario, algo que los usuarios maliciosos aprovechaban para infectar equipos. La reproducción automática (autoplay) moderna ofrece más control y puede pedir al usuario que elija una acción, pero la solución más segura sigue siendo desactivarla por completo.</div></div>
+
+<div class="submit-area">
+  <button class="btn-submit" id="btn-submit" disabled>Verificar y registrar respuestas</button>
+  <div class="sending" id="sending">&#9203; Enviando resultados a Google Sheets&hellip;</div>
+</div>
+<div class="result" id="result">
+  <div class="r-score" id="r-score">0%</div>
+  <div class="r-label" id="r-label">&mdash;</div>
+  <div class="r-student" id="r-student"></div>
+  <div class="r-msg" id="r-msg"></div>
+  <div class="r-ok" id="r-ok">&#128202; Resultado registrado en Google Sheets correctamente.</div>
+  <div class="r-err" id="r-err">&#9888;&#65039; No se pudo registrar en Google Sheets. Verific&aacute; la URL del script.</div>
+  <div class="r-actions">
+    <button class="btn-retry" onclick="location.reload()">Intentar nuevamente</button>
+    <a href="index.html" class="btn-home">&larr; Volver al Inicio</a>
+  </div>
+</div>
+</div>
+<script>
+// ================================================
+// REEMPLAZA CON LA URL DE TU APPS SCRIPT
+// ================================================
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycbzIsJaGKKRJ95vXUyQBI_9eFOjL6PyIRyslUjL0n-QUcP6PNHcC2WqaaXZCOgWzmRjT/exec';
+// ================================================
+const ANSWERS={1:'b',2:'c',3:'c',4:'b',5:'b',6:'b',7:'b',8:'b',9:'a',10:'b',11:'b',12:'b',13:'a',14:'a',15:'c',16:'a',17:'a',18:'b',19:'b',20:'a'};
+const TOTAL=20;const sel={};let submitted=false;
+function updProg(){const n=Object.keys(sel).length,p=Math.round(n/TOTAL*100);document.getElementById('prog-bar').style.width=p+'%';document.getElementById('prog-txt').textContent=n+' de '+TOTAL+' respondidas';document.getElementById('prog-pct').textContent=p+'%';document.getElementById('btn-submit').disabled=(n<TOTAL||!document.getElementById('inp-nombre').value.trim());}
+document.getElementById('inp-nombre').addEventListener('input',updProg);
+document.querySelectorAll('.opt').forEach(o=>{o.addEventListener('click',()=>{if(submitted)return;const q=o.dataset.q;document.querySelectorAll('.opt[data-q="'+q+'"]').forEach(x=>x.classList.remove('selected'));o.classList.add('selected');sel[q]=o.dataset.val;document.getElementById('q'+q).classList.add('answered');updProg();});});
+document.getElementById('btn-submit').addEventListener('click',()=>{
+  if(submitted)return;
+  const nombre=document.getElementById('inp-nombre').value.trim(),comision=document.getElementById('inp-comision').value.trim();
+  if(!nombre){document.getElementById('inp-nombre').classList.add('error');document.getElementById('inp-nombre').focus();return;}
+  submitted=true;document.getElementById('btn-submit').disabled=true;
+  let correct=0;
+  for(let i=1;i<=TOTAL;i++){const ua=sel[String(i)],ca=ANSWERS[i];document.querySelectorAll('.opt[data-q="'+i+'"]').forEach(o=>{o.classList.add('locked');if(o.dataset.val===ca)o.classList.add('correct');else if(o.dataset.val===ua&&ua!==ca)o.classList.add('incorrect');});document.getElementById('exp'+i).classList.add('show');if(ua===ca)correct++;else{document.getElementById('q'+i).classList.remove('answered');document.getElementById('q'+i).classList.add('wrong');}}
+  const pct=Math.round(correct/TOTAL*100),label=pct>=90?'&#127942; Excelente':pct>=70?'&#9989; Aprobado':'&#10060; A repasar',msg=pct>=90?'Obtuviste '+correct+'/'+TOTAL+'. &#161;Excelente dominio del cap&iacute;tulo!':pct>=70?'Obtuviste '+correct+'/'+TOTAL+'. Aprobado. Revis&aacute; las incorrectas.':'Obtuviste '+correct+'/'+TOTAL+'. Repas&aacute; el Cap&iacute;tulo 12 antes de continuar.';
+  document.getElementById('r-score').textContent=pct+'%';document.getElementById('r-label').innerHTML=label;document.getElementById('r-student').textContent=nombre+(comision?' &mdash; Comisi&oacute;n: '+comision:'');document.getElementById('r-msg').innerHTML=msg;document.getElementById('result').classList.add('show');document.getElementById('result').scrollIntoView({behavior:'smooth',block:'center'});
+  if(SCRIPT_URL&&!SCRIPT_URL.includes('TU_APPS_SCRIPT')){document.getElementById('sending').classList.add('show');const now=new Date();fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({capitulo:'Capitulo 12',nombre,comision:comision||'&mdash;',fecha:now.toLocaleDateString('es-AR'),hora:now.toLocaleTimeString('es-AR'),puntaje:correct,total:TOTAL,porcentaje:pct})}).then(()=>{document.getElementById('sending').classList.remove('show');document.getElementById('r-ok').classList.add('show');}).catch(()=>{document.getElementById('sending').classList.remove('show');document.getElementById('r-err').classList.add('show');});}
+});
+</script>
+</body>
+</html>
